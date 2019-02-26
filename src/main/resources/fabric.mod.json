@@ -1,0 +1,14 @@
+[
+  {
+    "id": "satin",
+    "name": "Satin",
+    "version": "1.0.0",
+    "side": "universal",
+    "initializers": [
+      "ladysnake.satin.Satin"
+    ],
+    "mixins": {
+      "client": "mixins.satin.client.json"
+    }
+  }
+]

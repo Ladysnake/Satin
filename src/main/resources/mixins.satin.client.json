@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "ladysnake.satin.mixin.client",
+  "mixins": [
+    "event.GameRendererMixin",
+    "event.MinecraftClientMixin",
+    "event.WorldRendererMixin",
+    "gl.AccessiblePassesShaderEffect",
+    "gl.JsonGlProgramMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
