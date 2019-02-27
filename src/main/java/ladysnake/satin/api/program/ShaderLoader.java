@@ -28,6 +28,7 @@ public interface ShaderLoader {
      * @param fragmentLocation the name or relative location of the fragment shader
      * @return the reference to the initialized program
      * @throws IOException If an I/O error occurs while reading the shader source files
+     * @throws ShaderLinkException if the shader fails to be linked
      */
     @API(status = MAINTAINED)
     int loadShader(ResourceManager resourceManager, @Nullable Identifier vertexLocation, @Nullable Identifier fragmentLocation) throws IOException;
