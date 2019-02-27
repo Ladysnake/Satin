@@ -6,13 +6,13 @@ import net.minecraft.client.render.VisibleRegion;
 import net.minecraft.entity.Entity;
 
 @FunctionalInterface
-public interface PostEntitiesRenderCallback {
+public interface EntitiesPostRenderCallback {
     /**
      * Fired after Minecraft has rendered all entities and before it renders block entities.
      */
-    Event<PostEntitiesRenderCallback> EVENT = EventFactory.createArrayBacked(PostEntitiesRenderCallback.class,
+    Event<EntitiesPostRenderCallback> EVENT = EventFactory.createArrayBacked(EntitiesPostRenderCallback.class,
             (listeners) -> (Entity camera, VisibleRegion frustum, float tickDelta) -> {
-                for (PostEntitiesRenderCallback handler : listeners) {
+                for (EntitiesPostRenderCallback handler : listeners) {
                     handler.onEntitiesRendered(camera, frustum, tickDelta);
                 }
             });

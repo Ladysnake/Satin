@@ -1,6 +1,6 @@
 package ladysnake.satin.mixin.client.event;
 
-import ladysnake.satin.api.event.PostEntitiesRenderCallback;
+import ladysnake.satin.api.event.EntitiesPostRenderCallback;
 import net.minecraft.client.render.VisibleRegion;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.Entity;
@@ -14,7 +14,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(method = "renderEntities", at = @At(value = "CONSTANT", args = "stringValue=blockentities"))
     private void firePostRenderEntities(Entity camera, VisibleRegion frustum, float tickDelta, CallbackInfo info) {
-        PostEntitiesRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickDelta);
+        EntitiesPostRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickDelta);
     }
 
 }
