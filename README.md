@@ -43,14 +43,15 @@ Here is the whole java code for a mod that applies a basic shader to the game:
 
 ```java
 public class GreyscaleMinecraft implements ClientModInitializer {
-    private static final ManagedShaderEffect GREYSCALE_SHADER = ShaderEffectManager.getInstance().manage(new Identifier("shaderexample", "shaders/post/greyscale.json"));
+    private static final ManagedShaderEffect GREYSCALE_SHADER = ShaderEffectManager.getInstance()
+    		.manage(new Identifier("shaderexample", "shaders/post/greyscale.json"));
     
     @Override
     public void onInitializeClient() {
         // the render method of the shader will be called after the game
         // has drawn the world on the main framebuffer, when it renders
         // vanilla post process shaders
-		ShaderEffectRenderCallback.EVENT.register(GREYSCALE_SHADER::render);
+	ShaderEffectRenderCallback.EVENT.register(GREYSCALE_SHADER::render);
     }
 }
 ```
