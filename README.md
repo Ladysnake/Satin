@@ -10,7 +10,7 @@ A lightweight Fabric library for OpenGL shader usage.
 
 You can add the library by inserting the following in your `build.gradle`:
 
-```groovy
+```gradle
 repositories {
 	maven { url 'https://jitpack.io' }
 }
