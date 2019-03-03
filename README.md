@@ -67,7 +67,7 @@ Satin has a few utility classes and methods to facilitate working with shaders, 
 Satin adds in a few events for rendering purposes / related to shaders. Currently, there are 4 available callbacks:
 
 - `PickEntityShaderCallback`: allows mods to add their own entity view shaders
-- `PostEntitiesRenderCallback`: fired between entity rendering end and block entity rendering start
+- `EntitiesPostRenderCallback`: fired between entity rendering end and block entity rendering start
 - `ResolutionChangeCallback`: allows mods to react to resolution changes
 - `ShaderEffectRenderCallback`: fired at the time vanilla renders their post process shaders
 

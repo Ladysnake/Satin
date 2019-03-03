@@ -6,7 +6,7 @@
     "event.GameRendererMixin",
     "event.MinecraftClientMixin",
     "event.WorldRendererMixin",
-    "gl.AccessiblePassesShaderEffect",
+    "gl.ShaderEffectMixin",
     "gl.JsonGlProgramMixin"
   ],
   "injectors": {

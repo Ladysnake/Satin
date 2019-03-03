@@ -1,4 +1,4 @@
-package ladysnake.satin.mixin.client.gl;
+package ladysnake.satin.impl;
 
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
@@ -11,8 +11,6 @@ import java.util.List;
  * The ShaderEffect class does not have a getter for its passes, so this mixin does the job until Access Transformers
  * are a thing.
  */
-@Mixin(ShaderEffect.class)
 public interface AccessiblePassesShaderEffect {
-    @Accessor
-    List<PostProcessShader> getPasses();
+    List<PostProcessShader> satin$getPasses();
 }
