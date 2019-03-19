@@ -21,7 +21,7 @@ public abstract class GameRendererMixin {
 
     @Shadow private ShaderEffect shader;
 
-    @Shadow protected abstract void loadShader(Identifier identifier_1);
+    @Shadow protected abstract void loadShader(Identifier location);
 
     /**
      * Fires {@link ShaderEffectRenderCallback#EVENT}
@@ -40,7 +40,7 @@ public abstract class GameRendererMixin {
     @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN", ordinal = 1))
     private void useCustomEntityShader(@Nullable Entity entity, CallbackInfo info) {
         if (this.shader == null) {
-            PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, this::loadShader, () -> this.shader);
+            PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, loc -> this.loadShader(loc), () -> this.shader);
         }
     }
 }
