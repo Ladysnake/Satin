@@ -19,11 +19,10 @@ public abstract class JsonGlProgramMixin {
      * @param id the actual id passed as an argument to the method
      * @return a new Identifier
      */
-    // The minecraft dev plugin currently fails to recognize an instantiation target
     @Redirect(
             at = @At(
                     value = "NEW",
-                    target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"
+                    ordinal = 0
             ),
             method = "<init>"
     )
@@ -40,11 +39,10 @@ public abstract class JsonGlProgramMixin {
      * @param id the actual id passed as an argument to the method
      * @return a new Identifier
      */
-    // The minecraft dev plugin currently fails to recognize an instantiation target
     @Redirect(
             at = @At(
                     value = "NEW",
-                    target = "(Ljava/lang/String;)Lnet/minecraft/util/Identifier;"
+                    ordinal = 0
             ),
             method = "getShader"
     )
