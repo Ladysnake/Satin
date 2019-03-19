@@ -159,8 +159,7 @@ public final class ManagedShaderEffectImpl implements ManagedShaderEffect {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
             JsonGlProgram sm = sg.satin$getPasses().get(index).getProgram();
-            // method_1270 == getProgramRef
-            ShaderPrograms.useShader(sm.method_1270());
+            ShaderPrograms.useShader(sm.getProgramRef());
             dynamicSetBlock.run();
             ShaderPrograms.useShader(0);
         }

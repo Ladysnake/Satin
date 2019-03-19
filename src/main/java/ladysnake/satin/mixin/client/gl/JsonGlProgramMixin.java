@@ -20,7 +20,6 @@ public abstract class JsonGlProgramMixin {
      * @return a new Identifier
      */
     // The minecraft dev plugin currently fails to recognize an instantiation target
-    @SuppressWarnings("UnresolvedMixinReference")
     @Redirect(
             at = @At(
                     value = "NEW",
@@ -42,7 +41,6 @@ public abstract class JsonGlProgramMixin {
      * @return a new Identifier
      */
     // The minecraft dev plugin currently fails to recognize an instantiation target
-    @SuppressWarnings("UnresolvedMixinReference")
     @Redirect(
             at = @At(
                     value = "NEW",

@@ -2,7 +2,7 @@
   {
     "id": "satin",
     "name": "Satin",
-    "version": "1.0.0",
+    "version": "${version}",
     "side": "universal",
     "initializers": [
       "ladysnake.satin.Satin"

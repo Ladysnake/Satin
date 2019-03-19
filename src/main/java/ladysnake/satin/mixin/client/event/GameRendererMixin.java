@@ -2,12 +2,10 @@ package ladysnake.satin.mixin.client.event;
 
 import ladysnake.satin.api.event.PickEntityShaderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
