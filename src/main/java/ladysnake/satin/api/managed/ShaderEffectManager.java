@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 import static org.apiguardian.api.API.Status.*;
 
 /**
- *
+ * @see ManagedShaderEffect
  */
 public interface ShaderEffectManager {
     @API(status = STABLE)

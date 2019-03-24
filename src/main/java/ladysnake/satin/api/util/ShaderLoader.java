@@ -1,4 +1,4 @@
-package ladysnake.satin.api.program;
+package ladysnake.satin.api.util;
 
 import ladysnake.satin.impl.ShaderLoaderImpl;
 import net.minecraft.resource.ResourceManager;

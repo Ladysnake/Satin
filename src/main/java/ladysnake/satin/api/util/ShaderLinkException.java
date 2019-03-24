@@ -1,4 +1,4 @@
-package ladysnake.satin.api.program;
+package ladysnake.satin.api.util;
 
 /**
  * A {@code ShaderLinkException} is thrown by {@link ShaderLoader}

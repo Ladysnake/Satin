@@ -2,8 +2,8 @@ package ladysnake.satin.impl;
 
 import com.mojang.blaze3d.platform.GLX;
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.program.ShaderLinkException;
-import ladysnake.satin.api.program.ShaderLoader;
+import ladysnake.satin.api.util.ShaderLinkException;
+import ladysnake.satin.api.util.ShaderLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.ARBShaderObjects;

@@ -1,4 +1,4 @@
-package ladysnake.satin.api.program;
+package ladysnake.satin.api.util;
 
 import com.mojang.blaze3d.platform.GLX;
 import com.mojang.blaze3d.platform.GlStateManager;

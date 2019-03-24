@@ -3,7 +3,7 @@ package ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.program.ShaderPrograms;
+import ladysnake.satin.api.util.ShaderPrograms;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
