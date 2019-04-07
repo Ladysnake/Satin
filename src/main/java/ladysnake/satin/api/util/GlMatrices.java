@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 
+import static org.apiguardian.api.API.Status.DEPRECATED;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 /**
@@ -15,14 +16,13 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public final class GlMatrices {
     /**Used for opengl interactions such as matrix retrieval*/
     private static FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-    /**A secondary buffer for the same purpose as {@link #buffer}*/
-    private static FloatBuffer buffer1 = BufferUtils.createFloatBuffer(16);
     private static float[] inArray = new float[16];
     private static float[] outArray = new float[16];
 
     /**
      * A 16-sized float buffer that can be used to send data to shaders.
-     * Do not use this buffer for long term data storage, it can be cleared at any time.
+     * <p>
+     * Do <b>NOT</b> use this buffer for long term data storage, it can be cleared <em>at any time</em>.
      */
     @API(status = MAINTAINED)
     public static FloatBuffer getTmpBuffer() {
@@ -30,74 +30,135 @@ public final class GlMatrices {
         return buffer;
     }
 
+    /**
+     * @param outMat the buffer in which to store the output
+     * @return <code>outMat</code>
+     */
     @API(status = MAINTAINED)
-    public static FloatBuffer getProjectionMatrix() {
-        FloatBuffer projection = getTmpBuffer();
-        GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, projection);
-        projection.rewind();
-        return projection;
+    public static FloatBuffer getProjectionMatrix(FloatBuffer outMat) {
+        GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, outMat);
+        outMat.rewind();
+        return outMat;
     }
 
+    /**
+     * @param outMat the buffer in which to store the output
+     * @return <code>outMat</code>
+     */
     @API(status = MAINTAINED)
-    public static FloatBuffer getProjectionMatrixInverse() {
-        FloatBuffer projection = getProjectionMatrix();
-        FloatBuffer projectionInverse = buffer1;
-        projectionInverse.clear();
-        invertMat4FB(projectionInverse, projection);
-        projection.rewind();
-        projectionInverse.rewind();
-        return projectionInverse;
+    public static FloatBuffer getProjectionMatrixInverse(FloatBuffer outMat) {
+        getProjectionMatrix(outMat);
+        invertMat4FB(outMat, outMat);
+        return outMat;
     }
 
     /**
      * Call this once before doing any transform to get the <em>view</em> matrix, then load identity and call this again after
      * doing any rendering transform to get the <em>model</em> matrix for the rendered object
+     *
+     * @param outMat the buffer in which to store the output
+     * @return <code>outMat</code>
      */
     @API(status = MAINTAINED)
-    public static FloatBuffer getModelViewMatrix() {
-        FloatBuffer modelView = getTmpBuffer();
-        GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, modelView);
-        modelView.rewind();
-        return modelView;
+    public static FloatBuffer getModelViewMatrix(FloatBuffer outMat) {
+        GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, outMat);
+        outMat.rewind();
+        return outMat;
     }
 
+    /**
+     * @param outMat the buffer in which to store the output
+     * @return <code>outMat</code>
+     */
     @API(status = MAINTAINED)
+    public static FloatBuffer getModelViewMatrixInverse(FloatBuffer outMat) {
+        getModelViewMatrix(outMat);
+        invertMat4FB(outMat, outMat);
+        return outMat;
+    }
+
+    /**
+     * @deprecated use <code>getProjectionMatrix(getTmpBuffer())</code> for the same result
+     */
+    @Deprecated
+    @API(status = DEPRECATED)
+    public static FloatBuffer getProjectionMatrix() {
+        return getProjectionMatrix(getTmpBuffer());
+    }
+
+    /**
+     * @deprecated use <code>getProjectionMatrixInverse(getTmpBuffer())</code> for the same result
+     */
+    @Deprecated
+    @API(status = DEPRECATED)
+    public static FloatBuffer getProjectionMatrixInverse() {
+        return getProjectionMatrixInverse(getTmpBuffer());
+    }
+
+    /**
+     * @deprecated use <code>getModelViewMatrix(getTmpBuffer())</code> for the same result
+     */
+    @Deprecated
+    @API(status = DEPRECATED)
+    public static FloatBuffer getModelViewMatrix() {
+        return getModelViewMatrix(getTmpBuffer());
+    }
+
+    /**
+     * @deprecated use <code>getModelViewMatrixInverse(getTmpBuffer())</code> for the same result
+     */
+    @Deprecated
+    @API(status = DEPRECATED)
     public static FloatBuffer getModelViewMatrixInverse() {
-        FloatBuffer modelView = getModelViewMatrix();
-        FloatBuffer modelViewInverse = buffer1;
-        modelViewInverse.clear();
-        invertMat4FB(modelViewInverse, modelView);
-        modelView.rewind();
-        modelViewInverse.rewind();
-        return modelViewInverse;
+        return getModelViewMatrixInverse(getTmpBuffer());
     }
 
     /**
      * Inverts a 4x4 matrix stored in a float array
+     * <p>
+     * It is safe for the destination array to be the same as the input, as the
+     * result is stored in intermediate variables.
      *
      * @param matOut 16 capacity array to store the output in
      * @param m      16 values array storing the matrix to invert
      */
     @API(status = MAINTAINED)
     public static void invertMat4(float[] matOut, float[] m) {
-        matOut[0] = (m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10]);
-        matOut[1] = (-m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10]);
-        matOut[2] = (m[1] * m[6] * m[15] - m[1] * m[7] * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] - m[13] * m[3] * m[6]);
-        matOut[3] = (-m[1] * m[6] * m[11] + m[1] * m[7] * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9] * m[2] * m[7] + m[9] * m[3] * m[6]);
-        matOut[4] = (-m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10]);
-        matOut[5] = (m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10]);
-        matOut[6] = (-m[0] * m[6] * m[15] + m[0] * m[7] * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] + m[12] * m[3] * m[6]);
-        matOut[7] = (m[0] * m[6] * m[11] - m[0] * m[7] * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8] * m[2] * m[7] - m[8] * m[3] * m[6]);
-        matOut[8] = (m[4] * m[9] * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9]);
-        matOut[9] = (-m[0] * m[9] * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9]);
-        matOut[10] = (m[0] * m[5] * m[15] - m[0] * m[7] * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] - m[12] * m[3] * m[5]);
-        matOut[11] = (-m[0] * m[5] * m[11] + m[0] * m[7] * m[9] + m[4] * m[1] * m[11] - m[4] * m[3] * m[9] - m[8] * m[1] * m[7] + m[8] * m[3] * m[5]);
-        matOut[12] = (-m[4] * m[9] * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9]);
-        matOut[13] = (m[0] * m[9] * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9]);
-        matOut[14] = (-m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5]);
-        matOut[15] = (m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5]);
+        float m00 = (m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10]);
+        float m01 = (-m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10]);
+        float m02 = (m[1] * m[6] * m[15] - m[1] * m[7] * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] - m[13] * m[3] * m[6]);
+        float m03 = (-m[1] * m[6] * m[11] + m[1] * m[7] * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9] * m[2] * m[7] + m[9] * m[3] * m[6]);
+        float m10 = (-m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10]);
+        float m11 = (m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10]);
+        float m12 = (-m[0] * m[6] * m[15] + m[0] * m[7] * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] + m[12] * m[3] * m[6]);
+        float m13 = (m[0] * m[6] * m[11] - m[0] * m[7] * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8] * m[2] * m[7] - m[8] * m[3] * m[6]);
+        float m20 = (m[4] * m[9] * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9]);
+        float m21 = (-m[0] * m[9] * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9]);
+        float m22 = (m[0] * m[5] * m[15] - m[0] * m[7] * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] - m[12] * m[3] * m[5]);
+        float m23 = (-m[0] * m[5] * m[11] + m[0] * m[7] * m[9] + m[4] * m[1] * m[11] - m[4] * m[3] * m[9] - m[8] * m[1] * m[7] + m[8] * m[3] * m[5]);
+        float m30 = (-m[4] * m[9] * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9]);
+        float m31 = (m[0] * m[9] * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9]);
+        float m32 = (-m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5]);
+        float m33 = (m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5]);
 
-        float det = m[0] * matOut[0] + m[1] * matOut[4] + m[2] * matOut[8] + m[3] * matOut[12];
+        float det = m[0] * m00 + m[1] * m10 + m[2] * m20 + m[3] * m30;
+
+        matOut[0]  = m00;
+        matOut[1] = m01;
+        matOut[2] = m02;
+        matOut[3] = m03;
+        matOut[4] = m10;
+        matOut[5] = m11;
+        matOut[6] = m12;
+        matOut[7] = m13;
+        matOut[8] = m20;
+        matOut[9] = m21;
+        matOut[10] = m22;
+        matOut[11] = m23;
+        matOut[12] = m30;
+        matOut[13] = m31;
+        matOut[14] = m32;
+        matOut[15] = m33;
         if (det != 0.0D) {
             for (int i = 0; i < 16; i++) {
                 matOut[i] /= det;
@@ -109,6 +170,9 @@ public final class GlMatrices {
 
     /**
      * Inverts a matrix stored in a {@link FloatBuffer}
+     * <p>
+     * It is safe for the destination buffer to be the same as the input, as the
+     * result is stored in intermediate variables.
      *
      * @param fbInvOut an output buffer in which the result will be stored
      * @param fbMatIn  an input buffer storing the matrix to invert
@@ -130,6 +194,7 @@ public final class GlMatrices {
         fbMatIn.get(faMat);
         invertMat4(faInv, faMat);
         fbInvOut.put(faInv);
+        fbInvOut.rewind();
     }
 
     /**
