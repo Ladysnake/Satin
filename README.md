@@ -17,8 +17,11 @@ repositories {
 
 dependencies {
     modCompile "com.github.Ladysnake:Satin:${satin_version}"
+    // Include Satin as a Jar-in-Jar dependency (optional)
+    include "com.github.Ladysnake:Satin:${satin_version}"
 }
 ```
+*note: the `include` configuration requires loom 0.2.1 or more recent*
 
 You can then add the library version to your `gradle.properties`file:
 
@@ -60,7 +63,10 @@ For examples of json shader definitions, look for the `assets/minecraft/shaders`
 
 ### Shader Utilities
 
-Satin has a few utility classes and methods to facilitate working with shaders, not limited to `ShaderEffect`. `ShaderLoader` provides a way to load, create and link OpenGL shader programs through a single method call, `GlPrograms` offer helper methods that operate on those programs, and the `matrix` package helps with matrix retrieval and manipulation. More information is available in the javadoc.
+Satin has a few utility classes and methods to facilitate working with shaders, not limited to `ShaderEffect`. 
+`ShaderLoader` provides a way to load, create and link OpenGL shader programs through a single method call, 
+`GlPrograms` offer helper methods that operate on those programs, and the `matrix` package helps with matrix retrieval and manipulation. 
+More information is available in the javadoc.
 
 ### Events
 

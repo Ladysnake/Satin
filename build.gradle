@@ -13,6 +13,10 @@ group = project.maven_group
 minecraft {
 }
 
+repositories {
+    maven { url 'https://maven.fabricmc.net' }
+}
+
 dependencies {
     //to change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -21,6 +25,7 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modCompile "net.fabricmc:fabric:${project.fabric_version}"
+    modCompile "io.github.prospector.modmenu:ModMenu:${project.modmenu_version}"
 
     compile "org.jetbrains:annotations:${jb_annotations_version}"
     compile "com.google.code.findbugs:jsr305:${findbugs_version}"

@@ -1,14 +1,34 @@
-[
-  {
-    "id": "satin",
-    "name": "Satin",
-    "version": "${version}",
-    "side": "universal",
-    "initializers": [
+{
+  "schemaVersion": 1,
+  "id": "satin",
+  "version": "${version}",
+
+  "name": "Satin",
+  "icon": "assets/satin/icon.png",
+  "description": "Easy shaders for all modders",
+  "licence": "LGPLv3",
+  "contact": {
+    "sources": "https://github.com/Ladysnake/Satin",
+    "issues": "https://github.com/Ladysnake/Satin/issues",
+    "discord": "ladysnake.glitch.me/discord"
+  },
+  "environment": "client",
+  "entrypoints": {
+    "client": [
       "ladysnake.satin.Satin"
-    ],
-    "mixins": {
-      "client": "mixins.satin.client.json"
+    ]
+  },
+  "mixins": [
+    {
+      "environment": "client",
+      "config": "mixins.satin.client.json"
     }
+  ],
+  "requires": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "custom": {
+    "modmenu:api": true
   }
-]
+}
