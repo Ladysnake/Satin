@@ -8,6 +8,7 @@
     "event.MinecraftClientMixin",
     "event.WorldRendererMixin",
     "gl.DepthGlFramebufferMixin",
+    "gl.GlUniformMixin",
     "gl.JsonGlProgramMixin",
     "gl.ShaderEffectMixin"
   ],
