@@ -25,7 +25,7 @@ public class SatinMixins implements IMixinConfigPlugin {
         if (mixinClassName.equals("ladysnake.satin.mixin.client.gl.DepthGlFramebufferMixin")) {
             return SatinFeatures.getInstance().readableDepthFramebuffers.isEnabled();
         }
-        return false;
+        return true;
     }
 
     @Override
