@@ -22,6 +22,7 @@ public abstract class JsonGlProgramMixin {
     @Redirect(
             at = @At(
                     value = "NEW",
+                    target = "net/minecraft/util/Identifier",
                     ordinal = 0
             ),
             method = "<init>"
@@ -42,6 +43,7 @@ public abstract class JsonGlProgramMixin {
     @Redirect(
             at = @At(
                     value = "NEW",
+                    target = "net/minecraft/util/Identifier",
                     ordinal = 0
             ),
             method = "getShader"
