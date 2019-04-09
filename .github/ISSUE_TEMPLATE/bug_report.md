@@ -8,10 +8,10 @@ assignees: ''
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+*A clear and concise description of what the bug is.*
 
 **To Reproduce**
-Steps to reproduce the behavior.
+*Steps to reproduce the behavior.*
 
 **Environment:**
  - Minecraft Version [e.g. 1.14.1]
@@ -19,12 +19,12 @@ Steps to reproduce the behavior.
  - Inside or Outside of a development environment ?
 
 **Expected behavior (optional)**
-A clear and concise description of what you expected to happen.
+*A clear and concise description of what you expected to happen.*
 
 **Screenshots (optional)**
-If applicable, add screenshots to help explain your problem.
+*If applicable, add screenshots to help explain your problem.*
 
 **Additional context (optional)**
-Add any other context about the problem here.
+*Add any other context about the problem here.*
 
 You can remove any unused optional section.
