@@ -1,7 +1,6 @@
 package ladysnake.satin.mixin;
 
 
-import ladysnake.satin.api.experimental.config.SatinFeatures;
 import org.spongepowered.asm.lib.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -22,9 +21,7 @@ public class SatinMixins implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals("ladysnake.satin.mixin.client.gl.DepthGlFramebufferMixin")) {
-            return SatinFeatures.getInstance().readableDepthFramebuffers.isEnabled();
-        }
+        // Optional mixins get thrown out here
         return true;
     }
 

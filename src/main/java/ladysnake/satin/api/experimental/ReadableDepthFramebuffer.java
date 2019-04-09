@@ -12,9 +12,8 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
  * This allows access to a depth texture that the framebuffer writes to instead of the usual render buffer.
  * <p>
  * The replacement of the render buffer with a readable depth texture is only done when at least one mod
- * declares the {@link ladysnake.satin.api.experimental.config.SatinFeatures#readableDepthFramebuffers} feature as used.
+ * declares the {@link ladysnake.satin.config.SatinFeatures#readableDepthFramebuffers} feature as used.
  */
-@API(status = EXPERIMENTAL)
 public interface ReadableDepthFramebuffer {
     /**
      * Returns the depth texture used by this buffer.
@@ -29,6 +28,7 @@ public interface ReadableDepthFramebuffer {
      * @return the gl id of the depth texture, or -1 if it cannot be obtained
      */
     @CheckForSigned
+    @API(status = EXPERIMENTAL)
     int getCurrentDepthTexture();
 
 }

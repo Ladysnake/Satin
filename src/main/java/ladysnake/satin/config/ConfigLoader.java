@@ -1,4 +1,4 @@
-package ladysnake.satin.impl;
+package ladysnake.satin.config;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -26,19 +26,29 @@ public class ConfigLoader {
      * @return the generated config
      * @throws IOException if the config file cannot be read or created
      */
-    public static <T> T load(String configFile, Class<T> configClass, Supplier<T> defaultValues) throws IOException {
+    public static <T extends Versionable> T load(String configFile, Class<T> configClass, Supplier<T> defaultValues) throws IOException {
         final Path config = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(configFile);
-        T features;
+        final T features;
+        boolean needsUpdate;
+        // Read the config from the file
         if (Files.exists(config)) {
+            // The config exists, read from it and check if it is up to date
             try (final Reader reader = Files.newBufferedReader(config)) {
                 features = Objects.requireNonNull(GSON.fromJson(reader, configClass), "invalid config: " + reader.toString());
             }
+            needsUpdate = features.isUpToDate();
         } else {
-            Files.createFile(config);
+            // First boot, use default values and write the file
             features = defaultValues.get();
+            needsUpdate = true;
+        }
+        // Write the config to the file if needed
+        if (needsUpdate) {
+            Files.createFile(config);
             try (final Writer writer = Files.newBufferedWriter(config)) {
                 writer.append(GSON.toJson(features));
             }
+            features.update();
         }
         return features;
     }

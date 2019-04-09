@@ -5,7 +5,8 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
-import ladysnake.satin.api.experimental.config.SatinFeatures;
+import ladysnake.satin.config.OptionalFeature;
+import ladysnake.satin.config.SatinFeatures;
 import net.minecraft.client.gl.GlFramebuffer;
 import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.GL11;
@@ -43,7 +44,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
             at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GLX;glFramebufferRenderbuffer(IIII)V", shift = AFTER)
     )
     private void initFbo(int width, int height, boolean flushErrors, CallbackInfo ci) {
-        if (this.useDepthAttachment && SatinFeatures.getInstance().readableDepthFramebuffers.isInUse()) {
+        if (this.useDepthAttachment && SatinFeatures.getInstance().readableDepthFramebuffers.isActive()) {
             // Delete the depth render buffer, it will not be used
             GLX.glDeleteRenderbuffers(this.depthAttachment);
             this.depthAttachment = -1;
@@ -88,7 +89,12 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
                     GL_DEPTH_ATTACHMENT,
                     ARBFramebufferObject.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
             );
-            if (!this.useDepthAttachment || !SatinFeatures.getInstance().readableDepthFramebuffers.isInUse()) {
+            OptionalFeature readableDepthFramebuffers = SatinFeatures.getInstance().readableDepthFramebuffers;
+            if (!readableDepthFramebuffers.isActive()) {
+                Satin.LOGGER.info("Enabling readable depth framebuffers. This may cause incompatibilities with other graphical mods.");
+                readableDepthFramebuffers.use();
+            }
+            if (!this.useDepthAttachment) {
                 // if we aren't using depth, there will be no depth texture
                 actualDepthTexture = -1;
             } else if (attachmentObjectType != GL_TEXTURE) {
