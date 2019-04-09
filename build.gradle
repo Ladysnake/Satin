@@ -3,55 +3,72 @@ plugins {
     id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+archivesBaseName = rootProject.archives_base_name
+group = rootProject.maven_group
 
-archivesBaseName = project.archives_base_name
-version = project.mod_version
-group = project.maven_group
+subprojects {
+    apply plugin: 'fabric-loom'
+    archivesBaseName = rootProject.archives_base_name + "-" + project.name
+    group = rootProject.maven_group + "." + rootProject.archives_base_name
 
-minecraft {
-}
-
-repositories {
-    maven { url 'https://maven.fabricmc.net' }
-}
-
-dependencies {
-    //to change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    // Fabric API. This is technically optional, but you probably want it anyway.
-    modCompile "net.fabricmc:fabric:${project.fabric_version}"
-    modCompile "io.github.prospector.modmenu:ModMenu:${project.modmenu_version}"
-
-    compile "org.jetbrains:annotations:${jb_annotations_version}"
-    compile "com.google.code.findbugs:jsr305:${findbugs_version}"
-    compile "org.apiguardian:apiguardian-api:${apiguardian_version}"
-
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0-M1"
-}
-
-processResources {
-    inputs.property "version", project.version
-
-    from(sourceSets.main.resources.srcDirs) {
-        include "fabric.mod.json"
-        expand "version": project.version
-    }
-
-    from(sourceSets.main.resources.srcDirs) {
-        exclude "fabric.mod.json"
+    dependencies {
+        compile rootProject
     }
 }
 
-// ensure that the encoding is set to UTF-8, no matter what the system default is
-// this fixes some edge cases with special characters not displaying correctly
-// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+allprojects {
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    version = rootProject.mod_version
+
+    minecraft {
+    }
+
+    repositories {
+        maven {
+            url = "http://maven.fabricmc.net/"
+            name = "Fabric"
+        }
+    }
+
+    dependencies {
+        //to change the versions see the gradle.properties file
+        minecraft "com.mojang:minecraft:${project.minecraft_version}"
+        mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+        modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+
+        // Fabric API. This is technically optional, but you probably want it anyway.
+        modCompile "net.fabricmc:fabric:${project.fabric_version}"
+        modCompile "io.github.prospector.modmenu:ModMenu:${project.modmenu_version}"
+
+        compile "org.jetbrains:annotations:${jb_annotations_version}"
+        compile "com.google.code.findbugs:jsr305:${findbugs_version}"
+        compile "org.apiguardian:apiguardian-api:${apiguardian_version}"
+
+        testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0-M1"
+    }
+
+    processResources {
+        inputs.property "version", project.version
+
+        from(sourceSets.main.resources.srcDirs) {
+            include "fabric.mod.json"
+            expand "version": project.version
+        }
+
+        from(sourceSets.main.resources.srcDirs) {
+            exclude "fabric.mod.json"
+        }
+    }
+
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+    }
 }
 
 // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task

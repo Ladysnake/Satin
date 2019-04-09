@@ -1,14 +1,15 @@
 package ladysnake.satin.api.util;
 
+import net.minecraft.client.util.math.Matrix4f;
 import org.apiguardian.api.API;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nonnull;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 
-import static org.apiguardian.api.API.Status.DEPRECATED;
-import static org.apiguardian.api.API.Status.MAINTAINED;
+import static org.apiguardian.api.API.Status.*;
 
 /**
  * This class consists of static methods that operate on matrices.
@@ -74,6 +75,31 @@ public final class GlMatrices {
     public static FloatBuffer getModelViewMatrixInverse(FloatBuffer outMat) {
         getModelViewMatrix(outMat);
         invertMat4FB(outMat, outMat);
+        return outMat;
+    }
+
+    /**
+     * Computes the matrix allowing computation of eye space coordinates from window space and put the result
+     * into {@code projectionMatrix}
+     *
+     * @param outMat a matrix to put the result in
+     * @return <code>projectionMatrix</code>
+     */
+    @Nonnull
+    @API(status = EXPERIMENTAL)
+    public static Matrix4f getInverseTransformMatrix(Matrix4f outMat) {
+        float[] projectionArray = inArray;
+        float[] viewArray = outArray;
+        GlMatrices.getProjectionMatrix(getTmpBuffer()).get(projectionArray);
+        GlMatrices.getModelViewMatrix(getTmpBuffer()).get(viewArray);
+
+        // reuse matrices instead of creating new ones
+        float[] projectionViewArray = GlMatrices.multiplyMat4(projectionArray, projectionArray, viewArray);
+        GlMatrices.invertMat4(projectionViewArray, projectionViewArray);
+        FloatBuffer buffer = getTmpBuffer();
+        buffer.put(projectionViewArray);
+        buffer.rewind();
+        outMat.setFromBuffer(buffer);
         return outMat;
     }
 

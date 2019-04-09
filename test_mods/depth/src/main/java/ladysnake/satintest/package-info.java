@@ -1,0 +1,4 @@
+@ParametersAreNonnullByDefault
+package ladysnake.satintest;
+
+import javax.annotation.ParametersAreNonnullByDefault;
