@@ -1,18 +1,18 @@
 {
   "schemaVersion": 1,
-  "id": "satindepthtest",
+  "id": "satintestcore",
   "version": "1.0.0",
 
-  "name": "Satin Depth Test Mod",
-  "description": "Test mod for satin's readable depth feature",
+  "name": "Satin Test Core",
+  "description": "Core features for all test mods",
   "licence": "LGPL-3.0-or-later",
   "authors": [
     "Pyrofab"
   ],
   "environment": "client",
   "entrypoints": {
-    "client": [
-      "ladysnake.satindepthtest.SatinDepthTest"
+    "main": [
+      "ladysnake.satintestcore.SatinTestCore"
     ]
   },
   "requires": {

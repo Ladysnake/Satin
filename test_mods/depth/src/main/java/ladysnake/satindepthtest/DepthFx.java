@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 
 public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
-    public static final Identifier FANCY_NIGHT_SHADER_ID = new Identifier(Main.MOD_ID, "shaders/post/rainbow_ping.json");
+    public static final Identifier FANCY_NIGHT_SHADER_ID = new Identifier(SatinDepthTest.MOD_ID, "shaders/post/rainbow_ping.json");
     public static final DepthFx INSTANCE = new DepthFx();
 
     private MinecraftClient mc = MinecraftClient.getInstance();
