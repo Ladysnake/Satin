@@ -34,6 +34,19 @@ You can find the current version of Satin in the [releases](https://github.com/L
 
 ## Using Satin
 
+### Changes to Vanilla
+
+Simply having Satin installed alters the game in a few ways, mainly related to ShaderEffects.
+
+- **Uniform fix**: Using a vector of integers as a uniform crashes the game in Vanilla because of a bad
+copy paste. Satin redirects a call to upload the right buffer.
+- **Shader locations**: Satin patches JsonGlProgram to accept a resource domain in the specification
+of a program name and of a fragment/vertex shader file.
+- **Readable depth**: Satin patches minecraft's framebuffer objects to use textures instead of render
+buffers as depth attachments. This allows modders to reuse the depth information in shaders notably.
+Because this feature has a non-negligible risk of incompatibility with similar patches, it has to be enabled 
+by consumer code first, and users can forcefully disable it any time in the config.
+
 ### Shader Management
 
 Satin's main feature is the Shader Effect management facility. 
