@@ -1,13 +1,12 @@
 package ladysnake.satin.api.managed;
 
-import ladysnake.satin.impl.ManagedShaderEffectImpl;
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 
 import java.util.function.Consumer;
 
-import static org.apiguardian.api.API.Status.*;
+import static org.apiguardian.api.API.Status.STABLE;
 
 /**
  * @see ManagedShaderEffect
@@ -40,11 +39,11 @@ public interface ShaderEffectManager {
     /**
      * Removes a shader from the global list of managed shaders,
      * making it not respond to resource reloading and screen resizing.
-     * This also calls {@link ManagedShaderEffectImpl#release()} to release the shader's resources.
+     * This also calls {@link ManagedShaderEffect#release()} to release the shader's resources.
      * A <code>ManagedShaderEffect</code> object cannot be used after it has been disposed of.
      *
      * @param shader the shader to stop managing
-     * @see ManagedShaderEffectImpl#release()
+     * @see ManagedShaderEffect#release()
      */
     @API(status = STABLE, since = "1.0.0")
     void dispose(ManagedShaderEffect shader);

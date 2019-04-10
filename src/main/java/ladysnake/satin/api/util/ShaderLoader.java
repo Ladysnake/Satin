@@ -1,6 +1,6 @@
 package ladysnake.satin.api.util;
 
-import ladysnake.satin.impl.ShaderLoaderImpl;
+import ladysnake.satin.impl.ValidatingShaderLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -18,7 +18,7 @@ import static org.apiguardian.api.API.Status.MAINTAINED;
 public interface ShaderLoader {
     @API(status = MAINTAINED)
     static ShaderLoader getInstance() {
-        return ShaderLoaderImpl.INSTANCE;
+        return ValidatingShaderLoader.INSTANCE;
     }
 
     /**

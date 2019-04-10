@@ -25,18 +25,14 @@ import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * A post processing shader that is applied to the main framebuffer
- * <p>
- * Post shaders loaded through {@link ReloadableShaderEffectManager#manage(Identifier, Consumer)} are self-managed and will be
- * reloaded when shader assets are reloaded (through <tt>F3-T</tt> or <tt>/ladylib_shader_reload</tt>) or the
- * screen resolution changes.
- * <p>
+ * A {@link ManagedShaderEffect} that can be {@link #setup} several times in its lifetime,
+ * triggering an initialization callback.
  *
  * @see ReloadableShaderEffectManager
- * @see "<tt>assets/minecraft/shaders</tt> for examples"
+ * @see ManagedShaderEffect
  * @since 1.0.0
  */
-public final class ManagedShaderEffectImpl implements ManagedShaderEffect {
+public final class ResettableManagedShaderEffect implements ManagedShaderEffect {
 
     /**Location of the shader json definition file*/
     private final Identifier location;
@@ -56,7 +52,7 @@ public final class ManagedShaderEffectImpl implements ManagedShaderEffect {
      * @see ReloadableShaderEffectManager#manage(Identifier, Consumer)
      */
     @API(status = INTERNAL)
-    public ManagedShaderEffectImpl(Identifier location, Consumer<ManagedShaderEffect> uniformInitCallback) {
+    public ResettableManagedShaderEffect(Identifier location, Consumer<ManagedShaderEffect> uniformInitCallback) {
         this.location = location;
         this.uniformInitCallback = uniformInitCallback;
     }

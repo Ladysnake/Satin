@@ -17,8 +17,11 @@ import java.nio.charset.StandardCharsets;
 
 import static org.lwjgl.opengl.GL20.*;
 
-public final class ShaderLoaderImpl implements ShaderLoader {
-    public static final ShaderLoader INSTANCE = new ShaderLoaderImpl();
+/**
+ * A {@link ShaderLoader} that validates loaded GLSL code and logs errors
+ */
+public final class ValidatingShaderLoader implements ShaderLoader {
+    public static final ShaderLoader INSTANCE = new ValidatingShaderLoader();
 
     /**
      * Initializes a program from a fragment and a vertex source file

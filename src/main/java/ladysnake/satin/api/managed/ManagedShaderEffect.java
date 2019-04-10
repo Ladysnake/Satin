@@ -1,6 +1,5 @@
 package ladysnake.satin.api.managed;
 
-import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlFramebuffer;
 import net.minecraft.client.gl.ShaderEffect;
@@ -18,13 +17,13 @@ import static org.apiguardian.api.API.Status.*;
 /**
  * A post processing shader that is applied to the main framebuffer
  * <p>
- * Post shaders loaded through {@link ReloadableShaderEffectManager#manage(Identifier, Consumer)} are self-managed and will be
+ * Post shaders loaded through {@link ShaderEffectManager#manage(Identifier, Consumer)} are self-managed and will be
  * reloaded when shader assets are reloaded (through <tt>F3-T</tt> or <tt>/ladylib_shader_reload</tt>) or the
  * screen resolution changes.
  * <p>
  * Examples of json-defined shader effects are available in <tt>assets/minecraft/shaders</tt>.
  *
- * @see ReloadableShaderEffectManager
+ * @see ShaderEffectManager
  * @since 1.0.0
  */
 public interface ManagedShaderEffect {
@@ -89,10 +88,10 @@ public interface ManagedShaderEffect {
      * may not run to completion for a long period of time.
      * <p>
      * If the caller does not intend to use this shader effect again, they
-     * should call {@link ReloadableShaderEffectManager#dispose(ManagedShaderEffect)}.
+     * should call {@link ShaderEffectManager#dispose(ManagedShaderEffect)}.
      * </p>
      *
-     * @see ReloadableShaderEffectManager#dispose(ManagedShaderEffect)
+     * @see ShaderEffectManager#dispose(ManagedShaderEffect)
      * @see #isInitialized()
      * @see #getShaderEffect()
      * @see #finalize()
@@ -257,7 +256,7 @@ public interface ManagedShaderEffect {
     /**
      * Disposes of this shader once it is no longer referenced.
      *
-     * @see ReloadableShaderEffectManager#dispose(ManagedShaderEffect)
+     * @see ShaderEffectManager#dispose(ManagedShaderEffect)
      * @see #release
      */
     void finalize();
