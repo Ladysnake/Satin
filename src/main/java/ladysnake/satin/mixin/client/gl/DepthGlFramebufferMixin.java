@@ -36,33 +36,48 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     @Shadow public int texHeight;
 
     @Shadow public int fbo;
+    private static final OptionalFeature SATIN$READABLE_DEPTH_FRAMEBUFFERS = SatinFeatures.getInstance().readableDepthFramebuffers;
+
+    @Shadow public abstract void beginWrite(boolean boolean_1);
+
     private int satin$depthTexture = -1;
     private int satin$actualDepthTexture = -99;
+    private int satin$stillDepthTexture = -1;
 
     @Inject(
             method = "initFbo",
             at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GLX;glFramebufferRenderbuffer(IIII)V", shift = AFTER)
     )
     private void initFbo(int width, int height, boolean flushErrors, CallbackInfo ci) {
-        if (this.useDepthAttachment && SatinFeatures.getInstance().readableDepthFramebuffers.isActive()) {
-            // Delete the depth render buffer, it will not be used
-            GLX.glDeleteRenderbuffers(this.depthAttachment);
-            this.depthAttachment = -1;
+        if (this.useDepthAttachment)
+            if (SatinFeatures.getInstance().readableDepthFramebuffers.isActive()) {
+                // Delete the depth render buffer, it will not be used
+                GLX.glDeleteRenderbuffers(this.depthAttachment);
+                this.depthAttachment = -1;
+                this.satin$depthTexture = satin$setupDepthTexture();
+                GLX.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this.satin$depthTexture, 0);
+            }
+            this.satin$stillDepthTexture = satin$setupDepthTexture();
+    }
 
-            this.satin$depthTexture = GL11.glGenTextures();
-            GlStateManager.bindTexture(this.satin$depthTexture);
-            GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
-            GLX.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D, this.satin$depthTexture,0);
-        }
+    private int satin$setupDepthTexture() {
+        int shadowMap = GL11.glGenTextures();
+        GlStateManager.bindTexture(shadowMap);
+        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
+        return shadowMap;
     }
 
     @Inject(method = "delete", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/gl/GlFramebuffer;depthAttachment:I"))
     private void delete(CallbackInfo ci) {
         this.satin$deleteDepthTexture();
+        if (this.satin$stillDepthTexture > -1) {
+            TextureUtil.releaseTextureId(this.satin$depthTexture);
+            this.satin$depthTexture = -1;
+        }
         this.satin$actualDepthTexture = -99;
     }
 
@@ -89,14 +104,10 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
                     GL_DEPTH_ATTACHMENT,
                     ARBFramebufferObject.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
             );
-            OptionalFeature readableDepthFramebuffers = SatinFeatures.getInstance().readableDepthFramebuffers;
-            if (!readableDepthFramebuffers.isActive()) {
-                Satin.LOGGER.info("Enabling readable depth framebuffers. This may cause incompatibilities with other graphical mods.");
-                readableDepthFramebuffers.use();
-            }
-            if (!this.useDepthAttachment) {
+            if (!this.useDepthAttachment || !SATIN$READABLE_DEPTH_FRAMEBUFFERS.isConfigEnabled()) {
                 // if we aren't using depth, there will be no depth texture
                 actualDepthTexture = -1;
+                Satin.LOGGER.error("[Satin] A mod has queried a depth texture for a framebuffer that has none");
             } else if (attachmentObjectType != GL_TEXTURE) {
                 // there is no depth texture attached! figure out what's going on
                 String type;
@@ -107,7 +118,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
                     default: type = "UNKNOWN (" + attachmentObjectType + ")";
                 }
                 // Our framebuffer replacement is not doing its job
-                Satin.LOGGER.error("A framebuffer has no readable depth attachment (expected a texture attachment, got {} in {})", type, this.getClass().getName());
+                Satin.LOGGER.error("[Satin] A framebuffer has no readable depth attachment (expected a texture attachment, got {} in {})", type, this.getClass().getName());
                 actualDepthTexture = -1;
             } else {
                 // there is a depth texture attached
@@ -117,7 +128,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
                         ARBFramebufferObject.GL_FRAMEBUFFER_ATTACHMENT_OBJECT_NAME
                 );
                 if (actualDepthTexture != this.satin$depthTexture) {
-                    Satin.LOGGER.warn("A framebuffer has a depth texture different from the one assigned");
+                    Satin.LOGGER.warn("[Satin] A framebuffer has a depth texture different from the one assigned");
                     // Free our own depth texture, since it is not used
                     this.satin$deleteDepthTexture();
                 }
@@ -125,5 +136,19 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
             this.satin$actualDepthTexture = actualDepthTexture;
         }
         return this.satin$actualDepthTexture;
+    }
+
+    @Override
+    public int getStillDepthTexture() {
+        return this.satin$stillDepthTexture;
+    }
+
+    @Override
+    public void freezeDepthTexture() {
+        if (SATIN$READABLE_DEPTH_FRAMEBUFFERS.isActive()) {
+            this.beginWrite(false);
+            GlStateManager.bindTexture(this.satin$stillDepthTexture);
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, this.texWidth, this.texHeight);
+        }
     }
 }

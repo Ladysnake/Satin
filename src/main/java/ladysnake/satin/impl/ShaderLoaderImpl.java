@@ -44,7 +44,7 @@ public final class ShaderLoaderImpl implements ShaderLoader {
             ARBShaderObjects.glAttachObjectARB(programId, vertexShaderId);
             String log = glGetShaderInfoLog(vertexShaderId, 1024);
             if (!log.isEmpty()) {
-                Satin.LOGGER.error("Could not compile vertex shader " + vertexLocation + ": " + log);
+                Satin.LOGGER.error("Could not compile vertex shader {}: {}", vertexLocation, log);
             }
         }
 
@@ -56,7 +56,7 @@ public final class ShaderLoaderImpl implements ShaderLoader {
             ARBShaderObjects.glAttachObjectARB(programId, fragmentShaderId);
             String log = glGetShaderInfoLog(fragmentShaderId, 1024);
             if (!log.isEmpty()) {
-                Satin.LOGGER.error("Could not compile fragment shader " + fragmentLocation + ": " + log);
+                Satin.LOGGER.error("Could not compile fragment shader {}: {}", fragmentLocation, log);
             }
         }
 
@@ -79,7 +79,7 @@ public final class ShaderLoaderImpl implements ShaderLoader {
         // validate the program
         glValidateProgram(programId);
         if (glGetProgrami(programId, GL_VALIDATE_STATUS) == 0) {
-            Satin.LOGGER.warn("Warning validating Shader code:" + glGetProgramInfoLog(programId, 1024));
+            Satin.LOGGER.warn("Warning validating Shader code: {}", glGetProgramInfoLog(programId, 1024));
         }
 
         return programId;

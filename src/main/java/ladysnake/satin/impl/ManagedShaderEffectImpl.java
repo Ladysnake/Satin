@@ -3,9 +3,9 @@ package ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.util.ShaderPrograms;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import ladysnake.satin.api.util.ShaderPrograms;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlFramebuffer;
 import net.minecraft.client.gl.JsonGlProgram;
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.function.Consumer;
 
-import static org.apiguardian.api.API.Status.*;
+import static org.apiguardian.api.API.Status.INTERNAL;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -71,7 +71,7 @@ public final class ManagedShaderEffectImpl implements ManagedShaderEffect {
             try {
                 initialize();
             } catch (Exception e) {
-                Satin.LOGGER.error("Could not create screen shader {}", location, e);
+                Satin.LOGGER.error("[Satin] Could not create screen shader {}", location, e);
                 this.errored = true;
             }
         }

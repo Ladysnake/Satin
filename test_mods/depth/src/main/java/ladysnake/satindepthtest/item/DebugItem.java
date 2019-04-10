@@ -1,6 +1,6 @@
-package ladysnake.satintest.item;
+package ladysnake.satindepthtest.item;
 
-import ladysnake.satintest.DepthFx;
+import ladysnake.satindepthtest.DepthFx;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -37,6 +37,11 @@ public class DebugItem extends Item {
             }
         }
         return new TypedActionResult<>(ActionResult.SUCCESS, player.getStackInHand(hand));
+    }
+
+    @Override
+    public boolean hasEnchantmentGlint(ItemStack itemStack_1) {
+        return true;
     }
 
     @Override

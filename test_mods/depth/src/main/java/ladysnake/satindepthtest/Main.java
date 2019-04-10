@@ -1,17 +1,17 @@
-package ladysnake.satintest;
+package ladysnake.satindepthtest;
 
 import ladysnake.satin.api.event.PostWorldRenderCallback;
-import ladysnake.satin.config.SatinFeatures;
-import ladysnake.satintest.item.SatinTestItems;
+import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
+import ladysnake.satindepthtest.item.SatinTestItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 
-public class SatinTest implements ModInitializer, ClientModInitializer {
-    public static final String MOD_ID = "satintest";
+public class Main implements ModInitializer, ClientModInitializer {
+    public static final String MOD_ID = "satindepthtest";
     @Override
     public void onInitializeClient() {
-        SatinFeatures.getInstance().readableDepthFramebuffers.use();
+        ReadableDepthFramebuffer.useFeature();
         ClientTickCallback.EVENT.register(DepthFx.INSTANCE);
         PostWorldRenderCallback.EVENT.register(DepthFx.INSTANCE);
     }

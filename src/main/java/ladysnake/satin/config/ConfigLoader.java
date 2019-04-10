@@ -39,12 +39,12 @@ public class ConfigLoader {
             needsUpdate = features.isUpToDate();
         } else {
             // First boot, use default values and write the file
+            Files.createFile(config);
             features = defaultValues.get();
             needsUpdate = true;
         }
         // Write the config to the file if needed
         if (needsUpdate) {
-            Files.createFile(config);
             try (final Writer writer = Files.newBufferedWriter(config)) {
                 writer.append(GSON.toJson(features));
             }

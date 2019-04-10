@@ -41,5 +41,5 @@ void main()
     float d = distance(pixelPosition, CameraPosition);
     d /= mod(STime, 20);
     vec3 lolwat = vec3(sin(STime), cos(STime), sin(STime + 1.)) * smoothstep(2, 3., d) * smoothstep(4, 3., d);
-    gl_FragColor = vec4(pow(lolwat, vec3(3)), 1.);
+    gl_FragColor = vec4(tex.rgb + pow(lolwat, vec3(3)), 1.);
 }

@@ -1,6 +1,6 @@
-package ladysnake.satintest.item;
+package ladysnake.satindepthtest.item;
 
-import ladysnake.satintest.SatinTest;
+import ladysnake.satindepthtest.Main;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -13,7 +13,7 @@ public class SatinTestItems {
     }
 
     private static Item registerItem(Item item, String name) {
-        Registry.register(Registry.ITEM, new Identifier(SatinTest.MOD_ID, name), item);
+        Registry.register(Registry.ITEM, new Identifier(Main.MOD_ID, name), item);
         return item;
     }
 }

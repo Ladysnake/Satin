@@ -13,7 +13,7 @@ public class SatinFeatures implements Versionable {
             try {
                 instance = ConfigLoader.load("satin.json", SatinFeatures.class, SatinFeatures::new);
             } catch (IOException e) {
-                Satin.LOGGER.error("Failed to load features from config!");
+                Satin.LOGGER.error("[Satin] Failed to load features from config!", e);
                 instance = new SatinFeatures();
             }
         }
@@ -21,7 +21,7 @@ public class SatinFeatures implements Versionable {
     }
 
     private int version = CURRENT_VERSION;
-    public final OptionalFeature readableDepthFramebuffers = new OptionalFeature().name("Framebuffer depth textures").enableByDefault();
+    public final OptionalFeature readableDepthFramebuffers = new OptionalFeature().enableByDefault();
 
     @Override
     public boolean isUpToDate() {
