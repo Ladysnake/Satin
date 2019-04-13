@@ -139,12 +139,12 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     }
 
     @Override
-    public int getStillDepthTexture() {
+    public int getStillDepthMap() {
         return this.satin$stillDepthTexture;
     }
 
     @Override
-    public void freezeDepthTexture() {
+    public void freezeDepthMap() {
         if (SATIN$READABLE_DEPTH_FRAMEBUFFERS.isActive()) {
             this.beginWrite(false);
             GlStateManager.bindTexture(this.satin$stillDepthTexture);

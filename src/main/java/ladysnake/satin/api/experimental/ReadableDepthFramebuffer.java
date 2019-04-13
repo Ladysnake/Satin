@@ -24,7 +24,7 @@ public interface ReadableDepthFramebuffer {
      * Marks the readable depth framebuffer feature as used.
      * <p>
      * After this method has been called, all future framebuffers will have
-     * a texture as their depth attachment point
+     * a texture instead of a render buffer as their depth attachment point.
      */
     @API(status = EXPERIMENTAL)
     static void useFeature() {
@@ -54,7 +54,7 @@ public interface ReadableDepthFramebuffer {
      * is rendered.
      *
      * @return the gl id of the depth texture, or -1 if it cannot be obtained
-     * @see #getStillDepthTexture()
+     * @see #getStillDepthMap()
      */
     @CheckForSigned
     @API(status = EXPERIMENTAL)
@@ -64,7 +64,7 @@ public interface ReadableDepthFramebuffer {
      * Returns a still of this framebuffer's depth texture.
      * For most intents and purposes, this is the texture that API consumers should read from.
      * <p>
-     * This texture is updated only when {@link #freezeDepthTexture()} is called.
+     * This texture is updated only when {@link #freezeDepthMap()} is called.
      * <p>
      * If the feature is not enabled, or an incompatibility prevents the retrieval of the
      * {@link #getCurrentDepthTexture() current depth texture}, the still depth texture
@@ -79,11 +79,11 @@ public interface ReadableDepthFramebuffer {
      * @return a still of this framebuffer's depth texture
      */
     @API(status = EXPERIMENTAL)
-    int getStillDepthTexture();
+    int getStillDepthMap();
 
     /**
      * Freezes the {@link #getCurrentDepthTexture() current depth texture} for use in
-     * {@link #getStillDepthTexture()}.
+     * {@link #getStillDepthMap()}.
      * <p>
      * This is called by default on the {@link MinecraftClient#getFramebuffer() main framebuffer}
      * once every frame, right before {@link ladysnake.satin.api.event.PostWorldRenderCallback} is fired.
@@ -91,5 +91,5 @@ public interface ReadableDepthFramebuffer {
      * Calling this method will bind {@code this} framebuffer.
      */
     @API(status = EXPERIMENTAL)
-    void freezeDepthTexture();
+    void freezeDepthMap();
 }
