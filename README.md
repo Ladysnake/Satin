@@ -94,3 +94,5 @@ and the moment it starts rendering HUD's and GUI's
 
 *Note that those events may move to a more dedicated library at some point.*
 
+## Full documentation
+This [repository's wiki](https://github.com/Ladysnake/Satin/wiki) provides documentation to write and use shaders with Satin API.
