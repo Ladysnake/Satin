@@ -1,16 +1,21 @@
 #version 120
 
+// The main texture
 uniform sampler2D DiffuseSampler;
+// The depth map
 uniform sampler2D DepthSampler;
 
+// Position of the camera
 uniform vec3 CameraPosition;
+// Position of the center of the ping effect
+uniform vec3 Center;
+// Time in seconds (+ tick delta)
 uniform float STime;
 
 // The magic matrix to get world coordinates from pixel ones
 uniform mat4 InverseTransformMatrix;
 // The size of the viewport (typically, [0,0,1080,720])
 uniform ivec4 ViewPort;
-
 
 varying vec2 texCoord;
 varying vec4 vPosition;
@@ -38,8 +43,11 @@ void main()
     // Depth fading
     float sceneDepth = texture2D(DepthSampler, viewportCoord).x;
     vec3 pixelPosition = CalcEyeFromWindow(sceneDepth).xyz + CameraPosition;
-    float d = distance(pixelPosition, CameraPosition);
-    d /= mod(STime, 20);
-    vec3 lolwat = vec3(sin(STime), cos(STime), sin(STime + 1.)) * smoothstep(2, 3., d) * smoothstep(4, 3., d);
-    gl_FragColor = vec4(tex.rgb + pow(lolwat, vec3(3)), 1.);
+
+    // Ping effect: color pixels that are some distance away from the center
+    float d = distance(pixelPosition, Center);
+    d /= mod(STime, 20); // Scale the world to make the ping diffuse over time
+    vec3 rainbow = vec3(sin(STime), cos(STime), sin(STime + 1.)) * smoothstep(2, 3., d) * smoothstep(4, 3., d);
+
+    gl_FragColor = vec4(tex.rgb + pow(rainbow, vec3(3)), 1.0);
 }

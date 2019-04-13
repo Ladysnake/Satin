@@ -9,8 +9,10 @@ import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -22,7 +24,7 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
 
     private MinecraftClient mc = MinecraftClient.getInstance();
 
-    public final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(FANCY_NIGHT_SHADER_ID, shader -> {
+    final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(FANCY_NIGHT_SHADER_ID, shader -> {
         shader.setSamplerUniform("DepthSampler", ((ReadableDepthFramebuffer)mc.getFramebuffer()).getStillDepthTexture());
         shader.setUniformValue("ViewPort", 0, 0, mc.window.getFramebufferWidth(), mc.window.getFramebufferHeight());
     });
@@ -53,7 +55,13 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
             testShader.setUniformValue("InverseTransformMatrix", GlMatrices.getInverseTransformMatrix(projectionMatrix));
             Vec3d cameraPos = camera.getPos();
             testShader.setUniformValue("CameraPosition", (float)cameraPos.x, (float)cameraPos.y, (float)cameraPos.z);
+            Entity e = camera.getFocusedEntity();
+            testShader.setUniformValue("Center", lerp(e.x, e.prevX, tickDelta), lerp(e.y, e.prevY, tickDelta), lerp(e.z, e.prevZ, tickDelta));
             testShader.render(tickDelta);
         }
+    }
+
+    private static float lerp(double n, double prevN, float tickDelta) {
+        return (float) MathHelper.lerp(tickDelta, prevN, n);
     }
 }
