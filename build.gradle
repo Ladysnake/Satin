@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.2.0-SNAPSHOT'
+    id 'fabric-loom' version '0.2.1-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -12,7 +12,7 @@ subprojects {
     group = rootProject.maven_group + "." + rootProject.archives_base_name
 
     dependencies {
-        compile rootProject
+        modCompile rootProject
     }
 }
 
