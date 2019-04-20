@@ -12,7 +12,7 @@ subprojects {
     group = rootProject.maven_group + "." + rootProject.archives_base_name
 
     dependencies {
-        modCompile rootProject
+        compile rootProject.sourceSets.main.output
     }
 }
 
