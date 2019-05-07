@@ -30,7 +30,7 @@ public class Satin implements ClientModInitializer {
     public void onInitializeClient() {
         ResolutionChangeCallback.EVENT.register(ReloadableShaderEffectManager.INSTANCE);
         // Subscribe the shader manager to MinecraftClient's resource manager to reload shaders like normal assets.
-        ResourceManagerHelper.get(ResourceType.ASSETS).registerReloadListener(ReloadableShaderEffectManager.INSTANCE);
+        ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(ReloadableShaderEffectManager.INSTANCE);
     }
 
 }

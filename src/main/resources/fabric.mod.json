@@ -6,7 +6,7 @@
   "name": "Satin",
   "icon": "assets/satin/icon.png",
   "description": "Easy shaders for all modders",
-  "licence": "LGPL-3.0-or-later",
+  "license": "LGPL-3.0-or-later",
   "authors": [
     "Pyrofab"
   ],
