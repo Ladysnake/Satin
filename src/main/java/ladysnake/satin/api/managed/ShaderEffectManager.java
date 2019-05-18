@@ -30,11 +30,11 @@ public interface ShaderEffectManager {
      * Manages a post processing shader loaded from a json definition file
      *
      * @param location         the location of the json within your mod's assets
-     * @param uniformInitCallback a block ran once to initialize uniforms
+     * @param initCallback a block ran once the shader effect is initialized
      * @return a lazily initialized screen shader
      */
     @API(status = STABLE, since = "1.0.0")
-    ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> uniformInitCallback);
+    ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback);
 
     /**
      * Removes a shader from the global list of managed shaders,

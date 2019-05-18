@@ -37,7 +37,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     /**Location of the shader json definition file*/
     private final Identifier location;
     /**Callback to run once each time the shader effect is initialized*/
-    private final Consumer<ManagedShaderEffect> uniformInitCallback;
+    private final Consumer<ManagedShaderEffect> initCallback;
     @CheckForNull
     private ShaderEffect shaderGroup;
     private boolean errored;
@@ -47,14 +47,14 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
      * <b>Users should obtain instanced of this class through {@link ShaderEffectManager}</b>
      *
      * @param location         the location of a shader effect JSON definition file
-     * @param uniformInitCallback code to run in {@link #setup(int, int)}
+     * @param initCallback code to run in {@link #setup(int, int)}
      * @see ReloadableShaderEffectManager#manage(Identifier)
      * @see ReloadableShaderEffectManager#manage(Identifier, Consumer)
      */
     @API(status = INTERNAL)
-    public ResettableManagedShaderEffect(Identifier location, Consumer<ManagedShaderEffect> uniformInitCallback) {
+    public ResettableManagedShaderEffect(Identifier location, Consumer<ManagedShaderEffect> initCallback) {
         this.location = location;
-        this.uniformInitCallback = uniformInitCallback;
+        this.initCallback = initCallback;
     }
 
     /**
@@ -65,7 +65,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     public ShaderEffect getShaderEffect() {
         if (!this.isInitialized() && !this.errored) {
             try {
-                initialize();
+                this.initialize();
             } catch (Exception e) {
                 Satin.LOGGER.error("[Satin] Could not create screen shader {}", location, e);
                 this.errored = true;
@@ -89,7 +89,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     public void setup(int windowWidth, int windowHeight) {
         Preconditions.checkNotNull(shaderGroup);
         this.shaderGroup.setupDimensions(windowWidth, windowHeight);
-        this.uniformInitCallback.accept(this);
+        this.initCallback.accept(this);
     }
 
     /**
@@ -106,6 +106,14 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     @Override
     public boolean isErrored() {
         return this.errored;
+    }
+
+    public void setErrored(boolean error) {
+        this.errored = error;
+    }
+
+    public Identifier getLocation() {
+        return location;
     }
 
     /**

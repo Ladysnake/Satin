@@ -24,7 +24,7 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     public static final Identifier SHADER_RESOURCE_KEY = new Identifier("dissolution:shaders");
 
     // Let shaders be garbage collected when no one uses them
-    private static Set<ResettableManagedShaderEffect> managedShaderEffects = Collections.newSetFromMap(new WeakHashMap<>());
+    private Set<ResettableManagedShaderEffect> managedShaderEffects = Collections.newSetFromMap(new WeakHashMap<>());
 
     /**
      * Manages a post processing shader loaded from a json definition file
@@ -34,20 +34,19 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
      */
     @Override
     public ManagedShaderEffect manage(Identifier location) {
-        return manage(location, s -> {
-        });
+        return manage(location, s -> { });
     }
 
     /**
      * Manages a post processing shader loaded from a json definition file
      *
      * @param location            the location of the json within your mod's assets
-     * @param uniformInitCallback a block ran once to initialize uniforms
+     * @param initCallback a block ran once the shader effect is initialized
      * @return a lazily initialized screen shader
      */
     @Override
-    public ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> uniformInitCallback) {
-        ResettableManagedShaderEffect ret = new ResettableManagedShaderEffect(location, uniformInitCallback);
+    public ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback) {
+        ResettableManagedShaderEffect ret = new ResettableManagedShaderEffect(location, initCallback);
         managedShaderEffects.add(ret);
         return ret;
     }
@@ -74,8 +73,13 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
 
     @Override
     public void apply(ResourceManager var1) {
-        for (ManagedShaderEffect ss : managedShaderEffects) {
-            ss.release();
+        for (ResettableManagedShaderEffect ss : managedShaderEffects) {
+            try {
+                ss.initialize();
+            } catch (Exception e) {
+                Satin.LOGGER.error("[Satin] Could not create screen shader {}", ss.getLocation(), e);
+                ss.setErrored(true);
+            }
         }
     }
 
