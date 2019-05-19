@@ -3,6 +3,7 @@ package ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
 import ladysnake.satin.Satin;
+import ladysnake.satin.api.experimental.managed.*;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
@@ -19,6 +20,8 @@ import org.apiguardian.api.API;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -41,6 +44,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     @CheckForNull
     private ShaderEffect shaderGroup;
     private boolean errored;
+    private final Map<String, ManagedUniform> managedUniforms = new HashMap<>();
 
     /**
      * Creates a new shader effect. <br>
@@ -89,7 +93,17 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     public void setup(int windowWidth, int windowHeight) {
         Preconditions.checkNotNull(shaderGroup);
         this.shaderGroup.setupDimensions(windowWidth, windowHeight);
+        for (ManagedUniform uniform : this.managedUniforms.values()) {
+            setupUniform(uniform, shaderGroup);
+        }
         this.initCallback.accept(this);
+    }
+
+    private void setupUniform(ManagedUniform uniform, ShaderEffect shaderEffect) {
+        int found = uniform.findUniformTargets(((AccessiblePassesShaderEffect) shaderEffect).satin$getPasses());
+        if (found == 0) {
+            Satin.LOGGER.warn("[Satin] No uniform found with name {} in shader {}", uniform.getName(), this.location);
+        }
     }
 
     /**
@@ -302,6 +316,61 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
                 shader.getProgram().bindSampler(samplerName, texture);
             }
         }
+    }
+
+    private ManagedUniform manageUniform(String uniformName) {
+        return this.managedUniforms.computeIfAbsent(uniformName, name -> {
+            ManagedUniform ret = new ManagedUniform(name);
+            if (this.shaderGroup != null) {
+                setupUniform(ret, shaderGroup);
+            }
+            return ret;
+        });
+    }
+
+    @Override
+    public Uniform1i findUniform1i(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform2i findUniform2i(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform3i findUniform3i(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform4i findUniform4i(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform1f findUniform1f(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform2f findUniform2f(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform3f findUniform3f(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public Uniform4f findUniform4f(String uniformName) {
+        return manageUniform(uniformName);
+    }
+
+    @Override
+    public UniformMat4 findUniformMat4(String uniformName) {
+        return manageUniform(uniformName);
     }
 
     /**

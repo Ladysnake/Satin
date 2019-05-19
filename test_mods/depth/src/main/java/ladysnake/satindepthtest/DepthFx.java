@@ -2,6 +2,9 @@ package ladysnake.satindepthtest;
 
 import ladysnake.satin.api.event.PostWorldRenderCallback;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
+import ladysnake.satin.api.experimental.managed.Uniform1f;
+import ladysnake.satin.api.experimental.managed.Uniform3f;
+import ladysnake.satin.api.experimental.managed.UniformMat4;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.GlMatrices;
@@ -28,6 +31,10 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
         shader.setSamplerUniform("DepthSampler", ((ReadableDepthFramebuffer)mc.getFramebuffer()).getStillDepthMap());
         shader.setUniformValue("ViewPort", 0, 0, mc.window.getFramebufferWidth(), mc.window.getFramebufferHeight());
     });
+    private final Uniform1f uniformSTime = testShader.findUniform1f("STime");
+    private final UniformMat4 uniformInverseTransformMatrix = testShader.findUniformMat4("InverseTransformMatrix");
+    private final Uniform3f uniformCameraPosition = testShader.findUniform3f("CameraPosition");
+    private final Uniform3f uniformCenter = testShader.findUniform3f("Center");
 
     // fancy shader stuff
     private Matrix4f projectionMatrix = new Matrix4f();
@@ -51,17 +58,17 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
     public void onWorldRendered(Camera camera, float tickDelta, long nanoTime) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (isWorldNight(mc.player)) {
-            testShader.setUniformValue("STime", (ticks + tickDelta) / 20f);
-            testShader.setUniformValue("InverseTransformMatrix", GlMatrices.getInverseTransformMatrix(projectionMatrix));
+            uniformSTime.set((ticks + tickDelta) / 20f);
+            uniformInverseTransformMatrix.set(GlMatrices.getInverseTransformMatrix(projectionMatrix));
             Vec3d cameraPos = camera.getPos();
-            testShader.setUniformValue("CameraPosition", (float)cameraPos.x, (float)cameraPos.y, (float)cameraPos.z);
+            uniformCameraPosition.set((float)cameraPos.x, (float)cameraPos.y, (float)cameraPos.z);
             Entity e = camera.getFocusedEntity();
-            testShader.setUniformValue("Center", lerp(e.x, e.prevX, tickDelta), lerp(e.y, e.prevY, tickDelta), lerp(e.z, e.prevZ, tickDelta));
+            uniformCenter.set(lerpf(e.x, e.prevX, tickDelta), lerpf(e.y, e.prevY, tickDelta), lerpf(e.z, e.prevZ, tickDelta));
             testShader.render(tickDelta);
         }
     }
 
-    private static float lerp(double n, double prevN, float tickDelta) {
+    private static float lerpf(double n, double prevN, float tickDelta) {
         return (float) MathHelper.lerp(tickDelta, prevN, n);
     }
 }
