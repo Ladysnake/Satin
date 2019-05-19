@@ -1,5 +1,6 @@
 package ladysnake.satin.api.managed;
 
+import ladysnake.satin.api.experimental.managed.UniformFinder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlFramebuffer;
 import net.minecraft.client.gl.ShaderEffect;
@@ -26,7 +27,7 @@ import static org.apiguardian.api.API.Status.*;
  * @see ShaderEffectManager
  * @since 1.0.0
  */
-public interface ManagedShaderEffect {
+public interface ManagedShaderEffect extends UniformFinder {
     /**
      * Returns this object's managed {@link ShaderEffect}, creating and initializing it if it doesn't exist.
      * <p>

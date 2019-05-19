@@ -3,6 +3,7 @@ package ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.platform.GlStateManager;
 import ladysnake.satin.Satin;
+import ladysnake.satin.api.experimental.managed.*;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
@@ -302,6 +303,56 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
                 shader.getProgram().bindSampler(samplerName, texture);
             }
         }
+    }
+
+    @Override
+    public Uniform1i findUniform1i(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform2i findUniform2i(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform3i findUniform3i(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform4i findUniform4i(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform1f findUniform1f(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform2f findUniform2f(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform3f findUniform3f(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public Uniform4f findUniform4f(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public UniformMat4 findUniformMat4(String uniformName) {
+        return null;
+    }
+
+    @Override
+    public SamplerUniform findSamplerUniform(String samplerName) {
+        return null;
     }
 
     /**
