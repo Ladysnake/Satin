@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.2.1-SNAPSHOT'
+    id 'fabric-loom' version '0.2.4-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -37,15 +37,15 @@ allprojects {
         //to change the versions see the gradle.properties file
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-        modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+        modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
         // Fabric API. This is technically optional, but you probably want it anyway.
-        modCompile "net.fabricmc:fabric:${project.fabric_version}"
-        modCompile "io.github.prospector.modmenu:ModMenu:${project.modmenu_version}"
+        modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+        modRuntime "io.github.prospector.modmenu:ModMenu:${project.modmenu_version}"
 
-        compile "org.jetbrains:annotations:${jb_annotations_version}"
-        compile "com.google.code.findbugs:jsr305:${findbugs_version}"
-        compile "org.apiguardian:apiguardian-api:${apiguardian_version}"
+        compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
+        compileOnly "com.google.code.findbugs:jsr305:${findbugs_version}"
+        compileOnly "org.apiguardian:apiguardian-api:${apiguardian_version}"
 
         testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0-M1"
     }
@@ -88,7 +88,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             // add all the jars that should be included when publishing to maven
-            artifact(jar) {
+            artifact(remapJar.output) {
                 builtBy remapJar
             }
             artifact(sourcesJar) {
