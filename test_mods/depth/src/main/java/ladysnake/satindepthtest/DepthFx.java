@@ -44,7 +44,7 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
         if (player != null) {
             World world = player.world;
             float celestialAngle = world.getSkyAngle(1.0f);
-            return celestialAngle > 0.23f && celestialAngle < 0.76f;
+            return 0.23f < celestialAngle && celestialAngle < 0.76f;
         }
         return false;
     }
