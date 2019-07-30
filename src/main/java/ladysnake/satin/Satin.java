@@ -5,6 +5,7 @@ import ladysnake.satin.api.event.ResolutionChangeCallback;
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,6 +32,9 @@ public class Satin implements ClientModInitializer {
         ResolutionChangeCallback.EVENT.register(ReloadableShaderEffectManager.INSTANCE);
         // Subscribe the shader manager to MinecraftClient's resource manager to reload shaders like normal assets.
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(ReloadableShaderEffectManager.INSTANCE);
+        if (FabricLoader.getInstance().isModLoaded("optifabric")) {
+            LOGGER.warn("[Satin] Optifine present in the instance, custom entity post process shaders will not work");
+        }
     }
 
 }
