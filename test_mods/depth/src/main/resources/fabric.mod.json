@@ -15,7 +15,7 @@
       "ladysnake.satindepthtest.SatinDepthTest"
     ]
   },
-  "requires": {
+  "depends": {
     "satin": "*",
     "fabricloader": ">=0.4.0",
     "fabric": "*"
