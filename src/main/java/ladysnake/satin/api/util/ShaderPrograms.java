@@ -1,13 +1,14 @@
 package ladysnake.satin.api.util;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import ladysnake.satin.Satin;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.GlProgramManager;
+import net.minecraft.client.gl.GlUniform;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 import org.lwjgl.opengl.GL20;
@@ -44,7 +45,8 @@ public final class ShaderPrograms {
             return;
         }
 
-        GLX.glUseProgram(program);
+        // method_22094 == glUseProgram
+        GlProgramManager.method_22094(program);
     }
 
     /**
@@ -63,7 +65,8 @@ public final class ShaderPrograms {
             return;
         }
 
-        int attrib = GLX.glGetAttribLocation(program, attribName);
+        // method_22097 = glGetAttribLocation
+        int attrib = GlUniform.method_22097(program, attribName);
         if (attrib != -1) {
             operation.accept(attrib);
         }
@@ -184,7 +187,8 @@ public final class ShaderPrograms {
             uniform = shaderUniformsCache.getInt(uniformName);
         } else {
             // Compute if absent
-            uniform = GLX.glGetUniformLocation(program, uniformName);
+            // method_22096 == glGetUniformLocation
+            uniform = GlUniform.method_22096(program, uniformName);
             shaderUniformsCache.put(uniformName, uniform);
         }
         return uniform;
@@ -211,11 +215,11 @@ public final class ShaderPrograms {
         for (int i = 0; i < textures.length; i++) {
             Identifier texture = textures[i];
             // don't mess with the lightmap (1) nor the default texture (0)
-            GlStateManager.activeTexture(i + GLX.GL_TEXTURE2);
+            RenderSystem.activeTexture(i + GL20.GL_TEXTURE2);
             MinecraftClient.getInstance().getTextureManager().bindTexture(texture);
             // start texture uniforms at 1, as 0 would be the default texture which doesn't require any special operation
             setUniform(program, "texture" + (i + 1), i + 2);
         }
-        GlStateManager.activeTexture(GLX.GL_TEXTURE0);
+        RenderSystem.activeTexture(GL20.GL_TEXTURE0);
     }
 }

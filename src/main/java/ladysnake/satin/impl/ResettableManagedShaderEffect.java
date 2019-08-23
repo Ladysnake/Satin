@@ -1,7 +1,7 @@
 package ladysnake.satin.impl;
 
 import com.google.common.base.Preconditions;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.managed.*;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
@@ -149,15 +149,15 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     public void render(float tickDelta) {
         ShaderEffect sg = this.getShaderEffect();
         if (sg != null) {
-            GlStateManager.matrixMode(GL_TEXTURE);
-            GlStateManager.loadIdentity();
+            RenderSystem.matrixMode(GL_TEXTURE);
+            RenderSystem.loadIdentity();
             sg.render(tickDelta);
             MinecraftClient.getInstance().getFramebuffer().beginWrite(true);
-            GlStateManager.disableBlend();
-            GlStateManager.enableAlphaTest();
-            GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // restore blending
-            GlStateManager.enableDepthTest();
-            GlStateManager.matrixMode(GL_MODELVIEW);
+            RenderSystem.disableBlend();
+            RenderSystem.enableAlphaTest();
+            RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // restore blending
+            RenderSystem.enableDepthTest();
+            RenderSystem.matrixMode(GL_MODELVIEW);
         }
     }
 

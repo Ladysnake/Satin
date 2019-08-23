@@ -1,12 +1,12 @@
 package ladysnake.satin.mixin.client.gl;
 
-import com.mojang.blaze3d.platform.GLX;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.TextureUtil;
+import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import ladysnake.satin.config.OptionalFeature;
 import ladysnake.satin.config.SatinFeatures;
+import net.minecraft.class_4493;
+import net.minecraft.class_4536;
 import net.minecraft.client.gl.GlFramebuffer;
 import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.GL11;
@@ -15,16 +15,16 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.mojang.blaze3d.platform.GLX.GL_DEPTH_ATTACHMENT;
-import static com.mojang.blaze3d.platform.GLX.GL_FRAMEBUFFER;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24;
-import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_DEFAULT;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL30C.GL_DEPTH_ATTACHMENT;
 import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 
 @Mixin(GlFramebuffer.class)
@@ -46,28 +46,31 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
 
     @Inject(
             method = "initFbo",
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GLX;glFramebufferRenderbuffer(IIII)V", shift = AFTER)
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_4493;method_22004(IIII)V", shift = AFTER)
     )
     private void initFbo(int width, int height, boolean flushErrors, CallbackInfo ci) {
         if (this.useDepthAttachment)
             if (SatinFeatures.getInstance().readableDepthFramebuffers.isActive()) {
                 // Delete the depth render buffer, it will not be used
-                GLX.glDeleteRenderbuffers(this.depthAttachment);
+                // class_4493.method_22057 == GLX.glDeleteRenderBuffers
+                class_4493.method_22057(this.depthAttachment);
                 this.depthAttachment = -1;
                 this.satin$depthTexture = satin$setupDepthTexture();
-                GLX.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this.satin$depthTexture, 0);
+
+                // class_4493.method_21951 == GLX.glFramebufferTexture2D
+                class_4493.method_21951(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this.satin$depthTexture, 0);
             }
             this.satin$stillDepthTexture = satin$setupDepthTexture();
     }
 
     private int satin$setupDepthTexture() {
         int shadowMap = GL11.glGenTextures();
-        GlStateManager.bindTexture(shadowMap);
-        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        GlStateManager.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
+        RenderSystem.bindTexture(shadowMap);
+        RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        RenderSystem.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
         return shadowMap;
     }
 
@@ -75,7 +78,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     private void delete(CallbackInfo ci) {
         this.satin$deleteDepthTexture();
         if (this.satin$stillDepthTexture > -1) {
-            TextureUtil.releaseTextureId(this.satin$depthTexture);
+            class_4536.releaseTextureId(this.satin$depthTexture);
             this.satin$depthTexture = -1;
         }
         this.satin$actualDepthTexture = -99;
@@ -83,9 +86,14 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
 
     private void satin$deleteDepthTexture() {
         if (this.satin$depthTexture > -1) {
-            TextureUtil.releaseTextureId(this.satin$depthTexture);
+            class_4536.releaseTextureId(this.satin$depthTexture);
             this.satin$depthTexture = -1;
         }
+    }
+
+    @Unique
+    private static int getBoundFramebuffer() {
+        return RenderSystem.getInteger(GL_FRAMEBUFFER_BINDING);
     }
 
     @Override
@@ -93,7 +101,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
         // < -1 means it hasn't been initialized yet
         if (this.satin$actualDepthTexture < -1) {
             int actualDepthTexture;
-            int boundFbo = GLX.getBoundFramebuffer();
+            int boundFbo = getBoundFramebuffer();
             if (boundFbo != this.fbo) {
                 throw new IllegalStateException("Framebuffer must be bound before querying its depth texture for the first time");
             }
@@ -147,7 +155,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     public void freezeDepthMap() {
         if (SATIN$READABLE_DEPTH_FRAMEBUFFERS.isActive()) {
             this.beginWrite(false);
-            GlStateManager.bindTexture(this.satin$stillDepthTexture);
+            RenderSystem.bindTexture(this.satin$stillDepthTexture);
             glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, this.texWidth, this.texHeight);
         }
     }
