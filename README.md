@@ -8,7 +8,7 @@ A lightweight Fabric library for OpenGL shader usage.
 
 ## Adding Satin to your project
 
-You can add the library by inserting the following in your `build.gradle`:
+You can add the library by inserting the following in your `build.gradle` (Requires Loom 0.2.4+):
 
 ```gradle
 repositories {
@@ -16,12 +16,11 @@ repositories {
 }
 
 dependencies {
-    modCompile "com.github.Ladysnake:Satin:${satin_version}"
+    modImplementation "com.github.Ladysnake:Satin:${satin_version}"
     // Include Satin as a Jar-in-Jar dependency (optional)
     include "com.github.Ladysnake:Satin:${satin_version}"
 }
 ```
-*note: the `include` configuration requires loom 0.2.1 or more recent*
 
 You can then add the library version to your `gradle.properties`file:
 
@@ -31,6 +30,7 @@ satin_version = 1.x.y
 ```
 
 You can find the current version of Satin in the [releases](https://github.com/Ladysnake/Satin/releases) tab of the repository on Github.
+Snapshot versions of Satin can be retrieved from the 1.15 branch using `1.15-SNAPSHOT` as a version.
 
 ## Using Satin
 
