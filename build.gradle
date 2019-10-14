@@ -41,7 +41,7 @@ allprojects {
 
         // Fabric API. This is technically optional, but you probably want it anyway.
         modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-        modRuntime "io.github.prospector:modmenu:${project.modmenu_version}"
+//        modRuntime "io.github.prospector:modmenu:${project.modmenu_version}"
 
         compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
         compileOnly "com.google.code.findbugs:jsr305:${findbugs_version}"

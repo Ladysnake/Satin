@@ -1,13 +1,13 @@
 package ladysnake.satin.mixin.client.gl;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import ladysnake.satin.config.OptionalFeature;
 import ladysnake.satin.config.SatinFeatures;
-import net.minecraft.class_4493;
-import net.minecraft.class_4536;
 import net.minecraft.client.gl.GlFramebuffer;
+import net.minecraft.client.texture.TextureUtil;
 import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -46,19 +46,17 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
 
     @Inject(
             method = "initFbo",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_4493;method_22004(IIII)V", shift = AFTER)
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;framebufferRenderbuffer(IIII)V", shift = AFTER)
     )
     private void initFbo(int width, int height, boolean flushErrors, CallbackInfo ci) {
         if (this.useDepthAttachment)
             if (SatinFeatures.getInstance().readableDepthFramebuffers.isActive()) {
                 // Delete the depth render buffer, it will not be used
-                // class_4493.method_22057 == GLX.glDeleteRenderBuffers
-                class_4493.method_22057(this.depthAttachment);
+                GlStateManager.deleteRenderbuffers(this.depthAttachment);
                 this.depthAttachment = -1;
                 this.satin$depthTexture = satin$setupDepthTexture();
 
-                // class_4493.method_21951 == GLX.glFramebufferTexture2D
-                class_4493.method_21951(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this.satin$depthTexture, 0);
+                GlStateManager.framebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this.satin$depthTexture, 0);
             }
             this.satin$stillDepthTexture = satin$setupDepthTexture();
     }
@@ -70,7 +68,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        RenderSystem.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
+        GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
         return shadowMap;
     }
 
@@ -78,7 +76,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     private void delete(CallbackInfo ci) {
         this.satin$deleteDepthTexture();
         if (this.satin$stillDepthTexture > -1) {
-            class_4536.releaseTextureId(this.satin$depthTexture);
+            TextureUtil.releaseTextureId(this.satin$depthTexture);
             this.satin$depthTexture = -1;
         }
         this.satin$actualDepthTexture = -99;
@@ -86,14 +84,14 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
 
     private void satin$deleteDepthTexture() {
         if (this.satin$depthTexture > -1) {
-            class_4536.releaseTextureId(this.satin$depthTexture);
+            TextureUtil.releaseTextureId(this.satin$depthTexture);
             this.satin$depthTexture = -1;
         }
     }
 
     @Unique
     private static int getBoundFramebuffer() {
-        return RenderSystem.getInteger(GL_FRAMEBUFFER_BINDING);
+        return GlStateManager.getInteger(GL_FRAMEBUFFER_BINDING);
     }
 
     @Override

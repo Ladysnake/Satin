@@ -2,7 +2,6 @@
   "required": true,
   "compatibilityLevel": "JAVA_8",
   "package": "ladysnake.satin.mixin.client",
-  "plugin": "ladysnake.satin.mixin.SatinMixins",
   "mixins": [
     "event.GameRendererMixin",
     "event.MinecraftClientMixin",
@@ -10,6 +9,7 @@
     "gl.DepthGlFramebufferMixin",
     "gl.GlUniformMixin",
     "gl.JsonGlProgramMixin",
+    "gl.Matrix4FAccessor",
     "gl.ShaderEffectMixin"
   ],
   "injectors": {

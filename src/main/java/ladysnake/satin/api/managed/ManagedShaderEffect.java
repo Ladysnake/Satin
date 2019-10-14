@@ -4,7 +4,7 @@ import ladysnake.satin.api.experimental.managed.UniformFinder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.GlFramebuffer;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.texture.Texture;
+import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -234,7 +234,7 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param texture     a texture object
      */
     @API(status = STABLE, since = "1.0.0")
-    void setSamplerUniform(String samplerName, Texture texture);
+    void setSamplerUniform(String samplerName, AbstractTexture texture);
 
     /**
      * Sets the value of a sampler uniform declared in json

@@ -1,9 +1,9 @@
 package ladysnake.satin.impl;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.util.ShaderLinkException;
 import ladysnake.satin.api.util.ShaderLoader;
-import net.minecraft.class_4493;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.lwjgl.opengl.ARBShaderObjects;
@@ -35,16 +35,14 @@ public final class ValidatingShaderLoader implements ShaderLoader {
     public int loadShader(ResourceManager resourceManager, @Nullable Identifier vertexLocation, @Nullable Identifier fragmentLocation) throws IOException {
 
         // program creation
-        // GLX.glCreateProgram
-        int programId = class_4493.method_22062();
+        int programId = GlStateManager.createProgram();
 
         int vertexShaderId = 0;
         int fragmentShaderId = 0;
 
         // vertex shader creation
         if (vertexLocation != null) {
-            // class_4493.method_22035 = GLX.glCreateShader
-            vertexShaderId = class_4493.method_22035(GL30.GL_VERTEX_SHADER);
+            vertexShaderId = GlStateManager.createShader(GL30.GL_VERTEX_SHADER);
             ARBShaderObjects.glShaderSourceARB(vertexShaderId, fromFile(resourceManager, vertexLocation));
             ARBShaderObjects.glCompileShaderARB(vertexShaderId);
             ARBShaderObjects.glAttachObjectARB(programId, vertexShaderId);
@@ -56,8 +54,7 @@ public final class ValidatingShaderLoader implements ShaderLoader {
 
         // fragment shader creation
         if (fragmentLocation != null) {
-            // class_4493.method_22035 = GLX.glCreateShader
-            fragmentShaderId = class_4493.method_22035(GL30.GL_FRAGMENT_SHADER);
+            fragmentShaderId = GlStateManager.createShader(GL30.GL_FRAGMENT_SHADER);
             ARBShaderObjects.glShaderSourceARB(fragmentShaderId, fromFile(resourceManager, fragmentLocation));
             ARBShaderObjects.glCompileShaderARB(fragmentShaderId);
             ARBShaderObjects.glAttachObjectARB(programId, fragmentShaderId);
@@ -67,8 +64,7 @@ public final class ValidatingShaderLoader implements ShaderLoader {
             }
         }
 
-        // GLX.glLinkProgram
-        class_4493.method_22051(programId);
+        GlStateManager.linkProgram(programId);
         // check potential linkage errors
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
             throw new ShaderLinkException("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));

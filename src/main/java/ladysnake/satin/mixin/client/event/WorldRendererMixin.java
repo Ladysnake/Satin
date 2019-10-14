@@ -2,24 +2,42 @@ package ladysnake.satin.mixin.client.event;
 
 import ladysnake.satin.api.event.EntitiesPostRenderCallback;
 import ladysnake.satin.api.event.EntitiesPreRenderCallback;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.VisibleRegion;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
+import net.minecraft.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
+    @Unique
+    private Frustum frustum;
 
-    @Inject(method = "renderEntities", at = @At(value = "CONSTANT", args = "stringValue=entities"))
-    private void firePreRenderEntities(Camera camera, VisibleRegion frustum, float tickDelta, CallbackInfo info) {
+    @ModifyVariable(
+            method = "render",
+            at = @At(value = "CONSTANT", args = "stringValue=entities", ordinal = 0, shift = At.Shift.BEFORE)
+    )
+    private Frustum captureFrustum(Frustum frustum) {
+        this.frustum = frustum;
+        return frustum;
+    }
+
+    @Inject(
+            method = "render",
+            at = @At(value = "CONSTANT", args = "stringValue=entities", ordinal = 0)
+    )
+    private void firePreRenderEntities(MatrixStack matrixStack, float tickDelta, long time, boolean b, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, CallbackInfo ci) {
         EntitiesPreRenderCallback.EVENT.invoker().beforeEntitiesRender(camera, frustum, tickDelta);
     }
 
-    @Inject(method = "renderEntities", at = @At(value = "CONSTANT", args = "stringValue=blockentities"))
-    private void firePostRenderEntities(Camera camera, VisibleRegion frustum, float tickDelta, CallbackInfo info) {
+    @Inject(
+            method = "render",
+            at = @At(value = "CONSTANT", args = "stringValue=blockentities", ordinal = 0)
+    )
+    private void firePostRenderEntities(MatrixStack matrixStack, float tickDelta, long time, boolean b, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, CallbackInfo ci) {
         EntitiesPostRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickDelta);
     }
 

@@ -29,7 +29,7 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
 
     final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(FANCY_NIGHT_SHADER_ID, shader -> {
         shader.setSamplerUniform("DepthSampler", ((ReadableDepthFramebuffer)mc.getFramebuffer()).getStillDepthMap());
-        shader.setUniformValue("ViewPort", 0, 0, mc.window.getFramebufferWidth(), mc.window.getFramebufferHeight());
+        shader.setUniformValue("ViewPort", 0, 0, mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
     });
     private final Uniform1f uniformSTime = testShader.findUniform1f("STime");
     private final UniformMat4 uniformInverseTransformMatrix = testShader.findUniformMat4("InverseTransformMatrix");
@@ -63,7 +63,7 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
             Vec3d cameraPos = camera.getPos();
             uniformCameraPosition.set((float)cameraPos.x, (float)cameraPos.y, (float)cameraPos.z);
             Entity e = camera.getFocusedEntity();
-            uniformCenter.set(lerpf(e.x, e.prevX, tickDelta), lerpf(e.y, e.prevY, tickDelta), lerpf(e.z, e.prevZ, tickDelta));
+            uniformCenter.set(lerpf(e.getX(), e.prevX, tickDelta), lerpf(e.getY(), e.prevY, tickDelta), lerpf(e.getZ(), e.prevZ, tickDelta));
             testShader.render(tickDelta);
         }
     }

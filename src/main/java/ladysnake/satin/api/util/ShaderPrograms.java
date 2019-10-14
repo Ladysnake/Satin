@@ -45,8 +45,7 @@ public final class ShaderPrograms {
             return;
         }
 
-        // method_22094 == glUseProgram
-        GlProgramManager.method_22094(program);
+        GlProgramManager.useProgram(program);
     }
 
     /**
@@ -65,8 +64,7 @@ public final class ShaderPrograms {
             return;
         }
 
-        // method_22097 = glGetAttribLocation
-        int attrib = GlUniform.method_22097(program, attribName);
+        int attrib = GlUniform.getAttribLocation(program, attribName);
         if (attrib != -1) {
             operation.accept(attrib);
         }
@@ -187,8 +185,7 @@ public final class ShaderPrograms {
             uniform = shaderUniformsCache.getInt(uniformName);
         } else {
             // Compute if absent
-            // method_22096 == glGetUniformLocation
-            uniform = GlUniform.method_22096(program, uniformName);
+            uniform = GlUniform.getUniformLocation(program, uniformName);
             shaderUniformsCache.put(uniformName, uniform);
         }
         return uniform;

@@ -12,7 +12,7 @@ import net.minecraft.client.gl.GlFramebuffer;
 import net.minecraft.client.gl.JsonGlProgram;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.texture.Texture;
+import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -86,7 +86,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
         this.release();
         MinecraftClient mc = MinecraftClient.getInstance();
         this.shaderGroup = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), this.location);
-        this.setup(mc.window.getWidth(), mc.window.getHeight());
+        this.setup(mc.getWindow().getWidth(), mc.getWindow().getHeight());
     }
 
     @API(status = INTERNAL)
@@ -289,7 +289,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
      * {@inheritDoc}
      */
     @Override
-    public void setSamplerUniform(String samplerName, Texture texture) {
+    public void setSamplerUniform(String samplerName, AbstractTexture texture) {
         setSamplerUniform(samplerName, (Object) texture);
     }
 

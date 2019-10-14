@@ -10,6 +10,7 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,8 +42,8 @@ public abstract class GameRendererMixin {
         ShaderEffectRenderCallback.EVENT.invoker().renderShaderEffects(tickDelta);
     }
 
-    @Inject(method = "renderCenter", at = @At(value = "CONSTANT", args = "stringValue=hand"))
-    private void hookPostWorldRender(float tickDelta, long nanoTime, CallbackInfo ci) {
+    @Inject(method = "renderWorld", at = @At(value = "CONSTANT", args = "stringValue=hand"))
+    private void hookPostWorldRender(float tickDelta, long nanoTime, MatrixStack matrixStack, CallbackInfo ci) {
         ((ReadableDepthFramebuffer)MinecraftClient.getInstance().getFramebuffer()).freezeDepthMap();
         PostWorldRenderCallback.EVENT.invoker().onWorldRendered(this.camera, tickDelta, nanoTime);
     }
