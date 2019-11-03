@@ -2,7 +2,6 @@ package ladysnake.satin;
 
 import com.mojang.blaze3d.platform.GLX;
 import ladysnake.satin.api.event.ResolutionChangeCallback;
-import ladysnake.satin.impl.FbReloadFix;
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -30,8 +29,6 @@ public class Satin implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        FbReloadFix.init();
-        // Subscribe the shader manager to the resolution change callback to reload shaders when needed
         ResolutionChangeCallback.EVENT.register(ReloadableShaderEffectManager.INSTANCE);
         // Subscribe the shader manager to MinecraftClient's resource manager to reload shaders like normal assets.
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(ReloadableShaderEffectManager.INSTANCE);
