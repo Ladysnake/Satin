@@ -20,7 +20,7 @@ import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 public abstract class GlUniformMixin {
     @Shadow @Final private IntBuffer intData;
 
-    @Redirect(method = "uploadInts", at = @At(value = "INVOKE", target = "Ljava/nio/FloatBuffer;clear()Ljava/nio/Buffer;"))
+    @Redirect(method = "uploadInts", at = @At(value = "INVOKE", target = "Ljava/nio/FloatBuffer;clear()Ljava/nio/Buffer;", remap = false))
     private Buffer fixIntUniforms(FloatBuffer floatBuffer) {
         this.intData.clear();
         return floatBuffer;
