@@ -2,7 +2,7 @@ package ladysnake.satin.api.managed;
 
 import ladysnake.satin.api.experimental.managed.UniformFinder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.GlFramebuffer;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.util.math.Matrix4f;
@@ -107,7 +107,7 @@ public interface ManagedShaderEffect extends UniformFinder {
      * Calling this method first setups the graphic state for rendering,
      * then uploads uniforms to the GPU if they have been changed since last
      * draw, draws the {@link MinecraftClient#getFramebuffer() main framebuffer}'s texture
-     * to intermediate {@link GlFramebuffer framebuffers} as defined by the JSON files
+     * to intermediate {@link Framebuffer framebuffers} as defined by the JSON files
      * and resets part of the graphic state. The shader will be {@link #initialize() initialized}
      * if it has not been before.
      * <p>
@@ -243,7 +243,7 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param textureFbo  a framebuffer which main texture will be used
      */
     @API(status = STABLE, since = "1.0.0")
-    void setSamplerUniform(String samplerName, GlFramebuffer textureFbo);
+    void setSamplerUniform(String samplerName, Framebuffer textureFbo);
 
     /**
      * Sets the value of a sampler uniform declared in json

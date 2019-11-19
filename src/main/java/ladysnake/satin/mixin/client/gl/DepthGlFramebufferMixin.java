@@ -6,7 +6,7 @@ import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import ladysnake.satin.config.OptionalFeature;
 import ladysnake.satin.config.SatinFeatures;
-import net.minecraft.client.gl.GlFramebuffer;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.TextureUtil;
 import org.lwjgl.opengl.ARBFramebufferObject;
 import org.lwjgl.opengl.GL11;
@@ -27,13 +27,13 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL30C.GL_DEPTH_ATTACHMENT;
 import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 
-@Mixin(GlFramebuffer.class)
+@Mixin(Framebuffer.class)
 public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffer {
     @Shadow @Final public boolean useDepthAttachment;
 
     @Shadow public int depthAttachment;
-    @Shadow public int texWidth;
-    @Shadow public int texHeight;
+    @Shadow public int textureWidth;
+    @Shadow public int textureHeight;
 
     @Shadow public int fbo;
     private static final OptionalFeature SATIN$READABLE_DEPTH_FRAMEBUFFERS = SatinFeatures.getInstance().readableDepthFramebuffers;
@@ -68,11 +68,11 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.texWidth, this.texHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
+        GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.textureWidth, this.textureHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
         return shadowMap;
     }
 
-    @Inject(method = "delete", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/gl/GlFramebuffer;depthAttachment:I"))
+    @Inject(method = "delete", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/gl/Framebuffer;depthAttachment:I"))
     private void delete(CallbackInfo ci) {
         this.satin$deleteDepthTexture();
         if (this.satin$stillDepthTexture > -1) {
@@ -154,7 +154,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
         if (SATIN$READABLE_DEPTH_FRAMEBUFFERS.isActive()) {
             this.beginWrite(false);
             RenderSystem.bindTexture(this.satin$stillDepthTexture);
-            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, this.texWidth, this.texHeight);
+            glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, this.textureWidth, this.textureHeight);
         }
     }
 }
