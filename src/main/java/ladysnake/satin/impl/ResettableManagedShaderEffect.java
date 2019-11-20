@@ -86,7 +86,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
         this.release();
         MinecraftClient mc = MinecraftClient.getInstance();
         this.shaderGroup = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), this.location);
-        this.setup(mc.getWindow().getWidth(), mc.getWindow().getHeight());
+        this.setup(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
     }
 
     @API(status = INTERNAL)

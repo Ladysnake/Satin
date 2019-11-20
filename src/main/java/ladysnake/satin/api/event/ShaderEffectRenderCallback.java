@@ -9,11 +9,11 @@ public interface ShaderEffectRenderCallback {
      * Post process shader effects should generally be rendered at that time.
      */
     Event<ShaderEffectRenderCallback> EVENT = EventFactory.createArrayBacked(ShaderEffectRenderCallback.class,
-            (listeners) -> (deltaTick) -> {
+            (listeners) -> (tickDelta) -> {
                 for (ShaderEffectRenderCallback handler : listeners) {
-                    handler.renderShaderEffects(deltaTick);
+                    handler.renderShaderEffects(tickDelta);
                 }
             });
 
-    void renderShaderEffects(float deltaTick);
+    void renderShaderEffects(float tickDelta);
 }

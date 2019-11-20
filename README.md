@@ -16,9 +16,9 @@ repositories {
 }
 
 dependencies {
-    modImplementation "com.github.Ladysnake:Satin:${satin_version}"
+    modImplementation "io.github.ladysnake:Satin:${satin_version}"
     // Include Satin as a Jar-in-Jar dependency (optional)
-    include "com.github.Ladysnake:Satin:${satin_version}"
+    include "io.github.ladysnake:Satin:${satin_version}"
 }
 ```
 
