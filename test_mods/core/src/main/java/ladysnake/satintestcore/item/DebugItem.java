@@ -34,7 +34,7 @@ public class DebugItem extends Item {
         } else {
             this.callbacks.get(debugMode).use(world, player, hand);
         }
-        return new TypedActionResult<>(ActionResult.SUCCESS, player.getStackInHand(hand), true);
+        return new TypedActionResult<>(ActionResult.SUCCESS, player.getStackInHand(hand));
     }
 
     @Override

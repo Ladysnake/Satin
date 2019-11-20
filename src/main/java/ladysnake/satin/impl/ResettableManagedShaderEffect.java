@@ -8,7 +8,7 @@ import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.GlFramebuffer;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonGlProgram;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
@@ -297,7 +297,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
      * {@inheritDoc}
      */
     @Override
-    public void setSamplerUniform(String samplerName, GlFramebuffer textureFbo) {
+    public void setSamplerUniform(String samplerName, Framebuffer textureFbo) {
         setSamplerUniform(samplerName, (Object) textureFbo);
     }
 

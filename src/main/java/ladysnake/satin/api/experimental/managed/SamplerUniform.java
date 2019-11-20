@@ -1,6 +1,6 @@
 package ladysnake.satin.api.experimental.managed;
 
-import net.minecraft.client.gl.GlFramebuffer;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.AbstractTexture;
 import org.apiguardian.api.API;
 
@@ -21,7 +21,7 @@ public interface SamplerUniform {
      * @param textureFbo  a framebuffer which main texture will be used
      */
     @API(status = EXPERIMENTAL, since = "1.3.0")
-    void set(GlFramebuffer textureFbo);
+    void set(Framebuffer textureFbo);
 
     /**
      * Sets the value of a sampler uniform declared in json

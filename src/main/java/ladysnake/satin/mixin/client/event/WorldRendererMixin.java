@@ -3,7 +3,8 @@ package ladysnake.satin.mixin.client.event;
 import ladysnake.satin.api.event.EntitiesPostRenderCallback;
 import ladysnake.satin.api.event.EntitiesPreRenderCallback;
 import net.minecraft.client.render.*;
-import net.minecraft.util.math.MatrixStack;
+import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +30,7 @@ public abstract class WorldRendererMixin {
             method = "render",
             at = @At(value = "CONSTANT", args = "stringValue=entities", ordinal = 0)
     )
-    private void firePreRenderEntities(MatrixStack matrixStack, float tickDelta, long time, boolean b, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, CallbackInfo ci) {
+    private void firePreRenderEntities(MatrixStack matrix, float tickDelta, long time, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, Matrix4f matrix4f, CallbackInfo ci) {
         EntitiesPreRenderCallback.EVENT.invoker().beforeEntitiesRender(camera, frustum, tickDelta);
     }
 
@@ -37,7 +38,7 @@ public abstract class WorldRendererMixin {
             method = "render",
             at = @At(value = "CONSTANT", args = "stringValue=blockentities", ordinal = 0)
     )
-    private void firePostRenderEntities(MatrixStack matrixStack, float tickDelta, long time, boolean b, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, CallbackInfo ci) {
+    private void firePostRenderEntities(MatrixStack matrix, float tickDelta, long time, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, Matrix4f matrix4f, CallbackInfo ci) {
         EntitiesPostRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickDelta);
     }
 
