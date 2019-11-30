@@ -9,7 +9,7 @@
     "gl.DepthGlFramebufferMixin",
     "gl.GlUniformMixin",
     "gl.JsonGlProgramMixin",
-    "gl.Matrix4FAccessor",
+    "gl.Matrix4fMixin",
     "gl.ShaderEffectMixin"
   ],
   "injectors": {

@@ -1,6 +1,6 @@
 package ladysnake.satin.api.util;
 
-import ladysnake.satin.mixin.client.gl.Matrix4FAccessor;
+import ladysnake.satin.impl.ModifiableMatrix4f;
 import net.minecraft.client.util.math.Matrix4f;
 import org.apiguardian.api.API;
 import org.lwjgl.BufferUtils;
@@ -98,7 +98,7 @@ public final class GlMatrices {
         float[] projectionViewArray = GlMatrices.multiplyMat4(projectionArray, projectionArray, viewArray);
         GlMatrices.invertMat4(projectionViewArray, projectionViewArray);
         //noinspection ConstantConditions
-        System.arraycopy(projectionViewArray, 0, ((Matrix4FAccessor) (Object) outMat).getComponents(), 0, 16);
+        ((ModifiableMatrix4f) (Object) outMat).satin_setFromArray(projectionViewArray);
         return outMat;
     }
 
