@@ -52,7 +52,7 @@ public abstract class GameRendererMixin {
      * Fires {@link PickEntityShaderCallback#EVENT}
      * Disabled by optifine
      */
-    @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN", ordinal = 1), require = 0)
+    @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN"), require = 0)
     private void useCustomEntityShader(@Nullable Entity entity, CallbackInfo info) {
         if (this.shader == null) {
             // Mixin does not like method references to shadowed methods
