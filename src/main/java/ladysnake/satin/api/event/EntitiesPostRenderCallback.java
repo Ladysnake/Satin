@@ -3,8 +3,7 @@ package ladysnake.satin.api.event;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.VisibleRegion;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.render.Frustum;
 
 @FunctionalInterface
 public interface EntitiesPostRenderCallback {
@@ -18,5 +17,5 @@ public interface EntitiesPostRenderCallback {
                 }
             });
 
-    void onEntitiesRendered(Camera camera, VisibleRegion frustum, float tickDelta);
+    void onEntitiesRendered(Camera camera, Frustum frustum, float tickDelta);
 }

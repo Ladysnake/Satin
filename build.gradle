@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '0.2.5-SNAPSHOT'
+    id 'fabric-loom' version '0.2.6-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -36,12 +36,12 @@ allprojects {
     dependencies {
         //to change the versions see the gradle.properties file
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
-        mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+        mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
         // Fabric API. This is technically optional, but you probably want it anyway.
         modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-        modRuntime "io.github.prospector.modmenu:ModMenu:${project.modmenu_version}"
+//        modRuntime "io.github.prospector:modmenu:${project.modmenu_version}"
 
         compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
         compileOnly "com.google.code.findbugs:jsr305:${findbugs_version}"

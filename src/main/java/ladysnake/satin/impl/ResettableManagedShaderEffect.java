@@ -1,18 +1,18 @@
 package ladysnake.satin.impl;
 
 import com.google.common.base.Preconditions;
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.managed.*;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.GlFramebuffer;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonGlProgram;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.texture.Texture;
+import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -86,7 +86,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
         this.release();
         MinecraftClient mc = MinecraftClient.getInstance();
         this.shaderGroup = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), this.location);
-        this.setup(mc.window.getFramebufferWidth(), mc.window.getFramebufferHeight());
+        this.setup(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
     }
 
     @API(status = INTERNAL)
@@ -149,15 +149,15 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
     public void render(float tickDelta) {
         ShaderEffect sg = this.getShaderEffect();
         if (sg != null) {
-            GlStateManager.matrixMode(GL_TEXTURE);
-            GlStateManager.loadIdentity();
+            RenderSystem.matrixMode(GL_TEXTURE);
+            RenderSystem.loadIdentity();
             sg.render(tickDelta);
             MinecraftClient.getInstance().getFramebuffer().beginWrite(true);
-            GlStateManager.disableBlend();
-            GlStateManager.enableAlphaTest();
-            GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // restore blending
-            GlStateManager.enableDepthTest();
-            GlStateManager.matrixMode(GL_MODELVIEW);
+            RenderSystem.disableBlend();
+            RenderSystem.enableAlphaTest();
+            RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // restore blending
+            RenderSystem.enableDepthTest();
+            RenderSystem.matrixMode(GL_MODELVIEW);
         }
     }
 
@@ -289,7 +289,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
      * {@inheritDoc}
      */
     @Override
-    public void setSamplerUniform(String samplerName, Texture texture) {
+    public void setSamplerUniform(String samplerName, AbstractTexture texture) {
         setSamplerUniform(samplerName, (Object) texture);
     }
 
@@ -297,7 +297,7 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
      * {@inheritDoc}
      */
     @Override
-    public void setSamplerUniform(String samplerName, GlFramebuffer textureFbo) {
+    public void setSamplerUniform(String samplerName, Framebuffer textureFbo) {
         setSamplerUniform(samplerName, (Object) textureFbo);
     }
 

@@ -1,6 +1,5 @@
 package ladysnake.satin;
 
-import com.mojang.blaze3d.platform.GLX;
 import ladysnake.satin.api.event.ResolutionChangeCallback;
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
@@ -24,7 +23,7 @@ public class Satin implements ClientModInitializer {
      */
     @API(status = STABLE)
     public static boolean areShadersDisabled() {
-        return !GLX.usePostProcess;
+        return false;
     }
 
     @Override

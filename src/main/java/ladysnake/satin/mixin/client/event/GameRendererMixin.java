@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -41,8 +42,8 @@ public abstract class GameRendererMixin {
         ShaderEffectRenderCallback.EVENT.invoker().renderShaderEffects(tickDelta);
     }
 
-    @Inject(method = "renderCenter", at = @At(value = "CONSTANT", args = "stringValue=hand"))
-    private void hookPostWorldRender(float tickDelta, long nanoTime, CallbackInfo ci) {
+    @Inject(method = "renderWorld", at = @At(value = "CONSTANT", args = "stringValue=hand"))
+    private void hookPostWorldRender(float tickDelta, long nanoTime, MatrixStack matrixStack, CallbackInfo ci) {
         ((ReadableDepthFramebuffer)MinecraftClient.getInstance().getFramebuffer()).freezeDepthMap();
         PostWorldRenderCallback.EVENT.invoker().onWorldRendered(this.camera, tickDelta, nanoTime);
     }
@@ -51,7 +52,7 @@ public abstract class GameRendererMixin {
      * Fires {@link PickEntityShaderCallback#EVENT}
      * Disabled by optifine
      */
-    @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN", ordinal = 1), require = 0)
+    @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN"), require = 0)
     private void useCustomEntityShader(@Nullable Entity entity, CallbackInfo info) {
         if (this.shader == null) {
             // Mixin does not like method references to shadowed methods
