@@ -10,7 +10,8 @@
     "gl.GlUniformMixin",
     "gl.JsonGlProgramMixin",
     "gl.Matrix4fMixin",
-    "gl.ShaderEffectMixin"
+    "gl.ShaderEffectMixin",
+    "render.BufferBuilderStorageMixin"
   ],
   "injectors": {
     "defaultRequire": 1
