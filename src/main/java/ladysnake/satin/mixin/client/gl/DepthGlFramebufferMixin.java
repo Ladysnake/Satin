@@ -76,7 +76,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     private void delete(CallbackInfo ci) {
         this.satin$deleteDepthTexture();
         if (this.satin$stillDepthTexture > -1) {
-            TextureUtil.releaseTextureId(this.satin$depthTexture);
+            TextureUtil.method_24957(this.satin$depthTexture);
             this.satin$depthTexture = -1;
         }
         this.satin$actualDepthTexture = -99;
@@ -84,7 +84,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
 
     private void satin$deleteDepthTexture() {
         if (this.satin$depthTexture > -1) {
-            TextureUtil.releaseTextureId(this.satin$depthTexture);
+            TextureUtil.method_24957(this.satin$depthTexture);
             this.satin$depthTexture = -1;
         }
     }
