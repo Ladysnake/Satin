@@ -1,7 +1,7 @@
 package ladysnake.satin.api.util;
 
 import ladysnake.satin.impl.ModifiableMatrix4f;
-import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -17,9 +17,9 @@ import static org.apiguardian.api.API.Status.*;
  */
 public final class GlMatrices {
     /**Used for opengl interactions such as matrix retrieval*/
-    private static FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
-    private static float[] inArray = new float[16];
-    private static float[] outArray = new float[16];
+    private static final FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+    private static final float[] inArray = new float[16];
+    private static final float[] outArray = new float[16];
 
     /**
      * A 16-sized float buffer that can be used to send data to shaders.

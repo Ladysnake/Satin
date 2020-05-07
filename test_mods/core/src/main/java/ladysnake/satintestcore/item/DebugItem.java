@@ -29,7 +29,7 @@ public class DebugItem extends Item {
         if (player.isSneaking() && !world.isClient) {
             if (this.callbacks.size() > 1) {
                 debugMode = (debugMode + 1) % this.callbacks.size();
-                player.addChatMessage(new TranslatableText("Switched mode to %s", debugMode), true);
+                player.sendMessage(new TranslatableText("Switched mode to %s", debugMode), true);
             }
         } else {
             this.callbacks.get(debugMode).use(world, player, hand);

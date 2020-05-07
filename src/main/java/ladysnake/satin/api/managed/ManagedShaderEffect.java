@@ -5,8 +5,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.texture.AbstractTexture;
-import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
 
 import javax.annotation.Nullable;

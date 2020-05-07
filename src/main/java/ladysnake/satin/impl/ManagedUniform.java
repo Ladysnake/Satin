@@ -3,7 +3,7 @@ package ladysnake.satin.impl;
 import ladysnake.satin.api.experimental.managed.*;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 
 import java.util.List;
 import java.util.Objects;

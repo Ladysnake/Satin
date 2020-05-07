@@ -47,6 +47,8 @@ buffers as depth attachments. This allows modders to reuse the depth information
 Because this feature has a non-negligible risk of incompatibility with similar patches, it has to be enabled 
 by consumer code first, and users can forcefully disable it any time in the config.
 
+Satin **does not** set the shader in `GameRenderer`, except if a mod registers a `PickEntityShaderCallback`.
+
 ### Shader Management
 
 Satin's main feature is the Shader Effect management facility. 
@@ -61,13 +63,18 @@ Here is the whole java code for a mod that applies a basic shader to the game:
 public class GreyscaleMinecraft implements ClientModInitializer {
     private static final ManagedShaderEffect GREYSCALE_SHADER = ShaderEffectManager.getInstance()
     		.manage(new Identifier("shaderexample", "shaders/post/greyscale.json"));
+    private static boolean enabled = true;  // can be disabled whenever you want
     
     @Override
     public void onInitializeClient() {
         // the render method of the shader will be called after the game
         // has drawn the world on the main framebuffer, when it renders
         // vanilla post process shaders
-	ShaderEffectRenderCallback.EVENT.register(GREYSCALE_SHADER::render);
+    	ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
+    	    if (enabled) {
+                GREYSCALE_SHADER.render(tickDelta);
+            }
+    	});
     }
 }
 ```

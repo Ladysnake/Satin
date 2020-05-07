@@ -1,7 +1,7 @@
 package ladysnake.satin.mixin.client.gl;
 
 import ladysnake.satin.impl.ModifiableMatrix4f;
-import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

@@ -1,6 +1,6 @@
 package ladysnake.satin.api.experimental.managed;
 
-import net.minecraft.client.util.math.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;

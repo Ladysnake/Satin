@@ -13,8 +13,8 @@ import net.minecraft.client.gl.JsonGlProgram;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.texture.AbstractTexture;
-import net.minecraft.client.util.math.Matrix4f;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
 
 import javax.annotation.CheckForNull;
