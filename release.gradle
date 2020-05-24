@@ -9,8 +9,8 @@ task checkGitStatus() {
             throw new RuntimeException("Git repository not ready for release (${grgit.status()})")
         }
         def currentBranch = grgit.branch.current().getName()
-        if (currentBranch != 'master') {
-            throw new RuntimeException("Need to be on the master branch to release (currently on ${currentBranch})")
+        if (currentBranch != 'master' && !currentBranch.matches(/\d+\.\d+(?>\.\d+)?/)) {
+            throw new RuntimeException("Need to be on master or a snapshot branch to release (currently on ${currentBranch})")
         }
         grgit.fetch()
         if (grgit.tag.list().any { it.name == project.version }) {
