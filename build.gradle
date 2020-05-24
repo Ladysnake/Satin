@@ -1,6 +1,14 @@
+import java.time.Year
+
 plugins {
-    id 'fabric-loom' version '0.4.3'
-    id 'maven-publish'
+    id "fabric-loom" version "0.4.3"
+    id "net.minecrell.licenser" version "0.2.1"
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id "com.jfrog.bintray" version '1.8.4'
+    id 'org.ajoberstar.grgit' version '3.1.1'
+    id 'com.github.breadmoirai.github-release' version '2.2.9'
+    id "com.wynprice.cursemaven" version "2.1.1"
+    id "maven-publish"
 }
 
 archivesBaseName = rootProject.archives_base_name
@@ -83,23 +91,28 @@ jar {
     from "LICENSE"
 }
 
-// configure the maven publication
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            // add all the jars that should be included when publishing to maven
-            artifact(remapJar) {
-                builtBy remapJar
+license {
+    header = rootProject.file("code_quality/${project.license_header}_HEADER.txt")
+
+    // Apply licenses only to main source set
+    sourceSets = [project.sourceSets.main]
+    include "**/*.java"
+
+    newLine = false // Disables the empty line between the header and package name
+    //ignoreFailures = true //Ignore failures and only print a warning on license violations
+
+    //export variables
+    ext {
+        year = Year.now()
+        projectDisplayName = project.name
+        projectOwners = rootProject.owners
+        if (project.license_header.contains('GPL')) {
+            if (!project.hasProperty("gpl_version")) {
+                throw new RuntimeException("GPL version needs to be specified through the 'gpl_version' property")
             }
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
+            gplVersion = project.gpl_version
         }
     }
-
-    // select the repositories you want to publish to
-    repositories {
-        // uncomment to publish to the local maven
-        // mavenLocal()
-    }
 }
+
+apply from: 'release.gradle'
