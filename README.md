@@ -12,7 +12,10 @@ You can add the library by inserting the following in your `build.gradle` (Requi
 
 ```gradle
 repositories {
-	maven { url 'https://jitpack.io' }
+	maven { 
+        name = 'Ladysnake Libs'
+        url = 'https://dl.bintray.com/ladysnake/libs' 
+    }
 }
 
 dependencies {
@@ -30,7 +33,6 @@ satin_version = 1.x.y
 ```
 
 You can find the current version of Satin in the [releases](https://github.com/Ladysnake/Satin/releases) tab of the repository on Github.
-Snapshot versions of Satin can be retrieved from the 1.15 branch using `1.15-SNAPSHOT` as a version.
 
 ## Using Satin
 
