@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "satinbasictest",
+  "version": "1.0.0",
+
+  "name": "Satin Basic Test Mod",
+  "description": "Test mod for basic satin features",
+  "licence": "LGPL-3.0-or-later",
+  "authors": [
+    "Pyrofab"
+  ],
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "ladysnake.satinbasictest.SatinBasicTest"
+    ]
+  },
+  "depends": {
+    "satin": "*",
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}

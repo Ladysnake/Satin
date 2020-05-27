@@ -41,7 +41,7 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     public static final Identifier SHADER_RESOURCE_KEY = new Identifier("dissolution:shaders");
 
     // Let shaders be garbage collected when no one uses them
-    private Set<ResettableManagedShaderEffect> managedShaderEffects = Collections.newSetFromMap(new WeakHashMap<>());
+    private final Set<ResettableManagedShaderEffect> managedShaderEffects = Collections.newSetFromMap(new WeakHashMap<>());
 
     /**
      * Manages a post processing shader loaded from a json definition file

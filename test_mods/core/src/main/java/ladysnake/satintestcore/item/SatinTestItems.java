@@ -6,9 +6,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class SatinTestItems {
-    public static DebugItem DEBUG_ITEM;
+    public static final DebugItem DEBUG_ITEM = new DebugItem(new Item.Settings());
 
     public static void init() {
-        DEBUG_ITEM = Registry.register(Registry.ITEM, new Identifier(SatinTestCore.MOD_ID, "debug_item"), new DebugItem(new Item.Settings()));
+        Registry.register(Registry.ITEM, new Identifier(SatinTestCore.MOD_ID, "debug_item"), DEBUG_ITEM);
     }
 }
