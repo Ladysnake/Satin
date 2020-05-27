@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "satinrenderlayer",
+  "version": "1.0.0",
+
+  "name": "Satin Render Layer Test Mod",
+  "description": "Test mod for satin render layers",
+  "licence": "LGPL-3.0-or-later",
+  "authors": [
+    "Pyrofab"
+  ],
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "ladysnake.satinrenderlayer.SatinRenderLayer::onInitializeClient"
+    ]
+  },
+  "mixins": [
+    {
+      "environment": "client",
+      "config": "satinrenderlayer.mixins.json"
+    }
+  ],
+  "depends": {
+    "satin": "*",
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}
