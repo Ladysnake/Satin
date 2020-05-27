@@ -12,20 +12,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public final class SatinRenderLayer extends RenderLayer {
+public final class SatinRenderLayer {
     public static final EntityType<IronGolemEntity> ILLUSION_GOLEM =
             Registry.register(
                     Registry.ENTITY_TYPE,
@@ -38,31 +35,17 @@ public final class SatinRenderLayer extends RenderLayer {
                 effect.setUniformValue("ColorModulate", 1.2f, 0.7f, 0.2f, 1.0f);
                 illusionBuffer = Objects.requireNonNull(effect.getShaderEffect()).getSecondaryTarget("final");
             });
-    private static final Target illusionTarget = new Target("satin:outline_target", () -> {
+    private static final RenderPhase.Target illusionTarget = new RenderPhase.Target("satin:outline_target", () -> {
         illusionBuffer.beginWrite(false);
     }, () -> {
         MinecraftClient.getInstance().getFramebuffer().beginWrite(false);
     });
-    private static final Map<Identifier, RenderLayer> renderLayers = new HashMap<>();
+    private static final Map<RenderLayer, RenderLayer> renderLayers = new HashMap<>();
 
-    public static RenderLayer getIllusion(Identifier texture) {
-        return renderLayers.computeIfAbsent(texture, tex -> RenderLayer.of(
-                "satin:illusion",
-                VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL,
-                GL11.GL_QUADS,
-                256,
-                RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(tex, false, false))
-                        .cull(ENABLE_CULLING)
-                        .depthTest(LEQUAL_DEPTH_TEST)
-                        .alpha(ONE_TENTH_ALPHA)
-                        .texturing(DEFAULT_TEXTURING)
-                        .lightmap(ENABLE_LIGHTMAP)
-                        .diffuseLighting(ENABLE_DIFFUSE_LIGHTING)
-                        .fog(NO_FOG)
-                        .target(illusionTarget)
-                        .build(true)
-        ));
+    public static RenderLayer getIllusion(RenderLayer baseLayer) {
+        return renderLayers.computeIfAbsent(baseLayer, tex ->
+                RenderLayerDuplicator.copyFrom("satin:illusion", baseLayer, builder -> builder.target(illusionTarget))
+        );
     }
 
     public static void onInitializeClient() {
@@ -84,10 +67,4 @@ public final class SatinRenderLayer extends RenderLayer {
                 }
         );
     }
-
-    private SatinRenderLayer(String name, VertexFormat vertexFormat, int drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, Runnable startAction, Runnable endAction) {
-        super(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, startAction, endAction);
-    }
-
-
 }

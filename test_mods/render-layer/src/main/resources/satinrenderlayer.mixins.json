@@ -3,6 +3,9 @@
   "compatibilityLevel": "JAVA_8",
   "package": "ladysnake.satinrenderlayer.mixin.client",
   "mixins": [
+    "MultiPhaseAccessor",
+    "MultiPhaseParametersAccessor",
+    "RenderLayerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

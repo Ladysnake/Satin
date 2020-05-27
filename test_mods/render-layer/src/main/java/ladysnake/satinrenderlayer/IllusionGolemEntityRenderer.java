@@ -15,6 +15,6 @@ public class IllusionGolemEntityRenderer extends IronGolemEntityRenderer {
     @Nullable
     @Override
     protected RenderLayer getRenderLayer(IronGolemEntity entity, boolean showBody, boolean translucent, boolean glowing) {
-        return SatinRenderLayer.getIllusion(this.getTexture(entity));
+        return SatinRenderLayer.getIllusion(super.getRenderLayer(entity, showBody, translucent, glowing));
     }
 }
