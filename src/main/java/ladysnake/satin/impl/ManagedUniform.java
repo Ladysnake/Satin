@@ -19,6 +19,7 @@ package ladysnake.satin.impl;
 
 import ladysnake.satin.api.experimental.managed.*;
 import net.minecraft.client.gl.GlUniform;
+import net.minecraft.client.gl.JsonGlProgram;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.util.math.Matrix4f;
 
@@ -39,13 +40,22 @@ public final class ManagedUniform implements
         this.name = name;
     }
 
-    public int findUniformTargets(List<PostProcessShader> shaders) {
+    public boolean findUniformTargets(List<PostProcessShader> shaders) {
         this.targets = shaders.stream()
                 .map(PostProcessShader::getProgram)
                 .map(s -> s.getUniformByName(this.name))
                 .filter(Objects::nonNull)
                 .toArray(GlUniform[]::new);
-        return this.targets.length;
+        return this.targets.length > 0;
+    }
+
+    public boolean findUniformTarget(JsonGlProgram program) {
+        GlUniform uniform = program.getUniformByName(this.name);
+        if (uniform != null) {
+            this.targets = new GlUniform[] {uniform};
+            return true;
+        }
+        return false;
     }
 
     public String getName() {

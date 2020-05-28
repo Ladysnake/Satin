@@ -270,13 +270,4 @@ public interface ManagedShaderEffect extends UniformFinder {
      */
     @API(status = STABLE, since = "1.0.0")
     void setSamplerUniform(String samplerName, int textureName);
-
-    /**
-     * Disposes of this shader once it is no longer referenced.
-     *
-     * @see ShaderEffectManager#dispose(ManagedShaderEffect)
-     * @see #release
-     */
-    void finalize();
-
 }

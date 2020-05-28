@@ -71,7 +71,7 @@ public class RenderLayerDuplicator {
                     copyPhaseParameters((MultiPhaseAccessor) existing, op)
             );
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Failed to duplicate render layer parameters from " + existing);
+            throw new RuntimeException("Failed to duplicate render layer parameters from " + existing, e);
         }
     }
 

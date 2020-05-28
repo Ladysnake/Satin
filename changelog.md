@@ -3,6 +3,12 @@ Version 1.4.0
 ------------------------------------------------------
 Update to 1.16 (thanks to Draylar and DaveyL2013 for snapshot updates)
 
+Additions
+- `ManagedShaderProgram` is a new alternative to `ManagedShaderEffect`, for when you do not need a full post process shader.
+
+Changes
+- Shaders are no longer garbage collected when you remove all references to them without calling `ShaderManager#dispose`. Clean the place before you leave!
+
 ------------------------------------------------------
 Version 1.3.3
 ------------------------------------------------------
