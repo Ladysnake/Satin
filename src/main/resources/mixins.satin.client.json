@@ -8,6 +8,7 @@
     "event.WorldRendererMixin",
     "gl.DepthGlFramebufferMixin",
     "gl.GlUniformMixin",
+    "gl.JsonGlProgramAccessor",
     "gl.JsonGlProgramMixin",
     "gl.Matrix4fMixin",
     "gl.ShaderEffectMixin",

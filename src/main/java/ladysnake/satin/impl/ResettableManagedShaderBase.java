@@ -19,6 +19,7 @@ package ladysnake.satin.impl;
 
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.experimental.managed.*;
+import ladysnake.satin.api.managed.uniform.SamplerUniform;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -26,9 +27,8 @@ import org.apiguardian.api.API;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
@@ -36,6 +36,8 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
     /**Location of the shader json definition file*/
     private final Identifier location;
     private final Map<String, ManagedUniform> managedUniforms = new HashMap<>();
+    private final Map<String, ManagedSamplerUniform> managedSamplers = new HashMap<>();
+    private final List<ManagedUniformBase> allUniforms = new ArrayList<>();
     private boolean errored;
     @CheckForNull
     protected S shader;
@@ -73,9 +75,6 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
 
     protected abstract S parseShader(MinecraftClient mc, Identifier location) throws IOException;
 
-    /**
-     * {@inheritDoc}
-     */
     public void release() {
         if (this.isInitialized()) {
             try {
@@ -89,11 +88,11 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         this.errored = false;
     }
 
-    protected Collection<ManagedUniform> getManagedUniforms() {
-        return this.managedUniforms.values();
+    protected Collection<ManagedUniformBase> getManagedUniforms() {
+        return this.allUniforms;
     }
 
-    protected abstract boolean setupUniform(ManagedUniform uniform, S shader);
+    protected abstract boolean setupUniform(ManagedUniformBase uniform, S shader);
 
     public boolean isInitialized() {
         return this.shader != null;
@@ -103,70 +102,75 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         return this.errored;
     }
 
-    public void setErrored(boolean error) {
-        this.errored = error;
-    }
-
     public Identifier getLocation() {
         return location;
     }
 
-    protected ManagedUniform manageUniform(String uniformName) {
-        return this.managedUniforms.computeIfAbsent(uniformName, name -> {
-            ManagedUniform ret = new ManagedUniform(name);
-            if (this.shader != null) {
-                boolean found = setupUniform(ret, shader);
-                if (!found) {
-                    Satin.LOGGER.warn("[Satin] No uniform found with name {} in shader {}", name, this.location);
-                }
+    private <U extends ManagedUniformBase> U manageUniform(Map<String, U> uniformMap, Function<String, U> factory, String uniformName, String uniformKind) {
+        U existing = uniformMap.get(uniformName);
+        if (existing != null) {
+            return existing;
+        }
+        U ret = factory.apply(uniformName);
+        if (this.shader != null) {
+            boolean found = setupUniform(ret, shader);
+            if (!found) {
+                Satin.LOGGER.warn("[Satin] No {} found with name {} in shader {}", uniformKind, uniformName, this.location);
             }
-            return ret;
-        });
+        }
+        uniformMap.put(uniformName, ret);
+        allUniforms.add(ret);
+        return ret;
     }
 
     @Override
     public Uniform1i findUniform1i(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform2i findUniform2i(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform3i findUniform3i(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform4i findUniform4i(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform1f findUniform1f(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform2f findUniform2f(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform3f findUniform3f(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public Uniform4f findUniform4f(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
     }
 
     @Override
     public UniformMat4 findUniformMat4(String uniformName) {
-        return manageUniform(uniformName);
+        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+    }
+
+    @Override
+    public SamplerUniform findSampler(String samplerName) {
+        return manageUniform(this.managedSamplers, ManagedSamplerUniform::new, samplerName, "sampler");
     }
 
     @API(status = INTERNAL)

@@ -21,15 +21,25 @@ import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.AbstractTexture;
 import org.apiguardian.api.API;
 
-import static org.apiguardian.api.API.Status.MAINTAINED;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
+@API(status = EXPERIMENTAL)
 public interface SamplerUniform {
+
+    /**
+     * Sets the value of a sampler uniform declared in json using the Opengl texture slot id (between 0 and 30).
+     * @param activeTexture the active texture id to be used by the sampler
+     * @see org.lwjgl.opengl.GL13#GL_TEXTURE0
+     */
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    void setDirect(int activeTexture);
+
     /**
      * Sets the value of a sampler uniform declared in json
      *
      * @param texture a texture object
      */
-    @API(status = MAINTAINED, since = "1.4.0")
+    @API(status = EXPERIMENTAL, since = "1.4.0")
     void set(AbstractTexture texture);
 
     /**
@@ -37,7 +47,7 @@ public interface SamplerUniform {
      *
      * @param textureFbo a framebuffer which main texture will be used
      */
-    @API(status = MAINTAINED, since = "1.4.0")
+    @API(status = EXPERIMENTAL, since = "1.4.0")
     void set(Framebuffer textureFbo);
 
     /**
@@ -45,6 +55,6 @@ public interface SamplerUniform {
      *
      * @param textureName an opengl texture name
      */
-    @API(status = MAINTAINED, since = "1.4.0")
+    @API(status = EXPERIMENTAL, since = "1.4.0")
     void set(int textureName);
 }

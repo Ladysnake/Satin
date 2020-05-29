@@ -19,6 +19,7 @@ package ladysnake.satin.api.managed.uniform;
 
 import org.apiguardian.api.API;
 
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 public interface UniformFinder {
@@ -93,5 +94,12 @@ public interface UniformFinder {
      */
     @API(status = MAINTAINED, since = "1.4.0")
     UniformMat4 findUniformMat4(String uniformName);
+
+    /**
+     * Finds a sampler declared in json
+     * @param samplerName the name of the sampler field in the shader source file
+     */
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    SamplerUniform findSampler(String samplerName);
 
 }

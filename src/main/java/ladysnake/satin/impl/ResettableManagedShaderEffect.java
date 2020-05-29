@@ -83,7 +83,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setup(int windowWidth, int windowHeight) {
         Preconditions.checkNotNull(shader);
         this.shader.setupDimensions(windowWidth, windowHeight);
-        for (ManagedUniform uniform : this.getManagedUniforms()) {
+        for (ManagedUniformBase uniform : this.getManagedUniforms()) {
             setupUniform(uniform, shader);
         }
         this.initCallback.accept(this);
@@ -258,7 +258,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    protected boolean setupUniform(ManagedUniform uniform, ShaderEffect shader) {
+    protected boolean setupUniform(ManagedUniformBase uniform, ShaderEffect shader) {
         return uniform.findUniformTargets(((AccessiblePassesShaderEffect) shader).satin$getPasses());
     }
 
