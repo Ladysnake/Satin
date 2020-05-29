@@ -18,15 +18,16 @@
 package ladysnake.satin.api.experimental.managed;
 
 import org.apiguardian.api.API;
+import org.jetbrains.annotations.ApiStatus;
 
-import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
-public interface Uniform1i {
-    /**
-     * Sets the value of this uniform
-     *
-     * @param value       int value
-     */
-    @API(status = EXPERIMENTAL, since = "1.3.0")
-    void set(int value);
+/**
+ * @deprecated use the promoted version in {@code ladysnake.satin.api.managed.uniform}
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval
+@API(status = DEPRECATED, since = "1.4.0")
+public interface Uniform1i extends ladysnake.satin.api.managed.uniform.Uniform1i {
+
 }

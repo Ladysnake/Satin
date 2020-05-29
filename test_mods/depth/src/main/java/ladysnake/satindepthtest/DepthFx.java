@@ -2,11 +2,11 @@ package ladysnake.satindepthtest;
 
 import ladysnake.satin.api.event.PostWorldRenderCallback;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
-import ladysnake.satin.api.experimental.managed.Uniform1f;
-import ladysnake.satin.api.experimental.managed.Uniform3f;
-import ladysnake.satin.api.experimental.managed.UniformMat4;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import ladysnake.satin.api.managed.uniform.Uniform1f;
+import ladysnake.satin.api.managed.uniform.Uniform3f;
+import ladysnake.satin.api.managed.uniform.UniformMat4;
 import ladysnake.satin.api.util.GlMatrices;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.minecraft.client.MinecraftClient;
@@ -25,7 +25,7 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
     public static final Identifier FANCY_NIGHT_SHADER_ID = new Identifier(SatinDepthTest.MOD_ID, "shaders/post/rainbow_ping.json");
     public static final DepthFx INSTANCE = new DepthFx();
 
-    private MinecraftClient mc = MinecraftClient.getInstance();
+    private final MinecraftClient mc = MinecraftClient.getInstance();
 
     final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(FANCY_NIGHT_SHADER_ID, shader -> {
         shader.setSamplerUniform("DepthSampler", ((ReadableDepthFramebuffer)mc.getFramebuffer()).getStillDepthMap());
@@ -37,7 +37,7 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
     private final Uniform3f uniformCenter = testShader.findUniform3f("Center");
 
     // fancy shader stuff
-    private Matrix4f projectionMatrix = new Matrix4f();
+    private final Matrix4f projectionMatrix = new Matrix4f();
     private int ticks;
 
     private boolean isWorldNight(@Nullable PlayerEntity player) {

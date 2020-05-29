@@ -17,7 +17,7 @@
  */
 package ladysnake.satin.api.managed;
 
-import ladysnake.satin.api.experimental.managed.UniformFinder;
+import ladysnake.satin.api.managed.uniform.UniformFinder;
 import net.minecraft.client.gl.JsonGlProgram;
 import org.apiguardian.api.API;
 

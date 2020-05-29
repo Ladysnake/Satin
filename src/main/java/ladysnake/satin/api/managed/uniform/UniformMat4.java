@@ -15,19 +15,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; If not, see <https://www.gnu.org/licenses>.
  */
-package ladysnake.satin.api.experimental.managed;
+package ladysnake.satin.api.managed.uniform;
 
+import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
-import org.jetbrains.annotations.ApiStatus;
 
-import static org.apiguardian.api.API.Status.DEPRECATED;
+import static org.apiguardian.api.API.Status.MAINTAINED;
 
-/**
- * @deprecated use the promoted version in {@code ladysnake.satin.api.managed.uniform}
- */
-@Deprecated
-@ApiStatus.ScheduledForRemoval
-@API(status = DEPRECATED, since = "1.4.0")
-public interface UniformMat4 extends ladysnake.satin.api.managed.uniform.UniformMat4 {
+public interface UniformMat4 {
+
+    /**
+     * Sets the value of a 4x4 matrix uniform
+     *
+     * @param value a matrix
+     */
+    @API(status = MAINTAINED, since = "1.4.0")
+    void set(Matrix4f value);
 
 }
