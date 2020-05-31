@@ -115,7 +115,7 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         if (this.shader != null) {
             boolean found = setupUniform(ret, shader);
             if (!found) {
-                Satin.LOGGER.warn("[Satin] No {} found with name {} in shader {}", uniformKind, uniformName, this.location);
+                Satin.LOGGER.warn("No {} found with name {} in shader {}", uniformKind, uniformName, this.location);
             }
         }
         uniformMap.put(uniformName, ret);

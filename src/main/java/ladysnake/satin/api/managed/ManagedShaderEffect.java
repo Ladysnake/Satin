@@ -134,6 +134,9 @@ public interface ManagedShaderEffect extends UniformFinder {
     @API(status = STABLE, since = "1.0.0")
     void render(float tickDelta);
 
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    ManagedFramebuffer getTarget(String name);
+
     /**
      * Forwards to {@link #setupDynamicUniforms(int, Runnable)} with an index of 0
      *

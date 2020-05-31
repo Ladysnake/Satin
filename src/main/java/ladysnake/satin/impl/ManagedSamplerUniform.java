@@ -13,7 +13,7 @@ import net.minecraft.client.texture.AbstractTexture;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ManagedSamplerUniform extends ManagedUniformBase implements SamplerUniform {
+public final class ManagedSamplerUniform extends ManagedUniformBase implements SamplerUniform {
     protected JsonGlProgram[] targets = new JsonGlProgram[0];
     protected int[] locations = new int[0];
     private Object sampler;
