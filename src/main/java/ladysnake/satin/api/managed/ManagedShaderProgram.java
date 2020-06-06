@@ -19,7 +19,11 @@ package ladysnake.satin.api.managed;
 
 import ladysnake.satin.api.managed.uniform.UniformFinder;
 import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderPhase;
 import org.apiguardian.api.API;
+
+import java.util.function.Consumer;
 
 @API(status = API.Status.EXPERIMENTAL)
 public interface ManagedShaderProgram extends UniformFinder {
@@ -30,4 +34,14 @@ public interface ManagedShaderProgram extends UniformFinder {
     void disable();
 
     void release();
+
+    /**
+     * Gets a simple {@link RenderLayer} that is functionally identical to {@code baseLayer},
+     * but with a different {@link RenderPhase.Target} that enables this program.
+     *
+     * @param baseLayer the layer to copy
+     * @return a render layer using this shader program
+     * @see ladysnake.satin.api.util.RenderLayerHelper#copy(RenderLayer, String, Consumer)
+     */
+    RenderLayer getRenderLayer(RenderLayer baseLayer);
 }

@@ -15,7 +15,8 @@
     "render.BufferBuilderStorageMixin",
     "render.MultiPhaseAccessor",
     "render.MultiPhaseParametersAccessor",
-    "render.RenderLayerAccessor"
+    "render.RenderLayerAccessor",
+    "render.RenderPhaseAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

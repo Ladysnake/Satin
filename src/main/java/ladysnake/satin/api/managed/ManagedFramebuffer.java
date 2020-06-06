@@ -18,10 +18,13 @@
 package ladysnake.satin.api.managed;
 
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.util.Window;
 import org.apiguardian.api.API;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 @API(status = API.Status.EXPERIMENTAL, since = "1.4.0")
 public interface ManagedFramebuffer {
@@ -58,4 +61,14 @@ public interface ManagedFramebuffer {
     void clear();
 
     void clear(boolean swallowErrors);
+
+    /**
+     * Gets a simple {@link RenderLayer} that is functionally identical to {@code baseLayer},
+     * but with a different {@link RenderPhase.Target} that binds this framebuffer.
+     *
+     * @param baseLayer the layer to copy
+     * @return a render layer using this framebuffer
+     * @see ladysnake.satin.api.util.RenderLayerHelper#copy(RenderLayer, String, Consumer)
+     */
+    RenderLayer getRenderLayer(RenderLayer baseLayer);
 }

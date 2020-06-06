@@ -23,6 +23,7 @@ public class RainbowWitherEntityRenderer extends WitherEntityRenderer {
     @Nullable
     @Override
     protected RenderLayer getRenderLayer(WitherEntity entity, boolean showBody, boolean translucent, boolean glowing) {
-        return SatinRenderLayer.getRainbow(super.getRenderLayer(entity, showBody, translucent, glowing));
+        RenderLayer baseLayer = super.getRenderLayer(entity, showBody, translucent, glowing);
+        return baseLayer == null ? null : SatinRenderLayer.rainbow.getRenderLayer(baseLayer);
     }
 }

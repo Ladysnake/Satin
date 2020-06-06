@@ -22,6 +22,7 @@ import ladysnake.satin.Satin;
 import ladysnake.satin.api.managed.ManagedShaderProgram;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 
 import java.io.IOException;
@@ -32,10 +33,16 @@ public final class ResettableManagedShaderProgram extends ResettableManagedShade
      * Callback to run once each time the shader effect is initialized
      */
     private final Consumer<ManagedShaderProgram> initCallback;
+    private final RenderLayerSupplier renderLayerSupplier;
 
     public ResettableManagedShaderProgram(Identifier location, Consumer<ManagedShaderProgram> initCallback) {
         super(location);
         this.initCallback = initCallback;
+        this.renderLayerSupplier = new RenderLayerSupplier(
+                location.toString() + "_" + System.identityHashCode(this),
+                this::enable,
+                this::disable
+        );
     }
 
     @Override
@@ -71,6 +78,11 @@ public final class ResettableManagedShaderProgram extends ResettableManagedShade
         if (program != null) {
             program.disable();
         }
+    }
+
+    @Override
+    public RenderLayer getRenderLayer(RenderLayer baseLayer) {
+        return this.renderLayerSupplier.getRenderLayer(baseLayer);
     }
 
     @Override

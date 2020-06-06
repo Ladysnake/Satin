@@ -22,17 +22,24 @@ import ladysnake.satin.api.managed.ManagedFramebuffer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.Window;
 
 import javax.annotation.Nullable;
 
 public final class FramebufferWrapper implements ManagedFramebuffer {
+    private final RenderLayerSupplier renderLayerSupplier;
     private final String name;
     @Nullable
     private Framebuffer wrapped;
 
     FramebufferWrapper(String name) {
         this.name = name;
+        this.renderLayerSupplier = new RenderLayerSupplier(
+                this.name + System.identityHashCode(this),
+                () -> this.beginWrite(false),
+                () -> MinecraftClient.getInstance().getFramebuffer().beginWrite(false)
+        );
     }
 
     void findTarget(@Nullable ShaderEffect shaderEffect) {
@@ -93,5 +100,10 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
         if (this.wrapped != null) {
             this.wrapped.clear(swallowErrors);
         }
+    }
+
+    @Override
+    public RenderLayer getRenderLayer(RenderLayer baseLayer) {
+        return this.renderLayerSupplier.getRenderLayer(baseLayer);
     }
 }

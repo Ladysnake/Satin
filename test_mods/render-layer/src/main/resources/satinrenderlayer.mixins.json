@@ -3,7 +3,6 @@
   "compatibilityLevel": "JAVA_8",
   "package": "ladysnake.satinrenderlayer.mixin.client",
   "mixins": [
-    "WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

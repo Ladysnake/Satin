@@ -9,15 +9,11 @@ import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ManagedShaderProgram;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.managed.uniform.Uniform1f;
-import ladysnake.satin.api.managed.uniform.UniformMat4;
-import ladysnake.satin.api.util.RenderLayerHelper;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderPhase;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.boss.WitherEntity;
@@ -27,12 +23,22 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public final class SatinRenderLayer {
+
+    /* * * * ManagedShaderEffect-based RenderLayer entity rendering * * * */
+
     public static final EntityType<IronGolemEntity> ILLUSION_GOLEM =
             Registry.register(
                     Registry.ENTITY_TYPE,
                     new Identifier("satinrenderlayer", "illusion_golem"),
                     FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, IronGolemEntity::new).dimensions(EntityType.IRON_GOLEM.getDimensions()).build()
             );
+
+    public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(new Identifier("satinrenderlayer", "shaders/post/illusion.json"),
+            effect -> effect.setUniformValue("ColorModulate", 1.2f, 0.7f, 0.2f, 1.0f));
+    public static final ManagedFramebuffer illusionBuffer = illusionEffect.getTarget("final");
+
+    /* * * * ManagedShaderProgram-based RenderLayer entity rendering * * * */
+
     public static final EntityType<WitherEntity> RAINBOW_WITHER =
             Registry.register(
                     Registry.ENTITY_TYPE,
@@ -43,31 +49,11 @@ public final class SatinRenderLayer {
                         return witherEntity;
                     }).dimensions(EntityType.WITHER.getDimensions()).build()
             );
-    public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(new Identifier("satinrenderlayer", "shaders/post/illusion.json"),
-            effect -> effect.setUniformValue("ColorModulate", 1.2f, 0.7f, 0.2f, 1.0f));
-    public static final ManagedFramebuffer illusionBuffer = illusionEffect.getTarget("final");
-    private static final RenderPhase.Target illusionTarget = new RenderPhase.Target(
-            "satin:illusion_target",
-            () -> illusionBuffer.beginWrite(false),
-            () -> MinecraftClient.getInstance().getFramebuffer().beginWrite(false)
-    );
+
     public static final ManagedShaderProgram rainbow = ShaderEffectManager.getInstance().manageProgram(new Identifier("satinrenderlayer", "rainbow"));
-    public static final UniformMat4 rainbowProjMat = rainbow.findUniformMat4("ProjMat");
     private static final Uniform1f uniformSTime = rainbow.findUniform1f("STime");
-    private static final RenderPhase.Target rainbowTarget = new RenderPhase.Target(
-            "satin:illusion_target",
-            rainbow::enable,
-            rainbow::disable
-    );
+
     private static int ticks;
-
-    public static RenderLayer getIllusion(RenderLayer baseLayer) {
-        return RenderLayerHelper.copy(baseLayer, "satin:illusion", builder -> builder.target(illusionTarget));
-    }
-
-    public static RenderLayer getRainbow(RenderLayer baseLayer) {
-        return RenderLayerHelper.copy(baseLayer, "satin:rainbow", builder -> builder.target(rainbowTarget));
-    }
 
     public static void onInitializeClient() {
         // Note: blocks cannot use custom render layers without a lot of hacks. Use BlockEntities instead.
