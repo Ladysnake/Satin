@@ -26,20 +26,20 @@ import net.minecraft.util.math.Matrix4f;
 import java.util.List;
 import java.util.Objects;
 
-public final class ManagedUniform implements
+public final class ManagedUniform extends ManagedUniformBase implements
         Uniform1i, Uniform2i, Uniform3i, Uniform4i,
         Uniform1f, Uniform2f, Uniform3f, Uniform4f,
         UniformMat4 {
 
-    private GlUniform[] targets = new GlUniform[0];
-    private final String name;
+    protected GlUniform[] targets = new GlUniform[0];
     private int i0, i1, i2, i3;
     private float f0, f1, f2, f3;
 
     public ManagedUniform(String name) {
-        this.name = name;
+        super(name);
     }
 
+    @Override
     public boolean findUniformTargets(List<PostProcessShader> shaders) {
         this.targets = shaders.stream()
                 .map(PostProcessShader::getProgram)
@@ -49,6 +49,7 @@ public final class ManagedUniform implements
         return this.targets.length > 0;
     }
 
+    @Override
     public boolean findUniformTarget(JsonGlProgram program) {
         GlUniform uniform = program.getUniformByName(this.name);
         if (uniform != null) {
@@ -56,10 +57,6 @@ public final class ManagedUniform implements
             return true;
         }
         return false;
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -196,5 +193,4 @@ public final class ManagedUniform implements
             }
         }
     }
-
 }

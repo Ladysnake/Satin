@@ -20,6 +20,7 @@ package ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.Satin;
+import ladysnake.satin.api.managed.ManagedFramebuffer;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
@@ -35,6 +36,8 @@ import org.apiguardian.api.API;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -51,7 +54,8 @@ import static org.lwjgl.opengl.GL11.*;
 public final class ResettableManagedShaderEffect extends ResettableManagedShaderBase<ShaderEffect> implements ManagedShaderEffect {
 
     /**Callback to run once each time the shader effect is initialized*/
-    protected final Consumer<ManagedShaderEffect> initCallback;
+    private final Consumer<ManagedShaderEffect> initCallback;
+    private final Map<String, FramebufferWrapper> managedTargets;
 
     /**
      * Creates a new shader effect. <br>
@@ -66,6 +70,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public ResettableManagedShaderEffect(Identifier location, Consumer<ManagedShaderEffect> initCallback) {
         super(location);
         this.initCallback = initCallback;
+        this.managedTargets = new HashMap<>();
     }
 
     @Nullable
@@ -80,10 +85,18 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
+    public void initialize() throws IOException {
+        super.initialize();
+        for (FramebufferWrapper buf : this.managedTargets.values()) {
+            buf.findTarget(this.shader);
+        }
+    }
+
+    @Override
     public void setup(int windowWidth, int windowHeight) {
         Preconditions.checkNotNull(shader);
         this.shader.setupDimensions(windowWidth, windowHeight);
-        for (ManagedUniform uniform : this.getManagedUniforms()) {
+        for (ManagedUniformBase uniform : this.getManagedUniforms()) {
             setupUniform(uniform, shader);
         }
         this.initCallback.accept(this);
@@ -106,6 +119,15 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
             RenderSystem.enableDepthTest();
             RenderSystem.matrixMode(GL_MODELVIEW);
         }
+    }
+
+    @Override
+    public ManagedFramebuffer getTarget(String name) {
+        return this.managedTargets.computeIfAbsent(name, n -> {
+            FramebufferWrapper ret = new FramebufferWrapper(n);
+            ret.findTarget(this.getShaderEffect());
+            return ret;
+        });
     }
 
     /**
@@ -258,16 +280,8 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    protected boolean setupUniform(ManagedUniform uniform, ShaderEffect shader) {
+    protected boolean setupUniform(ManagedUniformBase uniform, ShaderEffect shader) {
         return uniform.findUniformTargets(((AccessiblePassesShaderEffect) shader).satin$getPasses());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void finalize() {
-        ShaderEffectManager.getInstance().dispose(this);
     }
 
     @Override

@@ -8,6 +8,7 @@ Additions
 
 Changes
 - Shaders are no longer garbage collected when you remove all references to them without calling `ShaderManager#dispose`. Clean the place before you leave!
+- The `UniformFinder` interface and associated handles have been promoted to maintained API and moved to the appropriate package. The previous experimental classes have been marked deprecated.
 
 ------------------------------------------------------
 Version 1.3.3

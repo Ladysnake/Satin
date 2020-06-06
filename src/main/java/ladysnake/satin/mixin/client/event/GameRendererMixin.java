@@ -18,14 +18,10 @@
 package ladysnake.satin.mixin.client.event;
 
 import ladysnake.satin.api.event.PickEntityShaderCallback;
-import ladysnake.satin.api.event.PostWorldRenderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -57,12 +53,6 @@ public abstract class GameRendererMixin {
     )
     private void hookShaderRender(float tickDelta, long nanoTime, boolean renderLevel, CallbackInfo info) {
         ShaderEffectRenderCallback.EVENT.invoker().renderShaderEffects(tickDelta);
-    }
-
-    @Inject(method = "renderWorld", at = @At(value = "CONSTANT", args = "stringValue=hand"))
-    private void hookPostWorldRender(float tickDelta, long nanoTime, MatrixStack matrixStack, CallbackInfo ci) {
-        ((ReadableDepthFramebuffer)MinecraftClient.getInstance().getFramebuffer()).freezeDepthMap();
-        PostWorldRenderCallback.EVENT.invoker().onWorldRendered(this.camera, tickDelta, nanoTime);
     }
 
     /**

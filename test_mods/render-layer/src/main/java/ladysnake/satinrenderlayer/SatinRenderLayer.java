@@ -4,12 +4,12 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.EntitiesPreRenderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import ladysnake.satin.api.experimental.managed.Uniform1f;
-import ladysnake.satin.api.experimental.managed.UniformMat4;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ManagedShaderProgram;
 import ladysnake.satin.api.managed.ShaderEffectManager;
-import ladysnake.satin.impl.RenderLayerDuplicator;
+import ladysnake.satin.api.managed.uniform.Uniform1f;
+import ladysnake.satin.api.managed.uniform.UniformMat4;
+import ladysnake.satin.api.util.RenderLayerHelper;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -67,11 +67,11 @@ public final class SatinRenderLayer {
     private static int ticks;
 
     public static RenderLayer getIllusion(RenderLayer baseLayer) {
-        return RenderLayerDuplicator.copy(baseLayer, "satin:illusion", builder -> builder.target(illusionTarget));
+        return RenderLayerHelper.copy(baseLayer, "satin:illusion", builder -> builder.target(illusionTarget));
     }
 
     public static RenderLayer getRainbow(RenderLayer baseLayer) {
-        return RenderLayerDuplicator.copy(baseLayer, "satin:rainbow", builder -> builder.target(rainbowTarget));
+        return RenderLayerHelper.copy(baseLayer, "satin:rainbow", builder -> builder.target(rainbowTarget));
     }
 
     public static void onInitializeClient() {

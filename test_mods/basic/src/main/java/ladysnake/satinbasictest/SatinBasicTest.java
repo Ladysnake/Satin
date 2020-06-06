@@ -1,10 +1,9 @@
 package ladysnake.satinbasictest;
 
-import ladysnake.satin.api.event.PostWorldRenderCallback;
-import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
-import ladysnake.satin.api.experimental.managed.Uniform4f;
+import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import ladysnake.satin.api.managed.uniform.Uniform4f;
 import ladysnake.satintestcore.item.SatinTestItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.util.Identifier;
@@ -19,8 +18,7 @@ public final class SatinBasicTest implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        ReadableDepthFramebuffer.useFeature();
-        PostWorldRenderCallback.EVENT.register((camera, tickDelta, nanoTime) -> {
+        ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
             if (renderingBlit) {
                 testShader.render(tickDelta);
             }

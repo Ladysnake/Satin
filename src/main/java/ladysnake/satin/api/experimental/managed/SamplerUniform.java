@@ -17,34 +17,17 @@
  */
 package ladysnake.satin.api.experimental.managed;
 
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.texture.AbstractTexture;
 import org.apiguardian.api.API;
+import org.jetbrains.annotations.ApiStatus;
 
-import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+import static org.apiguardian.api.API.Status.DEPRECATED;
 
-public interface SamplerUniform {
-    /**
-     * Sets the value of a sampler uniform declared in json
-     *
-     * @param texture     a texture object
-     */
-    @API(status = EXPERIMENTAL, since = "1.3.0")
-    void set(AbstractTexture texture);
+/**
+ * @deprecated use the promoted version in {@code ladysnake.satin.api.managed.uniform}
+ */
+@Deprecated
+@ApiStatus.ScheduledForRemoval
+@API(status = DEPRECATED, since = "1.4.0")
+public interface SamplerUniform extends ladysnake.satin.api.managed.uniform.SamplerUniform {
 
-    /**
-     * Sets the value of a sampler uniform declared in json
-     *
-     * @param textureFbo  a framebuffer which main texture will be used
-     */
-    @API(status = EXPERIMENTAL, since = "1.3.0")
-    void set(Framebuffer textureFbo);
-
-    /**
-     * Sets the value of a sampler uniform declared in json
-     *
-     * @param textureName an opengl texture name
-     */
-    @API(status = EXPERIMENTAL, since = "1.3.0")
-    void set(int textureName);
 }

@@ -46,7 +46,7 @@ public final class ResettableManagedShaderProgram extends ResettableManagedShade
     @Override
     public void setup(int newWidth, int newHeight) {
         Preconditions.checkNotNull(this.shader);
-        for (ManagedUniform uniform : this.getManagedUniforms()) {
+        for (ManagedUniformBase uniform : this.getManagedUniforms()) {
             setupUniform(uniform, this.shader);
         }
         this.initCallback.accept(this);
@@ -74,7 +74,7 @@ public final class ResettableManagedShaderProgram extends ResettableManagedShade
     }
 
     @Override
-    protected boolean setupUniform(ManagedUniform uniform, JsonGlProgram shader) {
+    protected boolean setupUniform(ManagedUniformBase uniform, JsonGlProgram shader) {
         return uniform.findUniformTarget(shader);
     }
 
