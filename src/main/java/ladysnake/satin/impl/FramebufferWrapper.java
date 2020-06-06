@@ -42,7 +42,7 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
     @Override
     public void copyDepthFrom(Framebuffer buffer) {
         if (this.wrapped != null) {
-            this.wrapped.method_29329(buffer);
+            this.wrapped.copyDepthFrom(buffer);
         }
     }
 
