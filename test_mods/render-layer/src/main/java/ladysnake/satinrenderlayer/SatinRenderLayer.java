@@ -9,6 +9,7 @@ import ladysnake.satin.api.experimental.managed.UniformMat4;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ManagedShaderProgram;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import ladysnake.satin.impl.RenderLayerDuplicator;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -66,11 +67,11 @@ public final class SatinRenderLayer {
     private static int ticks;
 
     public static RenderLayer getIllusion(RenderLayer baseLayer) {
-        return RenderLayerDuplicator.copyFrom("satin:illusion", baseLayer, builder -> builder.target(illusionTarget));
+        return RenderLayerDuplicator.copy(baseLayer, "satin:illusion", builder -> builder.target(illusionTarget));
     }
 
     public static RenderLayer getRainbow(RenderLayer baseLayer) {
-        return RenderLayerDuplicator.copyFrom("satin:rainbow", baseLayer, builder -> builder.target(rainbowTarget));
+        return RenderLayerDuplicator.copy(baseLayer, "satin:rainbow", builder -> builder.target(rainbowTarget));
     }
 
     public static void onInitializeClient() {

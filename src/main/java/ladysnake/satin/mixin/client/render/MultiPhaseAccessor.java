@@ -1,4 +1,4 @@
-package ladysnake.satinrenderlayer.mixin.client;
+package ladysnake.satin.mixin.client.render;
 
 import net.minecraft.client.render.RenderLayer;
 import org.spongepowered.asm.mixin.Mixin;

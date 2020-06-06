@@ -1,8 +1,8 @@
-package ladysnake.satinrenderlayer;
+package ladysnake.satin.impl;
 
-import ladysnake.satinrenderlayer.mixin.client.MultiPhaseAccessor;
-import ladysnake.satinrenderlayer.mixin.client.MultiPhaseParametersAccessor;
-import ladysnake.satinrenderlayer.mixin.client.RenderLayerAccessor;
+import ladysnake.satin.mixin.client.render.MultiPhaseAccessor;
+import ladysnake.satin.mixin.client.render.MultiPhaseParametersAccessor;
+import ladysnake.satin.mixin.client.render.RenderLayerAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.client.render.RenderLayer;
@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
-public class RenderLayerDuplicator {
+public final class RenderLayerDuplicator {
     private static final Field multiPhaseParameters$outlineMode;
     private static final Method multiPhaseParametersBuilder$build;
 
@@ -56,45 +56,45 @@ public class RenderLayerDuplicator {
         }
     }
 
-    public static RenderLayer copyFrom(String newName, RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
+    public static RenderLayer copy(RenderLayer existing, String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
         if (!(existing instanceof MultiPhaseAccessor)) {
             throw new IllegalArgumentException("Only applicable to the default RenderLayer implementation");
         }
+        return RenderLayer.of(
+                newName,
+                existing.getVertexFormat(),
+                existing.getDrawMode(),
+                existing.getExpectedBufferSize(),
+                existing.hasCrumbling(),
+                ((RenderLayerAccessor) existing).isTranslucent(),
+                copyPhaseParameters((MultiPhaseAccessor) existing, op)
+        );
+    }
+
+    public static RenderLayer.MultiPhaseParameters copyPhaseParameters(MultiPhaseAccessor existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
         try {
-            return RenderLayer.of(
-                    newName,
-                    existing.getVertexFormat(),
-                    existing.getDrawMode(),
-                    existing.getExpectedBufferSize(),
-                    existing.hasCrumbling(),
-                    ((RenderLayerAccessor) existing).isTranslucent(),
-                    copyPhaseParameters((MultiPhaseAccessor) existing, op)
-            );
+            // yes, casting is safe
+            @SuppressWarnings("ConstantConditions") MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) (Object) existing.getPhases());
+            RenderLayer.MultiPhaseParameters.Builder builder = RenderLayer.MultiPhaseParameters.builder()
+                    .texture(access.getTexture())
+                    .transparency(access.getTransparency())
+                    .diffuseLighting(access.getDiffuseLighting())
+                    .shadeModel(access.getShadeModel())
+                    .alpha(access.getAlpha())
+                    .depthTest(access.getDepthTest())
+                    .cull(access.getCull())
+                    .lightmap(access.getLightmap())
+                    .overlay(access.getOverlay())
+                    .fog(access.getFog())
+                    .layering(access.getLayering())
+                    .target(access.getTarget())
+                    .texturing(access.getTexturing())
+                    .writeMaskState(access.getWriteMaskState())
+                    .lineWidth(access.getLineWidth());
+            op.accept(builder);
+            return (RenderLayer.MultiPhaseParameters) multiPhaseParametersBuilder$build.invoke(builder, multiPhaseParameters$outlineMode.get(access));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Failed to duplicate render layer parameters from " + existing, e);
         }
-    }
-
-    private static RenderLayer.MultiPhaseParameters copyPhaseParameters(MultiPhaseAccessor existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) throws IllegalAccessException, InvocationTargetException {
-        // yes, casting is safe
-        @SuppressWarnings("ConstantConditions") MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) (Object) existing.getPhases());
-        RenderLayer.MultiPhaseParameters.Builder builder = RenderLayer.MultiPhaseParameters.builder()
-                .texture(access.getTexture())
-                .transparency(access.getTransparency())
-                .diffuseLighting(access.getDiffuseLighting())
-                .shadeModel(access.getShadeModel())
-                .alpha(access.getAlpha())
-                .depthTest(access.getDepthTest())
-                .cull(access.getCull())
-                .lightmap(access.getLightmap())
-                .overlay(access.getOverlay())
-                .fog(access.getFog())
-                .layering(access.getLayering())
-                .target(access.getTarget())
-                .texturing(access.getTexturing())
-                .writeMaskState(access.getWriteMaskState())
-                .lineWidth(access.getLineWidth());
-        op.accept(builder);
-        return (RenderLayer.MultiPhaseParameters) multiPhaseParametersBuilder$build.invoke(builder, multiPhaseParameters$outlineMode.get(access));
     }
 }
