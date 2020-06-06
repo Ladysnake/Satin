@@ -47,15 +47,34 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
     }
 
     @Override
-    public void draw() {
-        Window window = MinecraftClient.getInstance().getWindow();
-        this.draw(window.getFramebufferWidth(), window.getFramebufferHeight());
+    public void beginWrite(boolean updateViewport) {
+        if (this.wrapped != null) {
+            this.wrapped.beginWrite(updateViewport);
+        }
     }
 
     @Override
-    public void draw(int width, int height) {
+    public void draw() {
+        Window window = MinecraftClient.getInstance().getWindow();
+        this.draw(window.getFramebufferWidth(), window.getFramebufferHeight(), true);
+    }
+
+    @Override
+    public void draw(int width, int height, boolean disableBlend) {
         if (this.wrapped != null) {
-            this.wrapped.draw(width, height);
+            this.wrapped.draw(width, height, disableBlend);
+        }
+    }
+
+    @Override
+    public void clear() {
+        clear(MinecraftClient.IS_SYSTEM_MAC);
+    }
+
+    @Override
+    public void clear(boolean swallowErrors) {
+        if (this.wrapped != null) {
+            this.wrapped.clear(swallowErrors);
         }
     }
 }

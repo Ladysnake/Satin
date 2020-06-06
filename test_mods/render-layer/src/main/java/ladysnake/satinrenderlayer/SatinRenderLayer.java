@@ -80,16 +80,14 @@ public final class SatinRenderLayer {
         EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformSTime.set((ticks + tickDelta) * 0.05f));
         ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
                     MinecraftClient client = MinecraftClient.getInstance();
-                    if (illusionEffect.isInitialized()) {
-                        illusionEffect.render(tickDelta);
-                        client.getFramebuffer().beginWrite(true);
-                        RenderSystem.enableBlend();
-                        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
-                        illusionBuffer.draw(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight(), false);
-                        illusionBuffer.clear();
-                        client.getFramebuffer().beginWrite(true);
-                        RenderSystem.disableBlend();
-                    }
+                    illusionEffect.render(tickDelta);
+                    client.getFramebuffer().beginWrite(true);
+                    RenderSystem.enableBlend();
+                    RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
+                    illusionBuffer.draw(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight(), false);
+                    illusionBuffer.clear();
+                    client.getFramebuffer().beginWrite(true);
+                    RenderSystem.disableBlend();
                 }
         );
     }

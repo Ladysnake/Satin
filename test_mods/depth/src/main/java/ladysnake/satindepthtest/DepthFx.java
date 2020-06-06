@@ -60,7 +60,6 @@ public class DepthFx implements PostWorldRenderCallback, ClientTickCallback {
     public void onWorldRendered(Camera camera, float tickDelta, long nanoTime) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (isWorldNight(mc.player)) {
-            // FIXME the shader is slightly off-center
             uniformSTime.set((ticks + tickDelta) / 20f);
             uniformInverseTransformMatrix.set(GlMatrices.getInverseTransformMatrix(projectionMatrix));
             Vec3d cameraPos = camera.getPos();

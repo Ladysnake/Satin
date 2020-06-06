@@ -11,6 +11,20 @@ public interface ManagedFramebuffer {
     @Nullable
     Framebuffer getFramebuffer();
 
+    /**
+     * Begins a write operation on this framebuffer.
+     *
+     * <p>If the operation is successful, every subsequent draw call will write to this framebuffer.
+     *
+     * @param updateViewport whether binding this framebuffer should call {@link com.mojang.blaze3d.platform.GlStateManager#viewport(int, int, int, int)}
+     */
+    void beginWrite(boolean updateViewport);
+
+    /**
+     * Copies the depth texture from another framebuffer to this framebuffer.
+     *
+     * @param buffer the framebuffer to copy depth from
+     */
     void copyDepthFrom(Framebuffer buffer);
 
     /**
@@ -19,5 +33,12 @@ public interface ManagedFramebuffer {
      */
     void draw();
 
-    void draw(int width, int height);
+    void draw(int width, int height, boolean disableBlend);
+
+    /**
+     * Clears the content of this framebuffer.
+     */
+    void clear();
+
+    void clear(boolean swallowErrors);
 }

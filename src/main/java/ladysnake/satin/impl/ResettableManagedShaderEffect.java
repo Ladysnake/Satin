@@ -125,7 +125,9 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public ManagedFramebuffer getTarget(String name) {
         return this.managedTargets.computeIfAbsent(name, n -> {
             FramebufferWrapper ret = new FramebufferWrapper(n);
-            ret.findTarget(this.getShaderEffect());
+            if (this.shader != null) {
+                ret.findTarget(this.shader);
+            }
             return ret;
         });
     }
