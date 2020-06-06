@@ -18,7 +18,10 @@
 /**
  * Implementation classes
  */
+@ApiStatus.Internal
 @ParametersAreNonnullByDefault
 package ladysnake.satin.impl;
+
+import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.ParametersAreNonnullByDefault;
