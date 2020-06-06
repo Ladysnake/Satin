@@ -52,7 +52,7 @@ public interface ReadableDepthFramebuffer {
      * a depth texture, making this feature redundant
      */
     @Deprecated
-    @API(status = DEPRECATED, since = "2.4.0")
+    @API(status = DEPRECATED, since = "1.4.0")
     static void useFeature() {
         Satin.LOGGER.info("[Satin] Enabling readable depth framebuffers. This may cause incompatibilities with other graphical mods.");
         OptionalFeature option = SatinFeatures.getInstance().readableDepthFramebuffers;
@@ -85,7 +85,7 @@ public interface ReadableDepthFramebuffer {
      */
     @CheckForSigned
     @Deprecated
-    @API(status = DEPRECATED, since = "2.4.0")
+    @API(status = DEPRECATED, since = "1.4.0")
     int getCurrentDepthTexture();
 
     /**

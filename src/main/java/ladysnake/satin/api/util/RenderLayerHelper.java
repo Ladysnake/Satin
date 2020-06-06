@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
-@API(status = EXPERIMENTAL, since = "2.4.0")
+@API(status = EXPERIMENTAL, since = "1.4.0")
 public final class RenderLayerHelper {
     /**
      * Copies a {@link RenderLayer} with all its parameters, but applies the given {@code phaseTransform} to the
@@ -29,12 +29,12 @@ public final class RenderLayerHelper {
      * @return a {@link RenderLayer} with the same base parameters as {@code existing} but modified according to {@code phaseTransform}
      * @throws IllegalArgumentException if {@code existing} is not a {@code MultiPhase} render layer
      */
-    @API(status = EXPERIMENTAL, since = "2.4.0")
+    @API(status = EXPERIMENTAL, since = "1.4.0")
     public static RenderLayer copy(RenderLayer existing, String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> phaseTransform) {
         return RenderLayerDuplicator.copy(existing, newName, phaseTransform);
     }
 
-    @API(status = EXPERIMENTAL, since = "2.4.0")
+    @API(status = EXPERIMENTAL, since = "1.4.0")
     public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> phaseTransform) {
         return RenderLayerDuplicator.copyPhaseParameters((MultiPhaseAccessor) existing, phaseTransform);
     }
