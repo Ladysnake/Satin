@@ -20,7 +20,6 @@ package ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.experimental.managed.*;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
@@ -34,11 +33,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
 
-import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
@@ -52,16 +48,10 @@ import static org.lwjgl.opengl.GL11.*;
  * @see ManagedShaderEffect
  * @since 1.0.0
  */
-public final class ResettableManagedShaderEffect implements ManagedShaderEffect {
+public final class ResettableManagedShaderEffect extends ResettableManagedShaderBase<ShaderEffect> implements ManagedShaderEffect {
 
-    /**Location of the shader json definition file*/
-    private final Identifier location;
     /**Callback to run once each time the shader effect is initialized*/
-    private final Consumer<ManagedShaderEffect> initCallback;
-    @CheckForNull
-    private ShaderEffect shaderGroup;
-    private boolean errored;
-    private final Map<String, ManagedUniform> managedUniforms = new HashMap<>();
+    protected final Consumer<ManagedShaderEffect> initCallback;
 
     /**
      * Creates a new shader effect. <br>
@@ -74,89 +64,29 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
      */
     @API(status = INTERNAL)
     public ResettableManagedShaderEffect(Identifier location, Consumer<ManagedShaderEffect> initCallback) {
-        this.location = location;
+        super(location);
         this.initCallback = initCallback;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     @Nullable
-    public ShaderEffect getShaderEffect() {
-        if (!this.isInitialized() && !this.errored) {
-            try {
-                this.initialize();
-            } catch (Exception e) {
-                Satin.LOGGER.error("[Satin] Could not create screen shader {}", location, e);
-                this.errored = true;
-            }
-        }
-        return this.shaderGroup;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void initialize() throws IOException {
-        this.release();
-        MinecraftClient mc = MinecraftClient.getInstance();
-        this.shaderGroup = new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), this.location);
-        this.setup(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
+    public ShaderEffect getShaderEffect() {
+        return getShaderOrLog();
     }
 
-    @API(status = INTERNAL)
+    @Override
+    protected ShaderEffect parseShader(MinecraftClient mc, Identifier location) throws IOException {
+        return new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), location);
+    }
+
+    @Override
     public void setup(int windowWidth, int windowHeight) {
-        Preconditions.checkNotNull(shaderGroup);
-        this.shaderGroup.setupDimensions(windowWidth, windowHeight);
-        for (ManagedUniform uniform : this.managedUniforms.values()) {
-            setupUniform(uniform, shaderGroup);
+        Preconditions.checkNotNull(shader);
+        this.shader.setupDimensions(windowWidth, windowHeight);
+        for (ManagedUniform uniform : this.getManagedUniforms()) {
+            setupUniform(uniform, shader);
         }
         this.initCallback.accept(this);
-    }
-
-    private void setupUniform(ManagedUniform uniform, ShaderEffect shaderEffect) {
-        int found = uniform.findUniformTargets(((AccessiblePassesShaderEffect) shaderEffect).satin$getPasses());
-        if (found == 0) {
-            Satin.LOGGER.warn("[Satin] No uniform found with name {} in shader {}", uniform.getName(), this.location);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isInitialized() {
-        return this.shaderGroup != null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isErrored() {
-        return this.errored;
-    }
-
-    public void setErrored(boolean error) {
-        this.errored = error;
-    }
-
-    public Identifier getLocation() {
-        return location;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void release() {
-        if (this.isInitialized()) {
-            this.shaderGroup.close();
-            this.shaderGroup = null;
-        }
-        this.errored = false;
     }
 
     /**
@@ -175,28 +105,6 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
             RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // restore blending
             RenderSystem.enableDepthTest();
             RenderSystem.matrixMode(GL_MODELVIEW);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setupDynamicUniforms(Runnable dynamicSetBlock) {
-        this.setupDynamicUniforms(0, dynamicSetBlock);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setupDynamicUniforms(int index, Runnable dynamicSetBlock) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            JsonGlProgram sm = sg.satin$getPasses().get(index).getProgram();
-            ShaderPrograms.useShader(sm.getProgramRef());
-            dynamicSetBlock.run();
-            ShaderPrograms.useShader(0);
         }
     }
 
@@ -318,14 +226,6 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
         setSamplerUniform(samplerName, (Object) textureFbo);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSamplerUniform(String samplerName, int textureName) {
-        setSamplerUniform(samplerName, Integer.valueOf(textureName));
-    }
-
     private void setSamplerUniform(String samplerName, Object texture) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
@@ -335,59 +235,31 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
         }
     }
 
-    private ManagedUniform manageUniform(String uniformName) {
-        return this.managedUniforms.computeIfAbsent(uniformName, name -> {
-            ManagedUniform ret = new ManagedUniform(name);
-            if (this.shaderGroup != null) {
-                setupUniform(ret, shaderGroup);
-            }
-            return ret;
-        });
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSamplerUniform(String samplerName, int textureName) {
+        setSamplerUniform(samplerName, Integer.valueOf(textureName));
+    }
+
+    public void setupDynamicUniforms(Runnable dynamicSetBlock) {
+        this.setupDynamicUniforms(0, dynamicSetBlock);
+    }
+
+    public void setupDynamicUniforms(int index, Runnable dynamicSetBlock) {
+        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
+        if (sg != null) {
+            JsonGlProgram sm = sg.satin$getPasses().get(index).getProgram();
+            ShaderPrograms.useShader(sm.getProgramRef());
+            dynamicSetBlock.run();
+            ShaderPrograms.useShader(0);
+        }
     }
 
     @Override
-    public Uniform1i findUniform1i(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform2i findUniform2i(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform3i findUniform3i(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform4i findUniform4i(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform1f findUniform1f(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform2f findUniform2f(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform3f findUniform3f(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public Uniform4f findUniform4f(String uniformName) {
-        return manageUniform(uniformName);
-    }
-
-    @Override
-    public UniformMat4 findUniformMat4(String uniformName) {
-        return manageUniform(uniformName);
+    protected boolean setupUniform(ManagedUniform uniform, ShaderEffect shader) {
+        return uniform.findUniformTargets(((AccessiblePassesShaderEffect) shader).satin$getPasses());
     }
 
     /**
@@ -398,4 +270,8 @@ public final class ResettableManagedShaderEffect implements ManagedShaderEffect 
         ShaderEffectManager.getInstance().dispose(this);
     }
 
+    @Override
+    protected void logInitError(IOException e) {
+        Satin.LOGGER.error("Could not create screen shader {}", this.getLocation(), e);
+    }
 }

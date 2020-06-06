@@ -17,17 +17,17 @@
  */
 package ladysnake.satin.impl;
 
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.event.ResolutionChangeCallback;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
+import ladysnake.satin.api.managed.ManagedShaderProgram;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-import java.util.Collections;
 import java.util.Set;
-import java.util.WeakHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -40,8 +40,7 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     public static final ReloadableShaderEffectManager INSTANCE = new ReloadableShaderEffectManager();
     public static final Identifier SHADER_RESOURCE_KEY = new Identifier("dissolution:shaders");
 
-    // Let shaders be garbage collected when no one uses them
-    private final Set<ResettableManagedShaderEffect> managedShaderEffects = Collections.newSetFromMap(new WeakHashMap<>());
+    private final Set<ResettableManagedShaderBase<?>> managedShaders = new ReferenceOpenHashSet<>();
 
     /**
      * Manages a post processing shader loaded from a json definition file
@@ -64,7 +63,19 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     @Override
     public ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback) {
         ResettableManagedShaderEffect ret = new ResettableManagedShaderEffect(location, initCallback);
-        managedShaderEffects.add(ret);
+        managedShaders.add(ret);
+        return ret;
+    }
+
+    @Override
+    public ManagedShaderProgram manageProgram(Identifier location) {
+        return manageProgram(location, s -> { });
+    }
+
+    @Override
+    public ManagedShaderProgram manageProgram(Identifier location, Consumer<ManagedShaderProgram> initCallback) {
+        ResettableManagedShaderProgram ret = new ResettableManagedShaderProgram(location, initCallback);
+        managedShaders.add(ret);
         return ret;
     }
 
@@ -80,7 +91,13 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     @Override
     public void dispose(ManagedShaderEffect shader) {
         shader.release();
-        managedShaderEffects.remove(shader);
+        managedShaders.remove(shader);
+    }
+
+    @Override
+    public void dispose(ManagedShaderProgram shader) {
+        shader.release();
+        managedShaders.remove(shader);
     }
 
     @Override
@@ -90,25 +107,19 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
 
     @Override
     public void apply(ResourceManager var1) {
-        for (ResettableManagedShaderEffect ss : managedShaderEffects) {
-            try {
-                ss.initialize();
-            } catch (Exception e) {
-                Satin.LOGGER.error("[Satin] Could not create screen shader {}", ss.getLocation(), e);
-                ss.setErrored(true);
-            }
+        for (ResettableManagedShaderBase<?> ss : managedShaders) {
+            ss.initializeOrLog();
         }
     }
 
     @Override
     public void onResolutionChanged(int newWidth, int newHeight) {
-        if (!Satin.areShadersDisabled() && !managedShaderEffects.isEmpty()) {
-            for (ResettableManagedShaderEffect ss : managedShaderEffects) {
+        if (!Satin.areShadersDisabled() && !managedShaders.isEmpty()) {
+            for (ResettableManagedShaderBase<?> ss : managedShaders) {
                 if (ss.isInitialized()) {
                     ss.setup(newWidth, newHeight);
                 }
             }
         }
     }
-
 }

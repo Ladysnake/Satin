@@ -23,6 +23,7 @@ import org.apiguardian.api.API;
 
 import java.util.function.Consumer;
 
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.STABLE;
 
 /**
@@ -53,6 +54,12 @@ public interface ShaderEffectManager {
     @API(status = STABLE, since = "1.0.0")
     ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback);
 
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    ManagedShaderProgram manageProgram(Identifier location);
+
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    ManagedShaderProgram manageProgram(Identifier location, Consumer<ManagedShaderProgram> initCallback);
+
     /**
      * Removes a shader from the global list of managed shaders,
      * making it not respond to resource reloading and screen resizing.
@@ -64,4 +71,7 @@ public interface ShaderEffectManager {
      */
     @API(status = STABLE, since = "1.0.0")
     void dispose(ManagedShaderEffect shader);
+
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    void dispose(ManagedShaderProgram shader);
 }

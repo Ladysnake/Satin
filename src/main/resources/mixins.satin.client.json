@@ -11,7 +11,10 @@
     "gl.JsonGlProgramMixin",
     "gl.Matrix4fMixin",
     "gl.ShaderEffectMixin",
-    "render.BufferBuilderStorageMixin"
+    "render.BufferBuilderStorageMixin",
+    "render.MultiPhaseAccessor",
+    "render.MultiPhaseParametersAccessor",
+    "render.RenderLayerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
