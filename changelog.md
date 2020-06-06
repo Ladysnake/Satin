@@ -4,7 +4,9 @@ Version 1.4.0
 Update to 1.16 (thanks to Draylar and DaveyL2013 for snapshot updates)
 
 Additions
-- `ManagedShaderProgram` is a new alternative to `ManagedShaderEffect`, for when you do not need a full post process shader.
+- Added `RenderLayerHelper`, a class with new methods for simplifying the creation of `RenderLayer`s based on existing ones
+- Added `ManagedShaderProgram`, a new alternative to `ManagedShaderEffect` that encapsulates a single shader program that can be enabled or disabled.
+- Added `ManagedFramebuffer`, for cleaner code when using a `ManagedShaderEffect`'s target framebuffers
 
 Changes
 - Shaders are no longer garbage collected when you remove all references to them without calling `ShaderManager#dispose`. Clean the place before you leave!
