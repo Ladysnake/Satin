@@ -24,6 +24,7 @@ import ladysnake.satin.api.managed.ManagedFramebuffer;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.util.ShaderPrograms;
+import ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonGlProgram;
@@ -163,7 +164,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setUniformValue(String uniformName, int value0, int value1, int value2, int value3) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1, value2, value3);
             }
         }
@@ -176,7 +177,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setUniformValue(String uniformName, float value) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().getUniformByNameOrDummy(uniformName).set(value);
             }
         }
@@ -189,7 +190,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setUniformValue(String uniformName, float value0, float value1) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1);
             }
         }
@@ -202,7 +203,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setUniformValue(String uniformName, float value0, float value1, float value2) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1, value2);
             }
         }
@@ -215,7 +216,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setUniformValue(String uniformName, float value0, float value1, float value2, float value3) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1, value2, value3);
             }
         }
@@ -228,7 +229,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setUniformValue(String uniformName, Matrix4f value) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().getUniformByNameOrDummy(uniformName).set(value);
             }
         }
@@ -253,7 +254,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     private void setSamplerUniform(String samplerName, Object texture) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            for (PostProcessShader shader : sg.satin$getPasses()) {
+            for (PostProcessShader shader : sg.getPasses()) {
                 shader.getProgram().bindSampler(samplerName, texture);
             }
         }
@@ -274,7 +275,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setupDynamicUniforms(int index, Runnable dynamicSetBlock) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            JsonGlProgram sm = sg.satin$getPasses().get(index).getProgram();
+            JsonGlProgram sm = sg.getPasses().get(index).getProgram();
             ShaderPrograms.useShader(sm.getProgramRef());
             dynamicSetBlock.run();
             ShaderPrograms.useShader(0);
@@ -283,7 +284,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
 
     @Override
     protected boolean setupUniform(ManagedUniformBase uniform, ShaderEffect shader) {
-        return uniform.findUniformTargets(((AccessiblePassesShaderEffect) shader).satin$getPasses());
+        return uniform.findUniformTargets(((AccessiblePassesShaderEffect) shader).getPasses());
     }
 
     @Override

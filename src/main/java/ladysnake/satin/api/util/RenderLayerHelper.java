@@ -18,7 +18,6 @@
 package ladysnake.satin.api.util;
 
 import ladysnake.satin.impl.RenderLayerDuplicator;
-import ladysnake.satin.mixin.client.render.MultiPhaseAccessor;
 import net.minecraft.client.render.RenderLayer;
 import org.apiguardian.api.API;
 
@@ -53,6 +52,6 @@ public final class RenderLayerHelper {
 
     @API(status = EXPERIMENTAL, since = "1.4.0")
     public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> phaseTransform) {
-        return RenderLayerDuplicator.copyPhaseParameters((MultiPhaseAccessor) existing, phaseTransform);
+        return RenderLayerDuplicator.copyPhaseParameters(existing, phaseTransform);
     }
 }

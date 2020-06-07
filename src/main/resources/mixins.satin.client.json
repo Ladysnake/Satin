@@ -3,6 +3,7 @@
   "compatibilityLevel": "JAVA_8",
   "package": "ladysnake.satin.mixin.client",
   "mixins": [
+    "AccessiblePassesShaderEffect",
     "event.GameRendererMixin",
     "event.MinecraftClientMixin",
     "event.WorldRendererMixin",
@@ -11,9 +12,7 @@
     "gl.JsonGlProgramAccessor",
     "gl.JsonGlProgramMixin",
     "gl.Matrix4fMixin",
-    "gl.ShaderEffectMixin",
     "render.BufferBuilderStorageMixin",
-    "render.MultiPhaseAccessor",
     "render.MultiPhaseParametersAccessor",
     "render.RenderLayerAccessor",
     "render.RenderPhaseAccessor"

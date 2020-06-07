@@ -17,66 +17,69 @@
  */
 package ladysnake.satin.impl;
 
-import ladysnake.satin.mixin.client.render.MultiPhaseAccessor;
 import ladysnake.satin.mixin.client.render.MultiPhaseParametersAccessor;
 import ladysnake.satin.mixin.client.render.RenderLayerAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.client.render.RenderLayer;
+import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public final class RenderLayerDuplicator {
+    private static final Field multiphase$phases;
     private static final Field multiPhaseParameters$outlineMode;
     private static final Method multiPhaseParametersBuilder$build;
+    private static final Class<?> multiphaseClass;
+
+    private static Type unmap(Class<?> clazz) {
+        // for a better implementation, see https://github.com/Ladysnake/Requiem/blob/523ec343d5/src/main/java/ladysnake/requiem/common/util/reflection/ReflectionHelper.java#L61-L74
+        if (clazz.isArray()) throw new IllegalArgumentException(clazz + " is an array type, array types are unsupported");
+        String unmappedType = FabricLoader.getInstance().getMappingResolver().unmapClassName("intermediary", clazz.getName());
+        return Type.getObjectType(unmappedType.replace('.', '/'));
+    }
+
+    private static Field findFieldFromIntermediary(Class<?> owner, String intermediaryName, Class<?> type) throws NoSuchFieldException {
+        String fieldDesc = unmap(type).getDescriptor();
+        MappingResolver mappingResolver = FabricLoader.getInstance().getMappingResolver();
+        String intermediaryOwner = mappingResolver.unmapClassName("intermediary", owner.getName());
+        String mappedName = mappingResolver.mapFieldName("intermediary", intermediaryOwner, intermediaryName, fieldDesc);
+        Field f = owner.getDeclaredField(mappedName);
+        f.setAccessible(true);
+        return f;
+    }
+
+    private static Method findMethodFromIntermediary(Class<?> owner, String intermediaryName, Class<?> returnType, Class<?>... parameterTypes) throws NoSuchMethodException {
+        String methodDesc = Type.getMethodDescriptor(unmap(returnType), Arrays.stream(parameterTypes).map(RenderLayerDuplicator::unmap).toArray(Type[]::new));
+        MappingResolver mappingResolver = FabricLoader.getInstance().getMappingResolver();
+        String intermediaryOwner = mappingResolver.unmapClassName("intermediary", owner.getName());
+        String mappedName = mappingResolver.mapMethodName("intermediary", intermediaryOwner, intermediaryName, methodDesc);
+        Method m = owner.getDeclaredMethod(mappedName, parameterTypes);
+        m.setAccessible(true);
+        return m;
+    }
 
     static {
         try {
             MappingResolver mappingResolver = FabricLoader.getInstance().getMappingResolver();
+
+            multiphaseClass = Class.forName(mappingResolver.mapClassName("intermediary", "net.minecraft.client.render.RenderLayer$MultiPhase"));
+            multiphase$phases = findFieldFromIntermediary(multiphaseClass, "field_21403", RenderLayer.MultiPhaseParameters.class);
+
             Class<?> outlineModeClass = Class.forName(mappingResolver.mapClassName("intermediary", "net.minecraft.class_1921$class_4750"));
-            Field outlineModeField = null;
-            for (Field declaredField : RenderLayer.MultiPhaseParameters.class.getDeclaredFields()) {
-                if (declaredField.getType() == outlineModeClass) {
-                    if (outlineModeField != null) {
-                        throw new IllegalStateException("More than one candidate for MultiPhaseParameters#outlineMode");
-                    }
-                    outlineModeField = declaredField;
-                }
-            }
-            if (outlineModeField == null) {
-                throw new IllegalStateException("No outline mode field in MultiPhaseParameters");
-            }
-            outlineModeField.setAccessible(true);
-            multiPhaseParameters$outlineMode = outlineModeField;
-            Method buildMethod = null;
-            for (Method declaredMethod : RenderLayer.MultiPhaseParameters.Builder.class.getDeclaredMethods()) {
-                if (declaredMethod.getReturnType() == RenderLayer.MultiPhaseParameters.class) {
-                    Class<?>[] parameterTypes = declaredMethod.getParameterTypes();
-                    if (parameterTypes.length == 1 && parameterTypes[0] == outlineModeClass) {
-                        if (buildMethod != null) {
-                            throw new IllegalStateException("More than one candidate for MultiPhaseParameters.Builder#build(OutlineMode)");
-                        }
-                        buildMethod = declaredMethod;
-                    }
-                }
-            }
-            if (buildMethod == null) {
-                throw new IllegalStateException("No candidate for MultiPhaseParameters.Builder#build(OutlineMode)");
-            }
-            buildMethod.setAccessible(true);
-            multiPhaseParametersBuilder$build = buildMethod;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            multiPhaseParameters$outlineMode = findFieldFromIntermediary(RenderLayer.MultiPhaseParameters.class, "field_21852", outlineModeClass);
+            multiPhaseParametersBuilder$build = findMethodFromIntermediary(RenderLayer.MultiPhaseParameters.Builder.class, "method_24297", RenderLayer.MultiPhaseParameters.class, outlineModeClass);
+        } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException e) {
+            throw new IllegalStateException(e);
         }
     }
 
     public static RenderLayer copy(RenderLayer existing, String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
-        if (!(existing instanceof MultiPhaseAccessor)) {
-            throw new IllegalArgumentException("Only applicable to the default RenderLayer implementation");
-        }
+        checkDefaultImpl(existing);
         return RenderLayer.of(
                 newName,
                 existing.getVertexFormat(),
@@ -84,14 +87,14 @@ public final class RenderLayerDuplicator {
                 existing.getExpectedBufferSize(),
                 existing.hasCrumbling(),
                 ((RenderLayerAccessor) existing).isTranslucent(),
-                copyPhaseParameters((MultiPhaseAccessor) existing, op)
+                copyPhaseParameters(existing, op)
         );
     }
 
-    public static RenderLayer.MultiPhaseParameters copyPhaseParameters(MultiPhaseAccessor existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
+    public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
+        checkDefaultImpl(existing);
         try {
-            // yes, casting is safe
-            @SuppressWarnings("ConstantConditions") MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) (Object) existing.getPhases());
+            MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) multiphase$phases.get(existing));
             RenderLayer.MultiPhaseParameters.Builder builder = RenderLayer.MultiPhaseParameters.builder()
                     .texture(access.getTexture())
                     .transparency(access.getTransparency())
@@ -112,6 +115,12 @@ public final class RenderLayerDuplicator {
             return (RenderLayer.MultiPhaseParameters) multiPhaseParametersBuilder$build.invoke(builder, multiPhaseParameters$outlineMode.get(access));
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException("Failed to duplicate render layer parameters from " + existing, e);
+        }
+    }
+
+    private static void checkDefaultImpl(RenderLayer existing) {
+        if (!multiphaseClass.isInstance(existing)) {
+            throw new IllegalArgumentException("Unrecognized RenderLayer implementation " + existing.getClass() + ". Layer duplication is only applicable to the default (MultiPhase) implementation");
         }
     }
 }

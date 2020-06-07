@@ -15,24 +15,17 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; If not, see <https://www.gnu.org/licenses>.
  */
-package ladysnake.satin.mixin.client.gl;
+package ladysnake.satin.mixin.client;
 
-import ladysnake.satin.impl.AccessiblePassesShaderEffect;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
 @Mixin(ShaderEffect.class)
-public abstract class ShaderEffectMixin implements AccessiblePassesShaderEffect {
-
-    @Shadow @Final private List<PostProcessShader> passes;
-
-    @Override
-    public List<PostProcessShader> satin$getPasses() {
-        return this.passes;
-    }
+public interface AccessiblePassesShaderEffect {
+    @Accessor
+    List<PostProcessShader> getPasses();
 }
