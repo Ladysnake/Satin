@@ -7,6 +7,7 @@ Additions
 - Added `RenderLayerHelper`, a class with new methods for simplifying the creation of `RenderLayer`s based on existing ones
 - Added `ManagedShaderProgram`, a new alternative to `ManagedShaderEffect` that encapsulates a single shader program that can be enabled or disabled.
 - Added `ManagedFramebuffer`, for cleaner code when using a `ManagedShaderEffect`'s target framebuffers
+- Added `PostWorldRenderCallbackV2`, now passing the MatrixStack for actual drawing
 
 Changes
 - Shaders are no longer garbage collected when you remove all references to them without calling `ShaderManager#dispose`. Clean the place before you leave!

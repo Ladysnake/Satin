@@ -98,21 +98,13 @@ public interface ManagedShaderEffect extends UniformFinder {
      * After this method is called, this shader will go back to its uninitialized state.
      * Future calls to {@link #isInitialized()} will return false until {@link #initialize()}
      * is called again, recreating the shader group.
-     * <p>
-     * Although the finalization process of the garbage collector
-     * also disposes of the same system resources, it is preferable
-     * to manually free the associated resources by calling this
-     * method rather than to rely on a finalization process which
-     * may not run to completion for a long period of time.
-     * <p>
-     * If the caller does not intend to use this shader effect again, they
+     *
+     * <p>If the caller does not intend to use this shader effect again, they
      * should call {@link ShaderEffectManager#dispose(ManagedShaderEffect)}.
-     * </p>
      *
      * @see ShaderEffectManager#dispose(ManagedShaderEffect)
      * @see #isInitialized()
      * @see #getShaderEffect()
-     * @see #finalize()
      */
     @API(status = EXPERIMENTAL, since = "1.0.0")
     void release();
