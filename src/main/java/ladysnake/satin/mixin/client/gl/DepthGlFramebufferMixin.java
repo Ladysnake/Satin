@@ -73,7 +73,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     private void delete(CallbackInfo ci) {
         if (this.satin$stillDepthTexture > -1) {
             // delete texture
-            TextureUtil.method_24957(this.satin$stillDepthTexture);
+            TextureUtil.deleteId(this.satin$stillDepthTexture);
             this.satin$stillDepthTexture = -1;
         }
     }

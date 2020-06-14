@@ -21,9 +21,9 @@ import ladysnake.satin.Satin;
 import ladysnake.satin.api.event.PostWorldRenderCallback;
 import ladysnake.satin.config.OptionalFeature;
 import ladysnake.satin.config.SatinFeatures;
-import net.minecraft.class_5365;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.options.GraphicsMode;
 import net.minecraft.client.render.WorldRenderer;
 import org.apiguardian.api.API;
 
@@ -95,7 +95,7 @@ public interface ReadableDepthFramebuffer {
      * <p>This texture is updated only when {@link #freezeDepthMap()} is called. For the main framebuffer,
      * it is updated automatically right before {@link PostWorldRenderCallback#EVENT} is fired.
      * <strong>Note that the content of the main framebuffer's depth texture depends on the graphic quality setting.</strong>
-     * With {@link class_5365#field_25429 FABULOUS}, no translucent object will appear on the main depth texture, so consumers may
+     * With {@link GraphicsMode#FABULOUS}, no translucent object will appear on the main depth texture, so consumers may
      * need to also use the depth textures from the various layers used by the {@link WorldRenderer}'s transparency shader.
      *
      * <p>Because this texture is independent from the framebuffer's actual depth texture,
