@@ -17,7 +17,7 @@
  */
 package ladysnake.satin.api.managed;
 
-import ladysnake.satin.api.experimental.managed.UniformFinder;
+import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
@@ -151,6 +151,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      *
      * @param uniformName the name of the uniform field in the shader source file
      * @param value       int value
+     * @see #findUniform1i(String)
+     * @see Uniform1i#set(int)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, int value);
@@ -161,6 +163,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param uniformName the name of the uniform field in the shader source file
      * @param value0      int value
      * @param value1      int value
+     * @see #findUniform2i(String)
+     * @see Uniform2i#set(int, int)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, int value0, int value1);
@@ -172,6 +176,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param value0      int value
      * @param value1      int value
      * @param value2      int value
+     * @see #findUniform3i(String)
+     * @see Uniform3i#set(int, int, int)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, int value0, int value1, int value2);
@@ -184,6 +190,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param value1      int value
      * @param value2      int value
      * @param value3      int value
+     * @see #findUniform4i(String)
+     * @see Uniform4i#set(int, int, int, int)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, int value0, int value1, int value2, int value3);
@@ -193,6 +201,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      *
      * @param uniformName the name of the uniform field in the shader source file
      * @param value       float value
+     * @see #findUniform1f(String)
+     * @see Uniform1f#set(float)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, float value);
@@ -203,6 +213,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param uniformName the name of the uniform field in the shader source file
      * @param value0      float value
      * @param value1      float value
+     * @see #findUniform2f(String)
+     * @see Uniform2f#set(float, float)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, float value0, float value1);
@@ -214,6 +226,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param value0      float value
      * @param value1      float value
      * @param value2      float value
+     * @see #findUniform3f(String)
+     * @see Uniform3f#set(float, float, float)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, float value0, float value1, float value2);
@@ -226,6 +240,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      * @param value1      float value
      * @param value2      float value
      * @param value3      float value
+     * @see #findUniform4f(String)
+     * @see Uniform4f#set(float, float, float, float)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, float value0, float value1, float value2, float value3);
@@ -235,6 +251,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      *
      * @param uniformName the name of the uniform field in the shader source file
      * @param value       a matrix
+     * @see #findUniformMat4(String)
+     * @see UniformMat4#set(Matrix4f)
      */
     @API(status = STABLE, since = "1.0.0")
     void setUniformValue(String uniformName, Matrix4f value);
@@ -244,6 +262,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      *
      * @param samplerName the name of the sampler uniform field in the shader source file and json
      * @param texture     a texture object
+     * @see #findSampler(String)
+     * @see SamplerUniform#set(AbstractTexture)
      */
     @API(status = STABLE, since = "1.0.0")
     void setSamplerUniform(String samplerName, AbstractTexture texture);
@@ -253,6 +273,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      *
      * @param samplerName the name of the sampler uniform field in the shader source file and json
      * @param textureFbo  a framebuffer which main texture will be used
+     * @see #findSampler(String)
+     * @see SamplerUniform#set(Framebuffer)
      */
     @API(status = STABLE, since = "1.0.0")
     void setSamplerUniform(String samplerName, Framebuffer textureFbo);
@@ -262,6 +284,8 @@ public interface ManagedShaderEffect extends UniformFinder {
      *
      * @param samplerName the name of the sampler uniform field in the shader source file and json
      * @param textureName an opengl texture name
+     * @see #findSampler(String)
+     * @see SamplerUniform#set(int)
      */
     @API(status = STABLE, since = "1.0.0")
     void setSamplerUniform(String samplerName, int textureName);

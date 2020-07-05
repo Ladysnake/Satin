@@ -28,7 +28,6 @@ import ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonGlProgram;
-import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.util.Identifier;
@@ -138,7 +137,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, int value) {
-        setUniformValue(uniformName, value, 0, 0, 0);
+        this.findUniform1i(uniformName).set(value);
     }
 
     /**
@@ -146,7 +145,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, int value0, int value1) {
-        setUniformValue(uniformName, value0, value1, 0, 0);
+        this.findUniform2i(uniformName).set(value0, value1);
     }
 
     /**
@@ -154,7 +153,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, int value0, int value1, int value2) {
-        setUniformValue(uniformName, value0, value1, value2, 0);
+        this.findUniform3i(uniformName).set(value0, value1, value2);
     }
 
     /**
@@ -162,12 +161,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, int value0, int value1, int value2, int value3) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1, value2, value3);
-            }
-        }
+        this.findUniform4i(uniformName).set(value0, value1, value2, value3);
     }
 
     /**
@@ -175,12 +169,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, float value) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().getUniformByNameOrDummy(uniformName).set(value);
-            }
-        }
+        this.findUniform1f(uniformName).set(value);
     }
 
     /**
@@ -188,12 +177,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, float value0, float value1) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1);
-            }
-        }
+        this.findUniform2f(uniformName).set(value0, value1);
     }
 
     /**
@@ -201,12 +185,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, float value0, float value1, float value2) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1, value2);
-            }
-        }
+        this.findUniform3f(uniformName).set(value0, value1, value2);
     }
 
     /**
@@ -214,12 +193,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, float value0, float value1, float value2, float value3) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().getUniformByNameOrDummy(uniformName).set(value0, value1, value2, value3);
-            }
-        }
+        this.findUniform4f(uniformName).set(value0, value1, value2, value3);
     }
 
     /**
@@ -227,12 +201,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setUniformValue(String uniformName, Matrix4f value) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().getUniformByNameOrDummy(uniformName).set(value);
-            }
-        }
+        this.findUniformMat4(uniformName).set(value);
     }
 
     /**
@@ -240,7 +209,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setSamplerUniform(String samplerName, AbstractTexture texture) {
-        setSamplerUniform(samplerName, (Object) texture);
+        this.findSampler(samplerName).set(texture);
     }
 
     /**
@@ -248,16 +217,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setSamplerUniform(String samplerName, Framebuffer textureFbo) {
-        setSamplerUniform(samplerName, (Object) textureFbo);
-    }
-
-    private void setSamplerUniform(String samplerName, Object texture) {
-        AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
-        if (sg != null) {
-            for (PostProcessShader shader : sg.getPasses()) {
-                shader.getProgram().bindSampler(samplerName, texture);
-            }
-        }
+        this.findSampler(samplerName).set(textureFbo);
     }
 
     /**
@@ -265,7 +225,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void setSamplerUniform(String samplerName, int textureName) {
-        setSamplerUniform(samplerName, Integer.valueOf(textureName));
+        this.findSampler(samplerName).set(textureName);
     }
 
     public void setupDynamicUniforms(Runnable dynamicSetBlock) {
