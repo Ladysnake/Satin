@@ -85,20 +85,18 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    public void initialize() throws IOException {
-        super.initialize();
-        for (FramebufferWrapper buf : this.managedTargets.values()) {
-            buf.findTarget(this.shader);
-        }
-    }
-
-    @Override
     public void setup(int windowWidth, int windowHeight) {
         Preconditions.checkNotNull(shader);
         this.shader.setupDimensions(windowWidth, windowHeight);
+
         for (ManagedUniformBase uniform : this.getManagedUniforms()) {
             setupUniform(uniform, shader);
         }
+
+        for (FramebufferWrapper buf : this.managedTargets.values()) {
+            buf.findTarget(this.shader);
+        }
+
         this.initCallback.accept(this);
     }
 
