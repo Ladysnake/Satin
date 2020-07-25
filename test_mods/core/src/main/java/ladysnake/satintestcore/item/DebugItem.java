@@ -14,7 +14,7 @@ import java.util.List;
 
 public class DebugItem extends Item {
     private int debugMode;
-    private List<DebugCallback> callbacks = new ArrayList<>();
+    private final List<DebugCallback> callbacks = new ArrayList<>();
 
     public DebugItem(Settings settings) {
         super(settings);

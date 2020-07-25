@@ -19,6 +19,8 @@ package ladysnake.satin.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.options.GraphicsMode;
 import net.minecraft.client.render.Camera;
 
 /**
@@ -28,6 +30,9 @@ import net.minecraft.client.render.Camera;
 public interface PostWorldRenderCallback {
     /**
      * Fired after Minecraft has rendered everything in the world, before it renders hands, HUDs and GUIs.
+     *
+     * <p>{@link ShaderEffect}s <strong>must not</strong> be rendered in this callback, as they will prevent
+     * {@link GraphicsMode#FABULOUS fabulous graphics} and other effects from working properly.
      */
     Event<PostWorldRenderCallback> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallback.class,
             (listeners) -> (camera, tickDelta, nanoTime) -> {
