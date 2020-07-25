@@ -17,7 +17,7 @@
  */
 package ladysnake.satin.impl;
 
-import ladysnake.satin.api.experimental.managed.*;
+import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.JsonGlProgram;
 import net.minecraft.client.gl.PostProcessShader;

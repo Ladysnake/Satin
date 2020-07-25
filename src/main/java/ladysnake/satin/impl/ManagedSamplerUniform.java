@@ -29,6 +29,7 @@ import net.minecraft.client.texture.AbstractTexture;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntSupplier;
 
 public final class ManagedSamplerUniform extends ManagedUniformBase implements SamplerUniform {
     protected JsonGlProgram[] targets = new JsonGlProgram[0];
@@ -82,20 +83,21 @@ public final class ManagedSamplerUniform extends ManagedUniformBase implements S
 
     @Override
     public void set(AbstractTexture texture) {
-        set((Object) texture);
+        set(texture::getGlId);
     }
 
     @Override
     public void set(Framebuffer textureFbo) {
-        set((Object) textureFbo);
+        set(textureFbo::method_30277);
     }
 
     @Override
     public void set(int textureName) {
-        set((Object) textureName);
+        set(() -> textureName);
     }
 
-    private void set(Object value) {
+    @Override
+    public void set(IntSupplier value) {
         JsonGlProgram[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {

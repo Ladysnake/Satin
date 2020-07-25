@@ -1,3 +1,4 @@
 dependencies {
     compile project(":core").sourceSets.main.output
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
 }

@@ -1,4 +1,12 @@
 ------------------------------------------------------
+Version 1.4.1
+------------------------------------------------------
+Update to 1.16.2
+
+Changes
+- Removed the experimental versions of the `UniformFinder` interface and associated handles (use the promoted versions!)
+
+------------------------------------------------------
 Version 1.4.0
 ------------------------------------------------------
 Update to 1.16 (thanks to Draylar and DaveyL2013 for snapshot updates)

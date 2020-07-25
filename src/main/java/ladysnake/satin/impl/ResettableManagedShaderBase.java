@@ -18,8 +18,7 @@
 package ladysnake.satin.impl;
 
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.experimental.managed.*;
-import ladysnake.satin.api.managed.uniform.SamplerUniform;
+import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;

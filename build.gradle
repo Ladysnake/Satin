@@ -1,7 +1,7 @@
 import java.time.Year
 
 plugins {
-    id "fabric-loom" version "0.4.3"
+    id "fabric-loom" version "0.4-SNAPSHOT"
     id "net.minecrell.licenser" version "0.2.1"
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id "com.jfrog.bintray" version '1.8.4'
@@ -47,8 +47,8 @@ allprojects {
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-        // Fabric API. This is technically optional, but you probably want it anyway.
-        modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+        modApi fabricApi.module("fabric-api-base", project.fabric_version)
+        modApi fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
 //        modRuntime "io.github.prospector:modmenu:${project.modmenu_version}"
 
         compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
