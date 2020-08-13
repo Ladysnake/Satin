@@ -54,7 +54,10 @@ Satin's main feature is the Shader Effect management facility.
 
 `ShaderEffect` is a Minecraft class implementing data driven post processing shaders, with a few caveats. First, those shader effects are initialized immediately at construction, but they must be initialized after the game has finished loading to avoid gl errors. Then, they must be updated each time the game's resolution changes. Finally, they do not have any way of setting uniforms from external code.
 
-Satin can manage a shader effect for you, giving you a `ManagedShaderEffect` object. This shader effect is lazily initialized - although it can be initialized manually at any time. Initialized shader effects will be automatically reloaded each time the game's resolution changes, and during resource reloading. It also provides a number of access methods to set uniforms dynamically.
+Satin can manage a shader effect for you, giving you a `ManagedShaderEffect` object.
+This shader effect will be automatically initialized after the first resource loading.
+Subsequent resource reloading and window size updates will cause the shader to reload.
+The `ManagedShaderEffect` interface also provides a number of access methods to set uniforms dynamically.
 
 Here is the whole java code for a mod that applies a basic shader to the game:
 
@@ -79,6 +82,16 @@ public class GreyscaleMinecraft implements ClientModInitializer {
 ```
 
 For examples of json shader definitions, look for the `assets/minecraft/shaders` folder in the minecraft source (description of those shaders can be found on the [Minecraft Wiki](https://minecraft.gamepedia.com/Shaders)). There is also a real application of this library in [Dissolution](https://github.com/Ladysnake/Dissolution/blob/2ab4f85f4d70e45b6c23efba63f9b8b6cf352d32/src/main/java/ladysnake/dissolution/client/DissolutionFx.java).
+
+### RenderLayer Utilities
+The `ManagedFramebuffer` and `ManagedShaderProgram` classes have methods to obtain clones of existing `RenderLayer` objects,
+with a custom `Target`. This target causes draw calls to happen on the `ManagedFramebuffer` for the former, or using the
+shader program for the latter. This can be notably used to render custom effects on entities and block entities.
+
+For examples of entities using those, see [the relevant test mod](https://github.com/Ladysnake/Satin/blob/master/test_mods/render-layer/src/main/java/ladysnake/satinrenderlayer/).
+
+**Regular blocks do not support custom render layers.** For advanced shader materials, you should consider using
+an alternative renderer like [Canvas](https://github.com/grondag/canvas).
 
 ### Shader Utilities
 
