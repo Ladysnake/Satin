@@ -81,7 +81,7 @@ public interface ReadableDepthFramebuffer {
      *
      * @return the gl id of the depth texture, or -1 if it cannot be obtained
      * @see #getStillDepthMap()
-     * @deprecated use {@link Framebuffer#depthAttachment}
+     * @deprecated use {@link Framebuffer#method_30278}
      */
     @CheckForSigned
     @Deprecated
