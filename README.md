@@ -81,7 +81,7 @@ public class GreyscaleMinecraft implements ClientModInitializer {
 }
 ```
 
-For examples of json shader definitions, look for the `assets/minecraft/shaders` folder in the minecraft source (description of those shaders can be found on the [Minecraft Wiki](https://minecraft.gamepedia.com/Shaders)). There is also a real application of this library in [Dissolution](https://github.com/Ladysnake/Dissolution/blob/2ab4f85f4d70e45b6c23efba63f9b8b6cf352d32/src/main/java/ladysnake/dissolution/client/DissolutionFx.java).
+For examples of json shader definitions, look for the `assets/minecraft/shaders` folder in the minecraft source (description of those shaders can be found on the [Minecraft Wiki](https://minecraft.gamepedia.com/Shaders)). There is also a real application of this library in [Requiem](https://github.com/Ladysnake/Requiem/blob/d95c4f5c55/src/main/java/ladysnake/requiem/client/RequiemFx.java).
 
 ### RenderLayer Utilities
 The `ManagedFramebuffer` and `ManagedShaderProgram` classes have methods to obtain clones of existing `RenderLayer` objects,
