@@ -1,5 +1,6 @@
 package ladysnake.satintestcore;
 
+import ladysnake.satintestcore.block.SatinTestBlocks;
 import ladysnake.satintestcore.item.SatinTestItems;
 import net.fabricmc.api.ModInitializer;
 
@@ -8,6 +9,7 @@ public class SatinTestCore implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        SatinTestBlocks.init();
         SatinTestItems.init();
     }
 }
