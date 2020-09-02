@@ -18,7 +18,9 @@
 package ladysnake.satin.api.util;
 
 import ladysnake.satin.impl.RenderLayerDuplicator;
+import ladysnake.satin.mixin.client.render.RenderPhaseAccessor;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderPhase;
 import org.apiguardian.api.API;
 
 import java.util.function.Consumer;
@@ -27,6 +29,21 @@ import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 @API(status = EXPERIMENTAL, since = "1.4.0")
 public final class RenderLayerHelper {
+
+    /**
+     * Gets the name of a {@link RenderPhase}
+     *
+     * <p>This method can be used with {@link #copy(RenderLayer, String, Consumer)}
+     * to make unique names based on the base layer's own name.
+     *
+     * @param phase a render phase or layer
+     * @return the name that was passed to {@link RenderPhase#RenderPhase(String, Runnable, Runnable)}
+     */
+    @API(status = EXPERIMENTAL, since = "1.5.0")
+    public static String getName(RenderPhase phase) {
+        return ((RenderPhaseAccessor) phase).getName();
+    }
+
     /**
      * Copies a {@link RenderLayer} with all its parameters, but applies the given {@code phaseTransform} to the
      * copied parameters.
