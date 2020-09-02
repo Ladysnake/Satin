@@ -2,6 +2,7 @@
 Version 1.5.0
 ------------------------------------------------------
 - Added a method in RenderLayerHelper to get the name of an existing render phase/layer
+- Removed experimental `BufferBuildersInitCallback` as it seems superseded by RenderLayer duplication
 
 ------------------------------------------------------
 Version 1.4.1

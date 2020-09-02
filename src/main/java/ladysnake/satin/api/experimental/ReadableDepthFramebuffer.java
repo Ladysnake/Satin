@@ -17,10 +17,7 @@
  */
 package ladysnake.satin.api.experimental;
 
-import ladysnake.satin.Satin;
 import ladysnake.satin.api.event.PostWorldRenderCallback;
-import ladysnake.satin.config.OptionalFeature;
-import ladysnake.satin.config.SatinFeatures;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.options.GraphicsMode;
@@ -53,15 +50,7 @@ public interface ReadableDepthFramebuffer {
      */
     @Deprecated
     @API(status = DEPRECATED, since = "1.4.0")
-    static void useFeature() {
-        Satin.LOGGER.info("[Satin] Enabling readable depth framebuffers. This may cause incompatibilities with other graphical mods.");
-        OptionalFeature option = SatinFeatures.getInstance().readableDepthFramebuffers;
-        if (option.isConfigEnabled()) {
-            option.use();
-        } else {
-            Satin.LOGGER.warn("[Satin] Couldn't activate the feature as it is disabled by the config!");
-        }
-    }
+    static void useFeature() { }
 
     /**
      * Returns the depth texture used by this buffer.

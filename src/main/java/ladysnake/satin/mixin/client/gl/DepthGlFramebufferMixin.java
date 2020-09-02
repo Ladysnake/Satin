@@ -40,7 +40,7 @@ import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffer {
     @Shadow @Final public boolean useDepthAttachment;
 
-    @Shadow public int depthAttachment;
+    @Shadow private int depthAttachment;
     @Shadow public int textureWidth;
     @Shadow public int textureHeight;
 

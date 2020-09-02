@@ -41,10 +41,7 @@ Simply having Satin installed alters the game in a few ways, mainly related to S
 copy paste. Satin redirects a call to upload the right buffer.
 - **Shader locations**: Satin patches JsonGlProgram to accept a resource domain in the specification
 of a program name and of a fragment/vertex shader file.
-- **Readable depth**: Satin patches minecraft's framebuffer objects to use textures instead of render
-buffers as depth attachments. This allows modders to reuse the depth information in shaders notably.
-Because this feature has a non-negligible risk of incompatibility with similar patches, it has to be enabled 
-by consumer code first, and users can forcefully disable it any time in the config.
+- ~~**Readable depth**~~: Satin offered access to a Framebuffer's depth texture before it was cool (superseded in 1.16).
 
 Satin **does not** set the shader in `GameRenderer`, except if a mod registers a `PickEntityShaderCallback`.
 
@@ -52,9 +49,15 @@ Satin **does not** set the shader in `GameRenderer`, except if a mod registers a
 
 Satin's main feature is the Shader Effect management facility. 
 
-`ShaderEffect` is a Minecraft class implementing data driven post processing shaders, with a few caveats. First, those shader effects are initialized immediately at construction, but they must be initialized after the game has finished loading to avoid gl errors. Then, they must be updated each time the game's resolution changes. Finally, they do not have any way of setting uniforms from external code.
+`ShaderEffect` is a Minecraft class implementing data driven post processing shaders, with a few caveats.
+First, those shader effects are initialized immediately at construction, but they must be initialized after the game has
+finished loading to avoid gl errors. Then, they must be updated each time the game's resolution changes.
+Finally, they do not have any way of setting uniforms from external code.
 
-Satin can manage a shader effect for you, giving you a `ManagedShaderEffect` object. This shader effect is lazily initialized - although it can be initialized manually at any time. Initialized shader effects will be automatically reloaded each time the game's resolution changes, and during resource reloading. It also provides a number of access methods to set uniforms dynamically.
+Satin can manage a shader effect for you, giving you a `ManagedShaderEffect` object.
+This shader effect is lazily initialized - although it can be initialized manually at any time.
+Initialized shader effects will be automatically reloaded each time the game's resolution changes,
+and during resource reloading. It also provides a number of access methods to set uniforms dynamically.
 
 Here is the whole java code for a mod that applies a basic shader to the game:
 
@@ -93,7 +96,7 @@ Satin adds in a few events for rendering purposes / related to shaders. Currentl
 
 - `EntitiesPostRenderCallback`: fired between entity rendering end and block entity rendering start
 - `PickEntityShaderCallback`: allows mods to add their own entity view shaders
-- `PostWorldRenderCallback`: allows mods to render things between the moment minecraft finishes to render the world
+- `PostWorldRenderCallback`: allows mods to render things between the moment minecraft finishes rendering the world
 and the moment it starts rendering HUD's and GUI's
 - `ResolutionChangeCallback`: allows mods to react to resolution changes
 - `ShaderEffectRenderCallback`: fired at the time vanilla renders their post process shaders

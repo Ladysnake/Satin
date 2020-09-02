@@ -12,7 +12,6 @@
     "gl.JsonGlProgramAccessor",
     "gl.JsonGlProgramMixin",
     "gl.Matrix4fMixin",
-    "render.BufferBuilderStorageMixin",
     "render.MultiPhaseParametersAccessor",
     "render.RenderLayerAccessor",
     "render.RenderPhaseAccessor"
