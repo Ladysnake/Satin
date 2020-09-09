@@ -14,7 +14,9 @@
     "gl.Matrix4fMixin",
     "render.MultiPhaseParametersAccessor",
     "render.RenderLayerAccessor",
-    "render.RenderPhaseAccessor"
+    "render.RenderLayerMixin",
+    "render.RenderPhaseAccessor",
+    "render.WorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
