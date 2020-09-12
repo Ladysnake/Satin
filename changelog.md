@@ -2,6 +2,8 @@
 Version 1.5.0
 ------------------------------------------------------
 - Added a method in RenderLayerHelper to get the name of an existing render phase/layer
+- Added the ability to set a regular block's render layer through `RenderLayerHelper`
+    - Marked the functionality as deprecated because of the potential for incompatibilities.
 - Removed experimental `BufferBuildersInitCallback` as it seems superseded by RenderLayer duplication
 
 ------------------------------------------------------
