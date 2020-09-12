@@ -44,7 +44,7 @@ public class DepthFx implements PostWorldRenderCallback, ShaderEffectRenderCallb
     private boolean isWorldNight(@Nullable PlayerEntity player) {
         if (player != null) {
             World world = player.world;
-            float celestialAngle = world.method_30274(1.0f);
+            float celestialAngle = world.getSkyAngle(1.0f);
             return 0.23f < celestialAngle && celestialAngle < 0.76f;
         }
         return false;

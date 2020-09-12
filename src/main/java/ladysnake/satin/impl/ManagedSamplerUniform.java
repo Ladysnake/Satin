@@ -88,7 +88,7 @@ public final class ManagedSamplerUniform extends ManagedUniformBase implements S
 
     @Override
     public void set(Framebuffer textureFbo) {
-        set(textureFbo::method_30277);
+        set(textureFbo::getColorAttachment);
     }
 
     @Override
