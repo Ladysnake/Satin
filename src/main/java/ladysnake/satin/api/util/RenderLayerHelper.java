@@ -17,8 +17,10 @@
  */
 package ladysnake.satin.api.util;
 
+import ladysnake.satin.impl.BlockRenderLayerRegistry;
 import ladysnake.satin.impl.RenderLayerDuplicator;
 import ladysnake.satin.mixin.client.render.RenderPhaseAccessor;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import org.apiguardian.api.API;
@@ -56,8 +58,8 @@ public final class RenderLayerHelper {
      *      builder -> builder.target(someShaderEnablingTarget)
      * );}</pre>
      *
-     * @param existing the render layer to duplicate
-     * @param newName the name of the new render layer
+     * @param existing       the render layer to duplicate
+     * @param newName        the name of the new render layer
      * @param phaseTransform a transformation operation to apply to the new layer's {@linkplain RenderLayer.MultiPhaseParameters.Builder parameter builder}
      * @return a {@link RenderLayer} with the same base parameters as {@code existing} but modified according to {@code phaseTransform}
      * @throws IllegalArgumentException if {@code existing} is not a {@code MultiPhase} render layer
@@ -70,5 +72,21 @@ public final class RenderLayerHelper {
     @API(status = EXPERIMENTAL, since = "1.4.0")
     public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> phaseTransform) {
         return RenderLayerDuplicator.copyPhaseParameters(existing, phaseTransform);
+    }
+
+    /**
+     * Register a custom RenderLayer for block rendering.
+     *
+     * <p><strong>Custom block render layers are usually not supported by alternative renderers.</strong>
+     * Calling this method will have no visible effect if one of those is active.
+     *
+     * @throws IllegalStateException if this method is called after {@link MinecraftClient#getBufferBuilders()
+     *                               buffer builders} have been initialized.
+     * @deprecated this feature is likely to cause incompatibilities. Use at your own discretion.
+     */
+    @Deprecated
+    @API(status = EXPERIMENTAL, since = "1.5.0")
+    public static void registerBlockRenderLayer(RenderLayer layer) {
+        BlockRenderLayerRegistry.INSTANCE.registerRenderLayer(layer);
     }
 }
