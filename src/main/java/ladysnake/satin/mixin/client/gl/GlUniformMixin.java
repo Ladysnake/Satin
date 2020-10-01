@@ -39,7 +39,9 @@ public abstract class GlUniformMixin {
 
     @Redirect(method = "uploadInts", at = @At(value = "INVOKE", target = "Ljava/nio/FloatBuffer;clear()Ljava/nio/Buffer;", remap = false))
     private Buffer fixIntUniforms(FloatBuffer floatBuffer) {
-        this.intData.clear();
+        // we need to upcast the buffer, as later Java versions overload the return value
+        Buffer intData = this.intData;
+        intData.clear();
         return floatBuffer;
     }
 

@@ -1,4 +1,9 @@
 ------------------------------------------------------
+Version 1.5.1
+------------------------------------------------------
+- Fixed a crash when calling some GlMatrices methods on Java 8
+IntBuffer
+------------------------------------------------------
 Version 1.5.0
 ------------------------------------------------------
 - Added a method in RenderLayerHelper to get the name of an existing render phase/layer

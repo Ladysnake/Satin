@@ -24,6 +24,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 
@@ -45,8 +46,10 @@ public final class GlMatrices {
      */
     @API(status = MAINTAINED)
     public static FloatBuffer getTmpBuffer() {
+        // we need to upcast the buffer, as later Java versions overload the return value
+        Buffer buffer = GlMatrices.buffer;
         buffer.clear();
-        return buffer;
+        return GlMatrices.buffer;
     }
 
     /**
@@ -56,7 +59,9 @@ public final class GlMatrices {
     @API(status = MAINTAINED)
     public static FloatBuffer getProjectionMatrix(FloatBuffer outMat) {
         GL11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, outMat);
-        outMat.rewind();
+        // we need to upcast the buffer, as later Java versions overload the return value
+        @SuppressWarnings("UnnecessaryLocalVariable") Buffer buffer = outMat;
+        buffer.rewind();
         return outMat;
     }
 
@@ -81,7 +86,9 @@ public final class GlMatrices {
     @API(status = MAINTAINED)
     public static FloatBuffer getModelViewMatrix(FloatBuffer outMat) {
         GL11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, outMat);
-        outMat.rewind();
+        // we need to upcast the buffer, as later Java versions overload the return value
+        @SuppressWarnings("UnnecessaryLocalVariable") Buffer buffer = outMat;
+        buffer.rewind();
         return outMat;
     }
 
