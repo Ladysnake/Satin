@@ -31,10 +31,10 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 public final class RenderLayerDuplicator {
-    private static final Field multiphase$phases;
+    private static final Field multiPhase$phases;
     private static final Field multiPhaseParameters$outlineMode;
     private static final Method multiPhaseParametersBuilder$build;
-    private static final Class<?> multiphaseClass;
+    private static final Class<?> multiPhaseClass;
 
     private static Type unmap(Class<?> clazz) {
         // for a better implementation, see https://github.com/Ladysnake/Requiem/blob/523ec343d5/src/main/java/ladysnake/requiem/common/util/reflection/ReflectionHelper.java#L61-L74
@@ -67,8 +67,8 @@ public final class RenderLayerDuplicator {
         try {
             MappingResolver mappingResolver = FabricLoader.getInstance().getMappingResolver();
 
-            multiphaseClass = Class.forName(mappingResolver.mapClassName("intermediary", "net.minecraft.client.render.RenderLayer$MultiPhase"));
-            multiphase$phases = findFieldFromIntermediary(multiphaseClass, "field_21403", RenderLayer.MultiPhaseParameters.class);
+            multiPhaseClass = Class.forName(mappingResolver.mapClassName("intermediary", "net.minecraft.class_1921$class_4687"));
+            multiPhase$phases = findFieldFromIntermediary(multiPhaseClass, "field_21403", RenderLayer.MultiPhaseParameters.class);
 
             Class<?> outlineModeClass = Class.forName(mappingResolver.mapClassName("intermediary", "net.minecraft.class_1921$class_4750"));
             multiPhaseParameters$outlineMode = findFieldFromIntermediary(RenderLayer.MultiPhaseParameters.class, "field_21852", outlineModeClass);
@@ -94,7 +94,7 @@ public final class RenderLayerDuplicator {
     public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
         checkDefaultImpl(existing);
         try {
-            MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) multiphase$phases.get(existing));
+            MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) multiPhase$phases.get(existing));
             RenderLayer.MultiPhaseParameters.Builder builder = RenderLayer.MultiPhaseParameters.builder()
                     .texture(access.getTexture())
                     .transparency(access.getTransparency())
@@ -119,7 +119,7 @@ public final class RenderLayerDuplicator {
     }
 
     private static void checkDefaultImpl(RenderLayer existing) {
-        if (!multiphaseClass.isInstance(existing)) {
+        if (!multiPhaseClass.isInstance(existing)) {
             throw new IllegalArgumentException("Unrecognized RenderLayer implementation " + existing.getClass() + ". Layer duplication is only applicable to the default (MultiPhase) implementation");
         }
     }

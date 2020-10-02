@@ -2,7 +2,8 @@
 Version 1.5.1
 ------------------------------------------------------
 - Fixed a crash when calling some GlMatrices methods on Java 8
-IntBuffer
+- Fixed a crash in obfuscated environments when using the RenderLayer duplication feature
+
 ------------------------------------------------------
 Version 1.5.0
 ------------------------------------------------------
