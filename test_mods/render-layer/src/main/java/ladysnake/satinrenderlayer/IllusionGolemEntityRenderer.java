@@ -1,15 +1,15 @@
 package ladysnake.satinrenderlayer;
 
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.IronGolemEntityRenderer;
 import net.minecraft.entity.passive.IronGolemEntity;
 
 import javax.annotation.Nullable;
 
 public class IllusionGolemEntityRenderer extends IronGolemEntityRenderer {
-    public IllusionGolemEntityRenderer(EntityRenderDispatcher entityRenderDispatcher) {
-        super(entityRenderDispatcher);
+    public IllusionGolemEntityRenderer(EntityRendererFactory.Context ctx) {
+        super(ctx);
     }
 
     @Nullable

@@ -2,7 +2,7 @@ package ladysnake.satinrenderlayer;
 
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.WitherEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.boss.WitherEntity;
@@ -10,7 +10,7 @@ import net.minecraft.entity.boss.WitherEntity;
 import javax.annotation.Nullable;
 
 public class RainbowWitherEntityRenderer extends WitherEntityRenderer {
-    public RainbowWitherEntityRenderer(EntityRenderDispatcher entityRenderDispatcher) {
+    public RainbowWitherEntityRenderer(EntityRendererFactory.Context entityRenderDispatcher) {
         super(entityRenderDispatcher);
     }
 
