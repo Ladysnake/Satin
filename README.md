@@ -31,6 +31,8 @@ satin_version = 1.x.y
 
 You can find the current version of Satin in the [releases](https://github.com/Ladysnake/Satin/releases) tab of the repository on Github.
 
+*If you wish your mod to be 100% standalone, you also need to include the `fabric-api-base` and `fabric-resource-loader-v0` modules from Fabric API in your mod jar.*
+
 ## Using Satin
 
 ### Changes to Vanilla
