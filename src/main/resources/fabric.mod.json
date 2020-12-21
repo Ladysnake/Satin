@@ -29,7 +29,8 @@
   ],
   "depends": {
     "fabricloader": ">=0.4.0",
-    "fabric-api-base": "*"
+    "fabric-api-base": "*",
+    "fabric-resource-loader-v0": "*"
   },
   "conflicts": {
     "optifabric": "*"
