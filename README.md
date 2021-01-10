@@ -104,7 +104,7 @@ More information is available in the javadoc.
 
 ### Events
 
-Satin adds in a few events for rendering purposes / related to shaders. Currently, there are 4 available callbacks:
+Satin adds in a few events for rendering purposes / related to shaders. Currently, there are 5 available callbacks:
 
 - `EntitiesPostRenderCallback`: fired between entity rendering end and block entity rendering start
 - `PickEntityShaderCallback`: allows mods to add their own entity view shaders
