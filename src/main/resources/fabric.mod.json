@@ -36,6 +36,6 @@
     "optifabric": "*"
   },
   "custom": {
-    "modmenu:api": true
+    "badges": [ "library" ]
   }
 }
