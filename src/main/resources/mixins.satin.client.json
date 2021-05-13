@@ -1,10 +1,12 @@
 {
   "required": true,
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_16",
   "package": "ladysnake.satin.mixin.client",
   "plugin": "ladysnake.satin.mixin.SatinMixinPlugin",
   "mixins": [
     "AccessiblePassesShaderEffect",
+    "blockrenderlayer.RenderLayerMixin",
+    "blockrenderlayer.WorldRendererMixin",
     "event.GameRendererMixin",
     "event.MinecraftClientMixin",
     "event.WorldRendererMixin",
@@ -13,11 +15,11 @@
     "gl.JsonGlProgramAccessor",
     "gl.JsonGlProgramMixin",
     "gl.Matrix4fMixin",
-    "render.MultiPhaseParametersAccessor",
     "render.RenderLayerAccessor",
-    "blockrenderlayer.RenderLayerMixin",
-    "render.RenderPhaseAccessor",
-    "blockrenderlayer.WorldRendererMixin"
+    "render.RenderLayerMixin",
+    "render.RenderLayerMixin$MultiPhaseParametersAccessor",
+    "render.RenderLayerMultiPhaseMixin",
+    "render.RenderPhaseAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

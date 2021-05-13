@@ -18,10 +18,10 @@
 package ladysnake.satin.mixin.client.gl;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.texture.TextureUtil;
 import org.lwjgl.opengl.GL11;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -65,7 +65,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         RenderSystem.texParameter(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        GlStateManager.texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.textureWidth, this.textureHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
+        GlStateManager._texImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, this.textureWidth, this.textureHeight, 0,GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, null);
         return shadowMap;
     }
 
@@ -73,7 +73,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     private void delete(CallbackInfo ci) {
         if (this.satin$stillDepthTexture > -1) {
             // delete texture
-            TextureUtil.deleteId(this.satin$stillDepthTexture);
+            TextureUtil.releaseTextureId(this.satin$stillDepthTexture);
             this.satin$stillDepthTexture = -1;
         }
     }

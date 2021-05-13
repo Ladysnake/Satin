@@ -17,14 +17,14 @@
  */
 package ladysnake.satin.mixin.client.gl;
 
-import net.minecraft.client.gl.JsonGlProgram;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 import java.util.Map;
+import net.minecraft.client.gl.JsonEffectGlShader;
 
-@Mixin(JsonGlProgram.class)
+@Mixin(JsonEffectGlShader.class)
 public interface JsonGlProgramAccessor {
     @Accessor
     Map<String, Object> getSamplerBinds();

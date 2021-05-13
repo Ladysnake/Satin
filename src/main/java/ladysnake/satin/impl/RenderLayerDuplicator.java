@@ -17,7 +17,7 @@
  */
 package ladysnake.satin.impl;
 
-import ladysnake.satin.mixin.client.render.MultiPhaseParametersAccessor;
+import ladysnake.satin.mixin.client.render.RenderLayerMixin;
 import ladysnake.satin.mixin.client.render.RenderLayerAccessor;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.MappingResolver;
@@ -80,47 +80,22 @@ public final class RenderLayerDuplicator {
 
     public static RenderLayer copy(RenderLayer existing, String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
         checkDefaultImpl(existing);
-        return RenderLayer.of(
-                newName,
-                existing.getVertexFormat(),
-                existing.getDrawMode(),
-                existing.getExpectedBufferSize(),
-                existing.hasCrumbling(),
-                ((RenderLayerAccessor) existing).isTranslucent(),
-                copyPhaseParameters(existing, op)
-        );
+        return ((SatinRenderLayer) existing).satin$copy(newName, op);
     }
 
     public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
         checkDefaultImpl(existing);
-        try {
-            MultiPhaseParametersAccessor access = ((MultiPhaseParametersAccessor) multiPhase$phases.get(existing));
-            RenderLayer.MultiPhaseParameters.Builder builder = RenderLayer.MultiPhaseParameters.builder()
-                    .texture(access.getTexture())
-                    .transparency(access.getTransparency())
-                    .diffuseLighting(access.getDiffuseLighting())
-                    .shadeModel(access.getShadeModel())
-                    .alpha(access.getAlpha())
-                    .depthTest(access.getDepthTest())
-                    .cull(access.getCull())
-                    .lightmap(access.getLightmap())
-                    .overlay(access.getOverlay())
-                    .fog(access.getFog())
-                    .layering(access.getLayering())
-                    .target(access.getTarget())
-                    .texturing(access.getTexturing())
-                    .writeMaskState(access.getWriteMaskState())
-                    .lineWidth(access.getLineWidth());
-            op.accept(builder);
-            return (RenderLayer.MultiPhaseParameters) multiPhaseParametersBuilder$build.invoke(builder, multiPhaseParameters$outlineMode.get(access));
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException("Failed to duplicate render layer parameters from " + existing, e);
-        }
+        return ((SatinRenderLayer) existing).satin$copyPhaseParameters(op);
     }
 
     private static void checkDefaultImpl(RenderLayer existing) {
         if (!multiPhaseClass.isInstance(existing)) {
             throw new IllegalArgumentException("Unrecognized RenderLayer implementation " + existing.getClass() + ". Layer duplication is only applicable to the default (MultiPhase) implementation");
         }
+    }
+
+    public interface SatinRenderLayer {
+        RenderLayer satin$copy(String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op);
+        RenderLayer.MultiPhaseParameters satin$copyPhaseParameters(Consumer<RenderLayer.MultiPhaseParameters.Builder> op);
     }
 }

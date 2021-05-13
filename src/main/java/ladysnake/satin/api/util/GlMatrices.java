@@ -17,6 +17,7 @@
  */
 package ladysnake.satin.api.util;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.impl.ModifiableMatrix4f;
 import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
@@ -113,16 +114,12 @@ public final class GlMatrices {
     @Nonnull
     @API(status = EXPERIMENTAL)
     public static Matrix4f getInverseTransformMatrix(Matrix4f outMat) {
-        float[] projectionArray = inArray;
-        float[] viewArray = outArray;
-        GlMatrices.getProjectionMatrix(getTmpBuffer()).get(projectionArray);
-        GlMatrices.getModelViewMatrix(getTmpBuffer()).get(viewArray);
-
-        // reuse matrices instead of creating new ones
-        float[] projectionViewArray = GlMatrices.multiplyMat4(projectionArray, projectionArray, viewArray);
-        GlMatrices.invertMat4(projectionViewArray, projectionViewArray);
-        //noinspection ConstantConditions
-        ((ModifiableMatrix4f) (Object) outMat).satin_setFromArray(projectionViewArray);
+        Matrix4f projection = RenderSystem.getProjectionMatrix();
+        Matrix4f modelView = RenderSystem.getModelViewMatrix();
+        outMat.loadIdentity();
+        outMat.multiply(projection);
+        outMat.multiply(modelView);
+        outMat.invert();
         return outMat;
     }
 

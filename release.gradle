@@ -39,25 +39,30 @@ githubRelease {
 }
 tasks.githubRelease.dependsOn(checkGitStatus)
 
-bintray {
-    user = project.findProperty('bintray_user')
-    key = project.findProperty('bintray_api_key')
-    publications = ['mavenJava']
-    publish = true //[Default: false] Whether version should be auto published after an upload
-    pkg {
-        repo = 'libs'
-        name = project.name
-        userOrg = 'ladysnake'
-        version {
-            name = project.version
-            vcsTag = project.version
-            released  = new Date()
+artifactory {
+    if (project.hasProperty("artifactory_user")) {
+        contextUrl = "https://ladysnake.jfrog.io/artifactory/"
+        publish {
+            repository {
+                repoKey = "mods"
+
+                username = artifactory_user
+                password = artifactory_api_key
+            }
+            defaults {
+                publications("mavenJava")
+
+                publishArtifacts = true
+                publishPom = true
+            }
         }
+    } else {
+        println "Cannot configure artifactory; please define ext.artifactory_user and ext.artifactory_api_key before running artifactoryPublish"
     }
 }
 
-bintrayUpload.dependsOn(checkGitStatus)
-bintrayUpload.dependsOn build
+artifactoryPublish.dependsOn(checkGitStatus)
+artifactoryPublish.dependsOn build
 
 // configure the maven publication
 publishing {
@@ -155,7 +160,7 @@ curseforge {
 
 tasks.curseforge.dependsOn(checkGitStatus)
 
-task release(dependsOn: [tasks.publish, tasks.githubRelease, tasks.bintrayUpload, tasks.curseforge]) {
+task release(dependsOn: [tasks.publish, tasks.githubRelease, tasks.artifactoryPublish, tasks.curseforge]) {
     group = 'publishing'
     description = 'Releases a new version to Maven, Github and Curseforge'
 }

@@ -1,13 +1,12 @@
 import java.time.Year
 
 plugins {
-    id "fabric-loom" version "0.4-SNAPSHOT"
-    id "net.minecrell.licenser" version "0.2.1"
+    id "fabric-loom" version "0.8-SNAPSHOT"
+    id "org.cadixdev.licenser" version "0.5.0"
     id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id "com.jfrog.bintray" version '1.8.4'
+    id "com.jfrog.artifactory" version '4.21.0'
     id 'org.ajoberstar.grgit' version '3.1.1'
     id 'com.github.breadmoirai.github-release' version '2.2.9'
-    id "com.wynprice.cursemaven" version "2.1.1"
     id "maven-publish"
 }
 
@@ -20,29 +19,22 @@ subprojects {
     group = rootProject.maven_group + "." + rootProject.archives_base_name
 
     dependencies {
-        compile rootProject.sourceSets.main.output
+        implementation rootProject.sourceSets.main.output
     }
 }
 
 allprojects {
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_16
+    targetCompatibility = JavaVersion.VERSION_16
 
     version = rootProject.mod_version
 
-    minecraft {
-    }
-
     repositories {
-        maven {
-            url = "http://maven.fabricmc.net/"
-            name = "Fabric"
-        }
     }
 
     dependencies {
-        //to change the versions see the gradle.properties file
+        // To change the versions see the gradle.properties file
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
@@ -61,34 +53,35 @@ allprojects {
     processResources {
         inputs.property "version", project.version
 
-        from(sourceSets.main.resources.srcDirs) {
-            include "fabric.mod.json"
+        filesMatching("fabric.mod.json") {
             expand "version": project.version
-        }
-
-        from(sourceSets.main.resources.srcDirs) {
-            exclude "fabric.mod.json"
         }
     }
 
     // ensure that the encoding is set to UTF-8, no matter what the system default is
     // this fixes some edge cases with special characters not displaying correctly
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = "UTF-8"
+        it.options.release = 16
     }
 }
 
-// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-// if it is present.
-// If you remove this task, sources will not be generated.
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier = "sources"
-    from sourceSets.main.allSource
+minecraft {
+    accessWidener = file("src/main/resources/satin.accesswidener")
+}
+
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
 }
 
 jar {
-    from "LICENSE"
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
 }
 
 license {

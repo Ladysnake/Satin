@@ -17,8 +17,8 @@
  */
 package ladysnake.satin.mixin.client.gl;
 
-import net.minecraft.client.gl.GlShader;
-import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.gl.JsonEffectGlShader;
+import net.minecraft.client.gl.Program;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  * Minecraft does not take into account domains when parsing a shader program.
  * These hooks redirect identifier instantiations to allow specifying a domain for shader files.
  */
-@Mixin(JsonGlProgram.class)
+@Mixin(JsonEffectGlShader.class)
 public abstract class JsonGlProgramMixin {
     /**
      * @param arg the string passed to the redirected Identifier constructor
@@ -63,9 +63,9 @@ public abstract class JsonGlProgramMixin {
                     target = "net/minecraft/util/Identifier",
                     ordinal = 0
             ),
-            method = "getShader"
+            method = "loadEffect"
     )
-    private static Identifier constructProgramIdentifier(String arg, ResourceManager unused, GlShader.Type shaderType, String id) {
+    private static Identifier constructProgramIdentifier(String arg, ResourceManager unused, Program.Type shaderType, String id) {
         if (!arg.contains(":")) {
             return new Identifier(arg);
         }

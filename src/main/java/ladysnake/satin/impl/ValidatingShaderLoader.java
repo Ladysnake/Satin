@@ -52,14 +52,14 @@ public final class ValidatingShaderLoader implements ShaderLoader {
     public int loadShader(ResourceManager resourceManager, @Nullable Identifier vertexLocation, @Nullable Identifier fragmentLocation) throws IOException {
 
         // program creation
-        int programId = GlStateManager.createProgram();
+        int programId = GlStateManager.glCreateProgram();
 
         int vertexShaderId = 0;
         int fragmentShaderId = 0;
 
         // vertex shader creation
         if (vertexLocation != null) {
-            vertexShaderId = GlStateManager.createShader(GL30.GL_VERTEX_SHADER);
+            vertexShaderId = GlStateManager.glCreateShader(GL30.GL_VERTEX_SHADER);
             ARBShaderObjects.glShaderSourceARB(vertexShaderId, fromFile(resourceManager, vertexLocation));
             ARBShaderObjects.glCompileShaderARB(vertexShaderId);
             ARBShaderObjects.glAttachObjectARB(programId, vertexShaderId);
@@ -71,7 +71,7 @@ public final class ValidatingShaderLoader implements ShaderLoader {
 
         // fragment shader creation
         if (fragmentLocation != null) {
-            fragmentShaderId = GlStateManager.createShader(GL30.GL_FRAGMENT_SHADER);
+            fragmentShaderId = GlStateManager.glCreateShader(GL30.GL_FRAGMENT_SHADER);
             ARBShaderObjects.glShaderSourceARB(fragmentShaderId, fromFile(resourceManager, fragmentLocation));
             ARBShaderObjects.glCompileShaderARB(fragmentShaderId);
             ARBShaderObjects.glAttachObjectARB(programId, fragmentShaderId);
@@ -81,7 +81,7 @@ public final class ValidatingShaderLoader implements ShaderLoader {
             }
         }
 
-        GlStateManager.linkProgram(programId);
+        GlStateManager.glLinkProgram(programId);
         // check potential linkage errors
         if (glGetProgrami(programId, GL_LINK_STATUS) == 0) {
             throw new ShaderLinkException("Error linking Shader code: " + glGetProgramInfoLog(programId, 1024));

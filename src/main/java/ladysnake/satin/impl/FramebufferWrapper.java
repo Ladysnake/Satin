@@ -35,7 +35,7 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
 
     FramebufferWrapper(String name) {
         this.name = name;
-        this.renderLayerSupplier = new RenderLayerSupplier(
+        this.renderLayerSupplier = RenderLayerSupplier.framebuffer(
                 this.name + System.identityHashCode(this),
                 () -> this.beginWrite(false),
                 () -> MinecraftClient.getInstance().getFramebuffer().beginWrite(false)

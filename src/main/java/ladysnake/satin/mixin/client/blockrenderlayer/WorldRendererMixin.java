@@ -24,7 +24,6 @@ import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resource.SynchronousResourceReloadListener;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.profiler.Profiler;
@@ -38,13 +37,13 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
-    @Shadow protected abstract void renderLayer(RenderLayer layer, MatrixStack matrix, double x, double y, double z);
+    @Shadow protected abstract void renderLayer(RenderLayer layer, MatrixStack matrix, double x, double y, double z, Matrix4f frustumMatrix);
     
     @Inject(
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/WorldRenderer;renderLayer(Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/util/math/MatrixStack;DDD)V",
+            target = "Lnet/minecraft/client/render/WorldRenderer;renderLayer(Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/util/math/MatrixStack;DDDLnet/minecraft/util/math/Matrix4f;)V",
             ordinal = 2,
             shift = At.Shift.AFTER
         ),
@@ -67,7 +66,7 @@ public abstract class WorldRendererMixin {
     ) {
         // Render all the custom ones
         for(RenderLayer layer : BlockRenderLayerRegistry.INSTANCE.getLayers()) {
-            renderLayer(layer, matrix, x, y, z);
+            renderLayer(layer, matrix, x, y, z, frustumMatrix);
         }
     }
 }

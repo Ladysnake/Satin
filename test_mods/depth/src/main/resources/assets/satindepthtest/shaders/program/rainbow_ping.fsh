@@ -1,4 +1,4 @@
-#version 120
+#version 150
 
 // The main texture
 uniform sampler2D DiffuseSampler;
@@ -17,8 +17,10 @@ uniform mat4 InverseTransformMatrix;
 // The size of the viewport (typically, [0,0,1080,720])
 uniform ivec4 ViewPort;
 
-varying vec2 texCoord;
-varying vec4 vPosition;
+in vec2 texCoord;
+in vec4 vPosition;
+
+out vec4 fragColor;
 
 vec4 CalcEyeFromWindow(in float depth)
 {
@@ -49,5 +51,5 @@ void main()
     d /= mod(STime, 20); // Scale the world to make the ping diffuse over time
     vec3 rainbow = vec3(sin(STime), cos(STime), sin(STime + 1.)) * smoothstep(2, 3., d) * smoothstep(4, 3., d);
 
-    gl_FragColor = vec4(tex.rgb + pow(rainbow, vec3(3)), 1.0);
+    fragColor = vec4(tex.rgb + pow(rainbow, vec3(3)), 1.0);
 }

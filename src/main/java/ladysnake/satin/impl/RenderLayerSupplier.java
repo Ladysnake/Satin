@@ -20,22 +20,35 @@ package ladysnake.satin.impl;
 import ladysnake.satin.mixin.client.render.RenderPhaseAccessor;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
+import net.minecraft.client.render.Shader;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class RenderLayerSupplier {
-    private final RenderPhase.Target target;
+    private final Consumer<RenderLayer.MultiPhaseParameters.Builder> transform;
     private final Map<RenderLayer, RenderLayer> renderLayerCache = new HashMap<>();
     private final String uniqueName;
 
-    public RenderLayerSupplier(String name, Runnable setupState, Runnable cleanupState) {
-        this.uniqueName = name;
-        this.target = new RenderPhase.Target(
-                uniqueName + "_target",
+    public static RenderLayerSupplier framebuffer(String name, Runnable setupState, Runnable cleanupState) {
+        RenderPhase.Target target = new RenderPhase.Target(
+                name + "_target",
                 setupState,
                 cleanupState
         );
+        return new RenderLayerSupplier(name, builder -> builder.target(target));
+    }
+
+    public static RenderLayerSupplier shader(String name, Supplier<Shader> shaderSupplier) {
+        RenderPhase shader = Helper.makeShader(shaderSupplier);
+        return new RenderLayerSupplier(name, builder -> Helper.applyShader(builder, shader));
+    }
+
+    public RenderLayerSupplier(String name, Consumer<RenderLayer.MultiPhaseParameters.Builder> transformer) {
+        this.uniqueName = name;
+        this.transform = transformer;
     }
 
     public RenderLayer getRenderLayer(RenderLayer baseLayer) {
@@ -44,8 +57,22 @@ public class RenderLayerSupplier {
             return existing;
         }
         String newName = ((RenderPhaseAccessor) baseLayer).getName() + "_" + this.uniqueName;
-        RenderLayer newLayer = RenderLayerDuplicator.copy(baseLayer, newName, builder -> builder.target(this.target));
+        RenderLayer newLayer = RenderLayerDuplicator.copy(baseLayer, newName, this.transform);
         this.renderLayerCache.put(baseLayer, newLayer);
         return newLayer;
+    }
+
+    private static class Helper extends RenderPhase {
+        public static RenderPhase makeShader(Supplier<net.minecraft.client.render.Shader> shader) {
+            return new Shader(shader);
+        }
+
+        public static RenderLayer.MultiPhaseParameters.Builder applyShader(RenderLayer.MultiPhaseParameters.Builder builder, RenderPhase shader) {
+            builder.shader((Shader) shader);
+        }
+
+        private Helper(String name, Runnable beginAction, Runnable endAction) {
+            super(name, beginAction, endAction);
+        }
     }
 }

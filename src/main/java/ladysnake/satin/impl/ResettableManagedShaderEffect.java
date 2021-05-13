@@ -27,7 +27,7 @@ import ladysnake.satin.api.util.ShaderPrograms;
 import ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.util.Identifier;
@@ -107,15 +107,15 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void render(float tickDelta) {
         ShaderEffect sg = this.getShaderEffect();
         if (sg != null) {
-            RenderSystem.matrixMode(GL_TEXTURE);
-            RenderSystem.loadIdentity();
+            RenderSystem.disableBlend();
+            RenderSystem.disableDepthTest();
+            RenderSystem.enableTexture();
+            RenderSystem.resetTextureMatrix();
             sg.render(tickDelta);
             MinecraftClient.getInstance().getFramebuffer().beginWrite(true);
             RenderSystem.disableBlend();
-            RenderSystem.enableAlphaTest();
             RenderSystem.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // restore blending
             RenderSystem.enableDepthTest();
-            RenderSystem.matrixMode(GL_MODELVIEW);
         }
     }
 
@@ -233,7 +233,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setupDynamicUniforms(int index, Runnable dynamicSetBlock) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            JsonGlProgram sm = sg.getPasses().get(index).getProgram();
+            JsonEffectGlShader sm = sg.getPasses().get(index).getProgram();
             ShaderPrograms.useShader(sm.getProgramRef());
             dynamicSetBlock.run();
             ShaderPrograms.useShader(0);

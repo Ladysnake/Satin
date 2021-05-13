@@ -1,8 +1,8 @@
 // a vertex shader that does not require any context to be passed through uniforms
-#version 120
+#version 150
 
-varying vec2 texCoord;
-varying vec4 vPosition;
+out vec2 texCoord;
+out vec4 vPosition;
 
 void main(){
     gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;

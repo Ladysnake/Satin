@@ -23,7 +23,7 @@ import ladysnake.satin.api.managed.uniform.SamplerUniform;
 import ladysnake.satin.mixin.client.gl.JsonGlProgramAccessor;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlUniform;
-import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.texture.AbstractTexture;
 
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 
 public final class ManagedSamplerUniform extends ManagedUniformBase implements SamplerUniform {
-    protected JsonGlProgram[] targets = new JsonGlProgram[0];
+    protected JsonEffectGlShader[] targets = new JsonEffectGlShader[0];
     protected int[] locations = new int[0];
     private Object sampler;
 
@@ -42,17 +42,17 @@ public final class ManagedSamplerUniform extends ManagedUniformBase implements S
 
     @Override
     public boolean findUniformTargets(List<PostProcessShader> shaders) {
-        List<JsonGlProgram> targets = new ArrayList<>(shaders.size());
+        List<JsonEffectGlShader> targets = new ArrayList<>(shaders.size());
         IntList rawTargets = new IntArrayList(shaders.size());
         for (PostProcessShader shader : shaders) {
-            JsonGlProgram program = shader.getProgram();
+            JsonEffectGlShader program = shader.getProgram();
             JsonGlProgramAccessor access = (JsonGlProgramAccessor) program;
             if (access.getSamplerBinds().containsKey(this.name)) {
                 targets.add(program);
                 rawTargets.add(getSamplerLoc(access));
             }
         }
-        this.targets = targets.toArray(new JsonGlProgram[0]);
+        this.targets = targets.toArray(new JsonEffectGlShader[0]);
         this.locations = rawTargets.toArray(new int[0]);
         return this.targets.length > 0;
     }
@@ -62,10 +62,10 @@ public final class ManagedSamplerUniform extends ManagedUniformBase implements S
     }
 
     @Override
-    public boolean findUniformTarget(JsonGlProgram program) {
+    public boolean findUniformTarget(JsonEffectGlShader program) {
         JsonGlProgramAccessor access = (JsonGlProgramAccessor) program;
         if (access.getSamplerBinds().containsKey(this.name)) {
-            this.targets = new JsonGlProgram[] {program};
+            this.targets = new JsonEffectGlShader[] {program};
             this.locations = new int[] {getSamplerLoc(access)};
             return true;
         }
@@ -98,11 +98,11 @@ public final class ManagedSamplerUniform extends ManagedUniformBase implements S
 
     @Override
     public void set(IntSupplier value) {
-        JsonGlProgram[] targets = this.targets;
+        JsonEffectGlShader[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
             if (this.sampler != value) {
-                for (JsonGlProgram target : targets) {
+                for (JsonEffectGlShader target : targets) {
                     target.bindSampler(this.name, value);
                 }
                 this.sampler = value;

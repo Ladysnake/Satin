@@ -17,7 +17,7 @@
  */
 package ladysnake.satin.impl;
 
-import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.PostProcessShader;
 
 import java.util.List;
@@ -31,7 +31,7 @@ public abstract class ManagedUniformBase {
 
     public abstract boolean findUniformTargets(List<PostProcessShader> shaders);
 
-    public abstract boolean findUniformTarget(JsonGlProgram program);
+    public abstract boolean findUniformTarget(JsonEffectGlShader program);
 
     public String getName() {
         return name;

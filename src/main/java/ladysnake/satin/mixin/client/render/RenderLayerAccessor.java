@@ -18,11 +18,18 @@
 package ladysnake.satin.mixin.client.render;
 
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexFormat;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(RenderLayer.class)
 public interface RenderLayerAccessor {
     @Accessor
     boolean isTranslucent();
+
+    @Invoker("of")
+    static RenderLayer.MultiPhase satin$of(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, RenderLayer.MultiPhaseParameters phases) {
+        throw new IllegalStateException("Mixin not transformed");
+    }
 }
