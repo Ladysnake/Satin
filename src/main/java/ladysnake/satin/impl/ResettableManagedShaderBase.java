@@ -20,11 +20,11 @@ package ladysnake.satin.impl;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 
 import javax.annotation.CheckForNull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
@@ -35,7 +35,6 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
     /**Location of the shader json definition file*/
     private final Identifier location;
     private final Map<String, ManagedUniform> managedUniforms = new HashMap<>();
-    private final Map<String, ManagedSamplerUniform> managedSamplers = new HashMap<>();
     private final List<ManagedUniformBase> allUniforms = new ArrayList<>();
     private boolean errored;
     @CheckForNull
@@ -45,18 +44,10 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         this.location = location;
     }
 
-    @Nullable
-    protected S getShaderOrLog() {
-        if (!this.isInitialized() && !this.errored) {
-            this.initializeOrLog();
-        }
-        return this.shader;
-    }
-
     @API(status = INTERNAL)
-    public void initializeOrLog() {
+    public void initializeOrLog(ResourceManager mgr) {
         try {
-            this.initialize();
+            this.initialize(mgr);
         } catch (IOException e) {
             this.errored = true;
             this.logInitError(e);
@@ -65,14 +56,14 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
 
     protected abstract void logInitError(IOException e);
 
-    public void initialize() throws IOException {
+    public void initialize(ResourceManager resourceManager) throws IOException {
         this.release();
         MinecraftClient mc = MinecraftClient.getInstance();
-        this.shader = parseShader(mc, this.location);
+        this.shader = parseShader(resourceManager, mc, this.location);
         this.setup(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
     }
 
-    protected abstract S parseShader(MinecraftClient mc, Identifier location) throws IOException;
+    protected abstract S parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException;
 
     public void release() {
         if (this.isInitialized()) {
@@ -105,7 +96,7 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
         return location;
     }
 
-    private <U extends ManagedUniformBase> U manageUniform(Map<String, U> uniformMap, Function<String, U> factory, String uniformName, String uniformKind) {
+    protected <U extends ManagedUniformBase> U manageUniform(Map<String, U> uniformMap, Function<String, U> factory, String uniformName, String uniformKind) {
         U existing = uniformMap.get(uniformName);
         if (existing != null) {
             return existing;
@@ -165,11 +156,6 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
     @Override
     public UniformMat4 findUniformMat4(String uniformName) {
         return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
-    }
-
-    @Override
-    public SamplerUniform findSampler(String samplerName) {
-        return manageUniform(this.managedSamplers, ManagedSamplerUniform::new, samplerName, "sampler");
     }
 
     @API(status = INTERNAL)

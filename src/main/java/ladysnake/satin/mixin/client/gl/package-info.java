@@ -15,26 +15,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; If not, see <https://www.gnu.org/licenses>.
  */
-package ladysnake.satin.impl;
+/**
+ * Implementation classes
+ */
+@ApiStatus.Internal
+@ParametersAreNonnullByDefault
+package ladysnake.satin.mixin.client.gl;
 
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.render.Shader;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.List;
-
-public abstract class ManagedUniformBase {
-    protected final String name;
-
-    public ManagedUniformBase(String name) {
-        this.name = name;
-    }
-
-    public abstract boolean findUniformTargets(List<PostProcessShader> shaders);
-
-    public abstract boolean findUniformTarget(Shader shader);
-
-    public String getName() {
-        return name;
-    }
-}
+import javax.annotation.ParametersAreNonnullByDefault;

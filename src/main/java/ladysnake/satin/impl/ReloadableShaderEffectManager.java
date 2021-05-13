@@ -21,9 +21,11 @@ import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.event.ResolutionChangeCallback;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ManagedShaderProgram;
+import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
@@ -68,13 +70,18 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     }
 
     @Override
-    public ManagedShaderProgram manageProgram(Identifier location) {
-        return manageProgram(location, s -> { });
+    public ManagedCoreShader manageCoreShader(Identifier location) {
+        return manageCoreShader(location, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL);
     }
 
     @Override
-    public ManagedShaderProgram manageProgram(Identifier location, Consumer<ManagedShaderProgram> initCallback) {
-        ResettableManagedShaderProgram ret = new ResettableManagedShaderProgram(location, initCallback);
+    public ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat) {
+        return manageCoreShader(location, vertexFormat, (s) -> {});
+    }
+
+    @Override
+    public ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat, Consumer<ManagedCoreShader> initCallback) {
+        ResettableManagedCoreShader ret = new ResettableManagedCoreShader(location, vertexFormat, initCallback);
         managedShaders.add(ret);
         return ret;
     }
@@ -95,7 +102,7 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     }
 
     @Override
-    public void dispose(ManagedShaderProgram shader) {
+    public void dispose(ManagedCoreShader shader) {
         shader.release();
         managedShaders.remove(shader);
     }
@@ -106,9 +113,9 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     }
 
     @Override
-    public void apply(ResourceManager var1) {
+    public void reload(ResourceManager mgr) {
         for (ResettableManagedShaderBase<?> ss : managedShaders) {
-            ss.initializeOrLog();
+            ss.initializeOrLog(mgr);
         }
     }
 

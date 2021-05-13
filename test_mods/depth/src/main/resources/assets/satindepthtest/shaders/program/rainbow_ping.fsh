@@ -37,13 +37,13 @@ vec4 CalcEyeFromWindow(in float depth)
 
 void main()
 {
-    vec4 tex = texture2D(DiffuseSampler, texCoord);
+    vec4 tex = texture(DiffuseSampler, texCoord);
 
     vec3 ndc = vPosition.xyz / vPosition.w; //perspective divide/normalize
     vec2 viewportCoord = ndc.xy * 0.5 + 0.5; //ndc is -1 to 1 in GL. scale for 0 to 1
 
     // Depth fading
-    float sceneDepth = texture2D(DepthSampler, viewportCoord).x;
+    float sceneDepth = texture(DepthSampler, viewportCoord).x;
     vec3 pixelPosition = CalcEyeFromWindow(sceneDepth).xyz + CameraPosition;
 
     // Ping effect: color pixels that are some distance away from the center

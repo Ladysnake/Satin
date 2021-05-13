@@ -18,13 +18,17 @@
 package ladysnake.satin.api.managed;
 
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
+import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.render.Shader;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
 
-import static org.apiguardian.api.API.Status.EXPERIMENTAL;
-import static org.apiguardian.api.API.Status.STABLE;
+import static org.apiguardian.api.API.Status.*;
 
 /**
  * @see ManagedShaderEffect
@@ -36,29 +40,88 @@ public interface ShaderEffectManager {
     }
 
     /**
-     * Manages a post processing shader loaded from a json definition file
+     * Manages a post-process {@link ShaderEffect} loaded from a json definition file
      *
      * @param location the location of the json within your mod's assets
-     * @return a lazily initialized shader effect
+     * @return a screen shader that will be automatically reloaded as needed
      */
     @API(status = STABLE, since = "1.0.0")
     ManagedShaderEffect manage(Identifier location);
 
     /**
-     * Manages a post processing shader loaded from a json definition file
+     * Manages a post-process {@link ShaderEffect} loaded from a json definition file
      *
      * @param location         the location of the json within your mod's assets
      * @param initCallback a block ran once the shader effect is initialized
-     * @return a lazily initialized screen shader
+     * @return a screen shader that will be automatically reloaded as needed
      */
     @API(status = STABLE, since = "1.0.0")
     ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback);
 
-    @API(status = EXPERIMENTAL, since = "1.4.0")
-    ManagedShaderProgram manageProgram(Identifier location);
+    /**
+     * @deprecated use {@link #manageCoreShader(Identifier)}.
+     * <strong>Shader files must go in {@code shaders/core} instead of {@code shaders/program}
+     */
+    @Deprecated(since = "1.6.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval
+    default ManagedCoreShader manageProgram(Identifier location) {
+        return manageCoreShader(location);
+    }
 
-    @API(status = EXPERIMENTAL, since = "1.4.0")
-    ManagedShaderProgram manageProgram(Identifier location, Consumer<ManagedShaderProgram> initCallback);
+    /**
+     * @deprecated use {@link #manageCoreShader(Identifier, VertexFormat, Consumer)}.
+     * <strong>Shader files must go in {@code shaders/core} instead of {@code shaders/program}
+     */
+    @Deprecated(since = "1.6.0", forRemoval = true)
+    @ApiStatus.ScheduledForRemoval
+    default ManagedCoreShader manageProgram(Identifier location, Consumer<ManagedCoreShader> initCallback) {
+        return manageCoreShader(location, VertexFormats.POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL, initCallback);
+    }
+
+    /**
+     * Manages a core {@link Shader} loaded from a json definition file
+     *
+     * <p>This overload forwards to {@link #manageCoreShader(Identifier, VertexFormat)} with {@link VertexFormats#POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL},
+     * the format used by entity rendering
+     *
+     * <p>The shader location must be in {@code assets/shaders/core}.
+     * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
+     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
+     *
+     * @param location the location of the json within your mod's assets
+     * @return a core render shader that will be reloaded as needed
+     */
+    @API(status = EXPERIMENTAL)
+    ManagedCoreShader manageCoreShader(Identifier location);
+
+    /**
+     * Manages a core {@link Shader} loaded from a json definition file
+     *
+     * <p>The shader location must be in {@code assets/shaders/core}.
+     * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
+     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
+     *
+     * @param location the location of the json within your mod's assets
+     * @param vertexFormat the format expected by your shader
+     * @return a core render shader that will be reloaded as needed
+     */
+    @API(status = EXPERIMENTAL)
+    ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat);
+
+    /**
+     * Manages a core {@link Shader} loaded from a json definition file
+     *
+     * <p>The shader location must be in {@code assets/shaders/core}.
+     * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
+     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
+     *
+     * @param location the location of the json within your mod's assets
+     * @param vertexFormat the format expected by your shader
+     * @param initCallback a block ran once the shader effect is initialized
+     * @return a core render shader that will be reloaded as needed
+     */
+    @API(status = EXPERIMENTAL)
+    ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat, Consumer<ManagedCoreShader> initCallback);
 
     /**
      * Removes a shader from the global list of managed shaders,
@@ -73,5 +136,5 @@ public interface ShaderEffectManager {
     void dispose(ManagedShaderEffect shader);
 
     @API(status = EXPERIMENTAL, since = "1.4.0")
-    void dispose(ManagedShaderProgram shader);
+    void dispose(ManagedCoreShader shader);
 }

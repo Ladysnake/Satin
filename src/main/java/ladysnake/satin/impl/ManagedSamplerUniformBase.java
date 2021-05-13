@@ -20,52 +20,61 @@ package ladysnake.satin.impl;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import ladysnake.satin.api.managed.uniform.SamplerUniform;
-import ladysnake.satin.mixin.client.gl.JsonGlProgramAccessor;
-import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.texture.AbstractTexture;
+import net.minecraft.client.render.Shader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntSupplier;
 
-public final class ManagedSamplerUniform extends ManagedUniformBase implements SamplerUniform {
-    protected JsonEffectGlShader[] targets = new JsonEffectGlShader[0];
+/**
+ * Mojank working in divergent branches for half a century, {@link net.minecraft.client.render.Shader}
+ * is a copy of an old implementation of {@link net.minecraft.client.gl.JsonEffectGlShader}.
+ * The latter has since been updated to have the {@link net.minecraft.client.gl.JsonEffectGlShader#bindSampler(String, IntSupplier)}
+ * while the former still uses {@link net.minecraft.client.render.Shader#addSampler(String, Object)}.
+ *
+ * <p>So we need to deal with both those extremely similar implementations
+ */
+public abstract class ManagedSamplerUniformBase extends ManagedUniformBase implements SamplerUniform {
+    protected SamplerAccess[] targets = new SamplerAccess[0];
     protected int[] locations = new int[0];
-    private Object sampler;
+    protected Object cachedValue;
 
-    public ManagedSamplerUniform(String name) {
+    public ManagedSamplerUniformBase(String name) {
         super(name);
     }
 
     @Override
     public boolean findUniformTargets(List<PostProcessShader> shaders) {
-        List<JsonEffectGlShader> targets = new ArrayList<>(shaders.size());
+        List<SamplerAccess> targets = new ArrayList<>(shaders.size());
         IntList rawTargets = new IntArrayList(shaders.size());
         for (PostProcessShader shader : shaders) {
             JsonEffectGlShader program = shader.getProgram();
-            JsonGlProgramAccessor access = (JsonGlProgramAccessor) program;
-            if (access.getSamplerBinds().containsKey(this.name)) {
-                targets.add(program);
+            SamplerAccess access = (SamplerAccess) program;
+            if (access.satin$hasSampler(this.name)) {
+                targets.add(access);
                 rawTargets.add(getSamplerLoc(access));
             }
         }
-        this.targets = targets.toArray(new JsonEffectGlShader[0]);
+        this.targets = targets.toArray(new SamplerAccess[0]);
         this.locations = rawTargets.toArray(new int[0]);
         return this.targets.length > 0;
     }
 
-    private int getSamplerLoc(JsonGlProgramAccessor access) {
-        return access.getSamplerShaderLocs().get(access.getSamplerNames().indexOf(this.name));
+    private int getSamplerLoc(SamplerAccess access) {
+        return access.satin$getSamplerShaderLocs().get(access.satin$getSamplerNames().indexOf(this.name));
     }
 
     @Override
-    public boolean findUniformTarget(JsonEffectGlShader program) {
-        JsonGlProgramAccessor access = (JsonGlProgramAccessor) program;
-        if (access.getSamplerBinds().containsKey(this.name)) {
-            this.targets = new JsonEffectGlShader[] {program};
+    public boolean findUniformTarget(Shader shader) {
+        return findUniformTarget(((SamplerAccess) shader));
+    }
+
+    private boolean findUniformTarget(SamplerAccess access) {
+        if (access.satin$hasSampler(this.name)) {
+            this.targets = new SamplerAccess[] {access};
             this.locations = new int[] {getSamplerLoc(access)};
             return true;
         }
@@ -76,37 +85,8 @@ public final class ManagedSamplerUniform extends ManagedUniformBase implements S
     public void setDirect(int activeTexture) {
         int length = this.locations.length;
         for (int i = 0; i < length; i++) {
-            ((JsonGlProgramAccessor) this.targets[i]).getSamplerBinds().remove(this.name);
+            this.targets[i].satin$removeSampler(this.name);
             GlUniform.uniform1(this.locations[i], activeTexture);
-        }
-    }
-
-    @Override
-    public void set(AbstractTexture texture) {
-        set(texture::getGlId);
-    }
-
-    @Override
-    public void set(Framebuffer textureFbo) {
-        set(textureFbo::getColorAttachment);
-    }
-
-    @Override
-    public void set(int textureName) {
-        set(() -> textureName);
-    }
-
-    @Override
-    public void set(IntSupplier value) {
-        JsonEffectGlShader[] targets = this.targets;
-        int nbTargets = targets.length;
-        if (nbTargets > 0) {
-            if (this.sampler != value) {
-                for (JsonEffectGlShader target : targets) {
-                    target.bindSampler(this.name, value);
-                }
-                this.sampler = value;
-            }
         }
     }
 }

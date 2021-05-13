@@ -60,12 +60,4 @@ public interface SamplerUniform {
      */
     @API(status = MAINTAINED, since = "1.4.0")
     void set(int textureName);
-
-    /**
-     * Sets the value of a sampler uniform declared in json
-     *
-     * @param textureSupplier a supplier for opengl texture names
-     */
-    @API(status = EXPERIMENTAL, since = "1.4.0")
-    void set(IntSupplier textureSupplier);
 }

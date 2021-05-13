@@ -18,35 +18,23 @@
 package ladysnake.satin.api.managed;
 
 import ladysnake.satin.api.managed.uniform.UniformFinder;
-import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
+import net.minecraft.client.render.Shader;
+import net.minecraft.client.render.VertexFormat;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 
 import java.util.function.Consumer;
 
 /**
- * @see ShaderEffectManager#manageProgram(Identifier)
- * @see ShaderEffectManager#manageProgram(Identifier, Consumer)
+ * @see ShaderEffectManager#manageCoreShader(Identifier) 
+ * @see ShaderEffectManager#manageCoreShader(Identifier, VertexFormat, Consumer)
  */
 @API(status = API.Status.EXPERIMENTAL)
-public interface ManagedShaderProgram extends UniformFinder {
-    JsonGlProgram getProgram();
-
-    /**
-     * Enables this shader program.
-     *
-     * <p>If this method is called when the shader is in an invalid state, nothing happens.
-     */
-    void enable();
-
-    /**
-     * Enables this shader program.
-     *
-     * <p>If this method is called when the shader is in an invalid state, nothing happens.
-     */
-    void disable();
+public interface ManagedCoreShader extends UniformFinder {
+    Shader getProgram();
 
     /**
      * Releases this shader's resources.
@@ -54,7 +42,7 @@ public interface ManagedShaderProgram extends UniformFinder {
      * <p>If the caller does not intend to use this shader effect again, they
      * should call {@link ShaderEffectManager#dispose(ManagedShaderEffect)}.
      *
-     * @see ShaderEffectManager#dispose(ManagedShaderProgram)
+     * @see ShaderEffectManager#dispose(ManagedCoreShader)
      */
     void release();
 

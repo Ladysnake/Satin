@@ -12,7 +12,14 @@ You can add the library by inserting the following in your `build.gradle` (Requi
 
 ```gradle
 repositories {
-    jcenter()
+        maven {
+        name = 'Ladysnake Mods'
+        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        content {
+            includeGroup 'io.github.ladysnake'
+            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+        }
+    }
 }
 
 dependencies {
@@ -41,7 +48,7 @@ Simply having Satin installed alters the game in a few ways, mainly related to S
 
 - **Uniform fix**: Using a vector of integers as a uniform crashes the game in Vanilla because of a bad
 copy paste. Satin redirects a call to upload the right buffer.
-- **Shader locations**: Satin patches JsonGlProgram to accept a resource domain in the specification
+- **Shader locations**: Satin patches shader processors to accept a resource domain in the specification
 of a program name and of a fragment/vertex shader file.
 - ~~**Readable depth**~~: Satin offered access to a Framebuffer's depth texture before it was cool (superseded in 1.16).
 

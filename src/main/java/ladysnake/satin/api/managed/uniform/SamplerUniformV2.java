@@ -15,26 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; If not, see <https://www.gnu.org/licenses>.
  */
-package ladysnake.satin.impl;
+package ladysnake.satin.api.managed.uniform;
 
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.render.Shader;
+import org.apiguardian.api.API;
 
-import java.util.List;
+import java.util.function.IntSupplier;
 
-public abstract class ManagedUniformBase {
-    protected final String name;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
-    public ManagedUniformBase(String name) {
-        this.name = name;
-    }
+public interface SamplerUniformV2 extends SamplerUniform {
 
-    public abstract boolean findUniformTargets(List<PostProcessShader> shaders);
-
-    public abstract boolean findUniformTarget(Shader shader);
-
-    public String getName() {
-        return name;
-    }
+    /**
+     * Sets the value of a sampler uniform declared in json
+     *
+     * <p><strong>This method is only supported for {@link ladysnake.satin.api.managed.ManagedShaderEffect}</strong>
+     *
+     * @param textureSupplier a supplier for opengl texture names
+     */
+    @API(status = EXPERIMENTAL, since = "1.4.0")
+    void set(IntSupplier textureSupplier);
 }

@@ -18,7 +18,6 @@
 package ladysnake.satin.api.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import ladysnake.satin.impl.ModifiableMatrix4f;
 import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
 import org.lwjgl.BufferUtils;

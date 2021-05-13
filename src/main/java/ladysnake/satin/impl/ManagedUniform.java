@@ -19,8 +19,8 @@ package ladysnake.satin.impl;
 
 import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.gl.GlUniform;
-import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.PostProcessShader;
+import net.minecraft.client.render.Shader;
 import net.minecraft.util.math.Matrix4f;
 
 import java.util.List;
@@ -50,8 +50,8 @@ public final class ManagedUniform extends ManagedUniformBase implements
     }
 
     @Override
-    public boolean findUniformTarget(JsonEffectGlShader program) {
-        GlUniform uniform = program.getUniformByName(this.name);
+    public boolean findUniformTarget(Shader shader) {
+        GlUniform uniform = shader.getUniform(this.name);
         if (uniform != null) {
             this.targets = new GlUniform[] {uniform};
             return true;

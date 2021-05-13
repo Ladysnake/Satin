@@ -19,35 +19,42 @@ package ladysnake.satin.impl;
 
 import com.google.common.base.Preconditions;
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.managed.ManagedShaderProgram;
+import ladysnake.satin.api.managed.ManagedCoreShader;
+import ladysnake.satin.api.managed.uniform.SamplerUniform;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.JsonGlProgram;
+import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.Shader;
+import net.minecraft.client.render.VertexFormat;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public final class ResettableManagedShaderProgram extends ResettableManagedShaderBase<JsonGlProgram> implements ManagedShaderProgram {
+public final class ResettableManagedCoreShader extends ResettableManagedShaderBase<Shader> implements ManagedCoreShader {
     /**
      * Callback to run once each time the shader effect is initialized
      */
-    private final Consumer<ManagedShaderProgram> initCallback;
+    private final Consumer<ManagedCoreShader> initCallback;
     private final RenderLayerSupplier renderLayerSupplier;
+    private final VertexFormat vertexFormat;
+    private final Map<String, ManagedSamplerUniformV1> managedSamplers = new HashMap<>();
 
-    public ResettableManagedShaderProgram(Identifier location, Consumer<ManagedShaderProgram> initCallback) {
+    public ResettableManagedCoreShader(Identifier location, VertexFormat vertexFormat, Consumer<ManagedCoreShader> initCallback) {
         super(location);
+        this.vertexFormat = vertexFormat;
         this.initCallback = initCallback;
-        this.renderLayerSupplier = new RenderLayerSupplier(
+        this.renderLayerSupplier = RenderLayerSupplier.shader(
                 location.toString() + "_" + System.identityHashCode(this),
-                this::enable,
-                this::disable
-        );
+                this::getProgram);
     }
 
     @Override
-    protected JsonGlProgram parseShader(MinecraftClient mc, Identifier location) throws IOException {
-        return new JsonGlProgram(MinecraftClient.getInstance().getResourceManager(), this.getLocation().toString());
+    protected Shader parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException {
+        return new Shader(resourceManager, this.getLocation().toString(), this.vertexFormat);
     }
 
     @Override
@@ -60,24 +67,8 @@ public final class ResettableManagedShaderProgram extends ResettableManagedShade
     }
 
     @Override
-    public JsonGlProgram getProgram() {
-        return getShaderOrLog();
-    }
-
-    @Override
-    public void enable() {
-        JsonGlProgram program = this.getProgram();
-        if (program != null) {
-            program.enable();
-        }
-    }
-
-    @Override
-    public void disable() {
-        JsonGlProgram program = this.getProgram();
-        if (program != null) {
-            program.disable();
-        }
+    public Shader getProgram() {
+        return this.shader;
     }
 
     @Override
@@ -86,8 +77,13 @@ public final class ResettableManagedShaderProgram extends ResettableManagedShade
     }
 
     @Override
-    protected boolean setupUniform(ManagedUniformBase uniform, JsonGlProgram shader) {
+    protected boolean setupUniform(ManagedUniformBase uniform, Shader shader) {
         return uniform.findUniformTarget(shader);
+    }
+
+    @Override
+    public SamplerUniform findSampler(String samplerName) {
+        return manageUniform(this.managedSamplers, ManagedSamplerUniformV1::new, samplerName, "sampler");
     }
 
     @Override

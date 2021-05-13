@@ -15,23 +15,13 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; If not, see <https://www.gnu.org/licenses>.
  */
-package ladysnake.satin.mixin.client.gl;
+/**
+ * Implementation classes
+ */
+@ApiStatus.Internal
+@ParametersAreNonnullByDefault
+package ladysnake.satin.mixin.client.render;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.jetbrains.annotations.ApiStatus;
 
-import java.util.List;
-import java.util.Map;
-import net.minecraft.client.gl.JsonEffectGlShader;
-
-@Mixin(JsonEffectGlShader.class)
-public interface JsonGlProgramAccessor {
-    @Accessor
-    Map<String, Object> getSamplerBinds();
-
-    @Accessor
-    List<String> getSamplerNames();
-
-    @Accessor
-    List<Integer> getSamplerShaderLocs();
-}
+import javax.annotation.ParametersAreNonnullByDefault;

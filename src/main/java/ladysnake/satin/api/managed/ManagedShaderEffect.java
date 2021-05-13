@@ -289,4 +289,7 @@ public interface ManagedShaderEffect extends UniformFinder {
      */
     @API(status = STABLE, since = "1.0.0")
     void setSamplerUniform(String samplerName, int textureName);
+
+    @Override
+    SamplerUniformV2 findSampler(String samplerName);
 }

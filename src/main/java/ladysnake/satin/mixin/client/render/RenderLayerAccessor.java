@@ -29,7 +29,7 @@ public interface RenderLayerAccessor {
     boolean isTranslucent();
 
     @Invoker("of")
-    static RenderLayer.MultiPhase satin$of(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, RenderLayer.MultiPhaseParameters phases) {
+    static RenderLayer.MultiPhase satin$of(@SuppressWarnings("unused") String name, @SuppressWarnings("unused") VertexFormat vertexFormat, @SuppressWarnings("unused") VertexFormat.DrawMode drawMode, @SuppressWarnings("unused") int expectedBufferSize, @SuppressWarnings("unused") boolean hasCrumbling, @SuppressWarnings("unused") boolean translucent, @SuppressWarnings("unused") RenderLayer.MultiPhaseParameters phases) {
         throw new IllegalStateException("Mixin not transformed");
     }
 }

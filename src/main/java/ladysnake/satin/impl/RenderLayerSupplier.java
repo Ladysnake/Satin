@@ -62,12 +62,15 @@ public class RenderLayerSupplier {
         return newLayer;
     }
 
+    /**
+     * Big brain move right there
+     */
     private static class Helper extends RenderPhase {
         public static RenderPhase makeShader(Supplier<net.minecraft.client.render.Shader> shader) {
             return new Shader(shader);
         }
 
-        public static RenderLayer.MultiPhaseParameters.Builder applyShader(RenderLayer.MultiPhaseParameters.Builder builder, RenderPhase shader) {
+        public static void applyShader(RenderLayer.MultiPhaseParameters.Builder builder, RenderPhase shader) {
             builder.shader((Shader) shader);
         }
 

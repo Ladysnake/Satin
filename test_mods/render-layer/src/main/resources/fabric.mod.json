@@ -12,7 +12,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "ladysnake.satinrenderlayer.SatinRenderLayer::onInitializeClient"
+      "ladysnake.satinrenderlayer.SatinRenderLayerTest::onInitializeClient"
     ]
   },
   "mixins": [

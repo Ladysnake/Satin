@@ -17,6 +17,12 @@
  */
 package ladysnake.satin.impl;
 
-public interface ModifiableMatrix4f {
-    void satin_setFromArray(float[] values);
+import java.util.List;
+import java.util.function.IntSupplier;
+
+public interface SamplerAccess {
+    void satin$removeSampler(String name);
+    boolean satin$hasSampler(String name);
+    List<String> satin$getSamplerNames();
+    List<Integer> satin$getSamplerShaderLocs();
 }

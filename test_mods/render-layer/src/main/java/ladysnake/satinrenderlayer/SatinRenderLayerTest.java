@@ -6,12 +6,13 @@ import ladysnake.satin.api.event.EntitiesPreRenderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.api.managed.ManagedFramebuffer;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ManagedShaderProgram;
+import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.managed.uniform.Uniform1f;
 import ladysnake.satin.api.util.RenderLayerHelper;
 import ladysnake.satintestcore.block.SatinTestBlocks;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientTickCallback;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -26,7 +27,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-public final class SatinRenderLayer {
+public final class SatinRenderLayerTest {
 
     /* * * * ManagedShaderEffect-based RenderLayer entity rendering * * * */
 
@@ -54,7 +55,7 @@ public final class SatinRenderLayer {
                     }).dimensions(EntityType.WITHER.getDimensions()).build()
             );
 
-    public static final ManagedShaderProgram rainbow = ShaderEffectManager.getInstance().manageProgram(new Identifier("satinrenderlayer", "rainbow"));
+    public static final ManagedCoreShader rainbow = ShaderEffectManager.getInstance().manageCoreShader(new Identifier("satinrenderlayer", "rainbow"));
     private static final Uniform1f uniformSTime = rainbow.findUniform1f("STime");
 
     private static int ticks;
@@ -65,9 +66,9 @@ public final class SatinRenderLayer {
         BlockRenderLayerMap.INSTANCE.putBlock(SatinTestBlocks.DEBUG_BLOCK, blockRenderLayer);
         FabricDefaultAttributeRegistry.register(ILLUSION_GOLEM, IronGolemEntity.createIronGolemAttributes());
         FabricDefaultAttributeRegistry.register(RAINBOW_WITHER, WitherEntity.createWitherAttributes());
-        EntityRendererRegistry.INSTANCE.register(ILLUSION_GOLEM, (ctx) -> new IllusionGolemEntityRenderer(ctx));
-        EntityRendererRegistry.INSTANCE.register(RAINBOW_WITHER, (ctx) -> new RainbowWitherEntityRenderer(ctx));
-        ClientTickCallback.EVENT.register(client -> ticks++);
+        EntityRendererRegistry.INSTANCE.register(ILLUSION_GOLEM, IllusionGolemEntityRenderer::new);
+        EntityRendererRegistry.INSTANCE.register(RAINBOW_WITHER, RainbowWitherEntityRenderer::new);
+        ClientTickEvents.END_CLIENT_TICK.register(client -> ticks++);
         EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformSTime.set((ticks + tickDelta) * 0.05f));
         ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
                     MinecraftClient client = MinecraftClient.getInstance();

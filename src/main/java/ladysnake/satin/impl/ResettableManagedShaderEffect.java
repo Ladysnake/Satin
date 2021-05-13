@@ -23,6 +23,7 @@ import ladysnake.satin.Satin;
 import ladysnake.satin.api.managed.ManagedFramebuffer;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import ladysnake.satin.api.managed.uniform.SamplerUniformV2;
 import ladysnake.satin.api.util.ShaderPrograms;
 import ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
 import net.minecraft.client.MinecraftClient;
@@ -30,6 +31,7 @@ import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.texture.AbstractTexture;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
@@ -56,6 +58,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     /**Callback to run once each time the shader effect is initialized*/
     private final Consumer<ManagedShaderEffect> initCallback;
     private final Map<String, FramebufferWrapper> managedTargets;
+    private final Map<String, ManagedSamplerUniformV2> managedSamplers = new HashMap<>();
 
     /**
      * Creates a new shader effect. <br>
@@ -80,8 +83,13 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    protected ShaderEffect parseShader(MinecraftClient mc, Identifier location) throws IOException {
-        return new ShaderEffect(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), location);
+    public void initialize() throws IOException {
+        super.initialize(MinecraftClient.getInstance().getResourceManager());
+    }
+
+    @Override
+    protected ShaderEffect parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException {
+        return new ShaderEffect(mc.getTextureManager(), resourceManager, mc.getFramebuffer(), location);
     }
 
     @Override
@@ -226,6 +234,11 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
         this.findSampler(samplerName).set(textureName);
     }
 
+    @Override
+    public SamplerUniformV2 findSampler(String samplerName) {
+        return manageUniform(this.managedSamplers, ManagedSamplerUniformV2::new, samplerName, "sampler");
+    }
+
     public void setupDynamicUniforms(Runnable dynamicSetBlock) {
         this.setupDynamicUniforms(0, dynamicSetBlock);
     }
@@ -248,5 +261,13 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     @Override
     protected void logInitError(IOException e) {
         Satin.LOGGER.error("Could not create screen shader {}", this.getLocation(), e);
+    }
+
+    @Nullable
+    protected ShaderEffect getShaderOrLog() {
+        if (!this.isInitialized() && !this.isErrored()) {
+            this.initializeOrLog(MinecraftClient.getInstance().getResourceManager());
+        }
+        return this.shader;
     }
 }

@@ -17,21 +17,57 @@
  */
 package ladysnake.satin.mixin.client.gl;
 
+import ladysnake.satin.impl.SamplerAccess;
 import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.Program;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.IntSupplier;
 
 /**
  * Minecraft does not take into account domains when parsing a shader program.
  * These hooks redirect identifier instantiations to allow specifying a domain for shader files.
  */
 @Mixin(JsonEffectGlShader.class)
-public abstract class JsonGlProgramMixin {
+public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
+    @Shadow @Final private Map<String, IntSupplier> samplerBinds;
+
+    @Override
+    public void satin$removeSampler(String name) {
+        this.samplerBinds.remove(name);
+    }
+
+    @Override
+    public boolean satin$hasSampler(String name) {
+        return this.samplerBinds.containsKey(name);
+    }
+
+    @Override
+    @Accessor("samplerNames")
+    public abstract List<String> satin$getSamplerNames();
+
+    @Override
+    @Accessor("samplerShaderLocs")
+    public abstract List<Integer> satin$getSamplerShaderLocs();
+
     /**
+     * Fix identifier creation to allow different namespaces
+     *
+     * <p>Why a redirect ?
+     * <ul>
+     * <li>Because letting the identifier be built will throw an exception, so no ModifyVariable</li>
+     * <li>Because we need to access the original id, so no ModifyArg (alternatively we could use 2 injections and a ThreadLocal but:)</li>
+     * <li>Because we assume other people who may want to do the same change can use this library</li>
+     * </ul>
      * @param arg the string passed to the redirected Identifier constructor
      * @param id the actual id passed as an argument to the method
      * @return a new Identifier
@@ -44,8 +80,8 @@ public abstract class JsonGlProgramMixin {
             ),
             method = "<init>"
     )
-    private Identifier constructProgramIdentifier(String arg, ResourceManager unused, String id) {
-        if (!arg.contains(":")) {
+    Identifier constructProgramIdentifier(String arg, ResourceManager unused, String id) {
+        if (!id.contains(":")) {
             return new Identifier(arg);
         }
         Identifier split = new Identifier(id);
