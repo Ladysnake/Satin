@@ -28,7 +28,8 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.function.Consumer;
 
-import static org.apiguardian.api.API.Status.*;
+import static org.apiguardian.api.API.Status.EXPERIMENTAL;
+import static org.apiguardian.api.API.Status.STABLE;
 
 /**
  * @see ManagedShaderEffect
@@ -91,7 +92,7 @@ public interface ShaderEffectManager {
      * @param location the location of the json within your mod's assets
      * @return a core render shader that will be reloaded as needed
      */
-    @API(status = EXPERIMENTAL)
+    @API(status = EXPERIMENTAL, since = "1.6.0")
     ManagedCoreShader manageCoreShader(Identifier location);
 
     /**
@@ -105,7 +106,7 @@ public interface ShaderEffectManager {
      * @param vertexFormat the format expected by your shader
      * @return a core render shader that will be reloaded as needed
      */
-    @API(status = EXPERIMENTAL)
+    @API(status = EXPERIMENTAL, since = "1.6.0")
     ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat);
 
     /**
@@ -120,7 +121,7 @@ public interface ShaderEffectManager {
      * @param initCallback a block ran once the shader effect is initialized
      * @return a core render shader that will be reloaded as needed
      */
-    @API(status = EXPERIMENTAL)
+    @API(status = EXPERIMENTAL, since = "1.6.0")
     ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat, Consumer<ManagedCoreShader> initCallback);
 
     /**

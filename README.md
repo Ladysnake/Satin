@@ -40,6 +40,18 @@ You can find the current version of Satin in the [releases](https://github.com/L
 
 *If you wish your mod to be 100% standalone, you also need to include the `fabric-api-base` and `fabric-resource-loader-v0` modules from Fabric API in your mod jar.*
 
+## Updating from 1.16 to 1.17
+
+1. Update your Satin dependency
+2. If you only use post process shaders, you are mostly done.
+   You should already be able to play, but it's preferable you also update your shaders to Core Profile (go to step 4).
+3. If you use custom shaders for your entities, follow these steps:
+    1. Move the relevant shader files from `assets/shaders/program` to `assets/shaders/core`
+    2. Replace references to `ManagedShaderProgram` with references to `ManagedCoreShader`
+    3. Replace calls to `ShaderEffectManager#manageProgram` with calls to `ShaderEffectManager#manageCoreShader`
+4. Update your shaders to Core Profile: https://docs.substance3d.com/sddoc/switching-your-shaders-to-opengl-core-profile-172819178.html
+    - You can refer to vanilla shaders for examples
+
 ## Using Satin
 
 ### Changes to Vanilla
