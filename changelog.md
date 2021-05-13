@@ -1,4 +1,15 @@
 ------------------------------------------------------
+Version 1.6.0
+------------------------------------------------------
+Updated to 1.17
+
+**Changes**
+- `ManagedShaderProgram` has been replaced with `ManagedCoreShader`
+  - shader files referenced from one of those should be moved from `assets/shaders/program` to `assets/shaders/core`
+
+*Reminder: we Core Profile now !*
+
+------------------------------------------------------
 Version 1.5.1
 ------------------------------------------------------
 - Fixed a crash when calling some GlMatrices methods on Java 8
