@@ -24,58 +24,15 @@ import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.render.WorldRenderer;
 import org.apiguardian.api.API;
 
-import javax.annotation.CheckForSigned;
-
-import static org.apiguardian.api.API.Status.DEPRECATED;
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
 /**
  * Implemented by every {@link Framebuffer} when the feature is enabled in the config.
  * <p>
  * This allows access to a depth texture that the framebuffer writes to instead of the usual render buffer.
- * <p>
- * The replacement of the render buffer with a readable depth texture is only done when at least one mod
- * {@link #useFeature() declares the feature as used}.
  */
 @API(status = EXPERIMENTAL)
 public interface ReadableDepthFramebuffer {
-
-    /**
-     * Marks the readable depth framebuffer feature as used.
-     * <p>
-     * After this method has been called, all future framebuffers will have
-     * a texture instead of a render buffer as their depth attachment point.
-     * @deprecated starting from 20w22a, {@link Framebuffer} always uses
-     * a depth texture, making this feature redundant
-     */
-    @Deprecated
-    @API(status = DEPRECATED, since = "1.4.0")
-    static void useFeature() { }
-
-    /**
-     * Returns the depth texture used by this buffer.
-     * <p>
-     * This buffer <b>MUST</b> be in use when this method is called.
-     * The reason for this is that the depth texture is retrieved
-     * reflectively to account for other mods doing similar changes.
-     * <p>
-     * If the feature is not enabled, or an incompatibility prevents the
-     * retrieval of the texture, the returned value will be -1.
-     * <p>
-     * Note that the depth texture is updated whenever something draws on screen.
-     * Reading from and writing to the depth texture simultaneously will result
-     * in undefined behaviour. Do also note that Minecraft clears all depth information
-     * after world render finishes, and each time a {@link net.minecraft.client.gl.PostProcessShader}
-     * is rendered.
-     *
-     * @return the gl id of the depth texture, or -1 if it cannot be obtained
-     * @see #getStillDepthMap()
-     * @deprecated use {@link Framebuffer#getDepthAttachment()}
-     */
-    @CheckForSigned
-    @Deprecated
-    @API(status = DEPRECATED, since = "1.4.0")
-    int getCurrentDepthTexture();
 
     /**
      * Returns a still of this framebuffer's depth texture.
@@ -99,7 +56,7 @@ public interface ReadableDepthFramebuffer {
     int getStillDepthMap();
 
     /**
-     * Freezes the {@link #getCurrentDepthTexture() current depth texture} for use in
+     * Freezes the {@linkplain Framebuffer#getDepthAttachment() current depth texture} for use in
      * {@link #getStillDepthMap()}.
      * <p>
      * This is called by default on the {@link MinecraftClient#getFramebuffer() main framebuffer}

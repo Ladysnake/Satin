@@ -33,7 +33,7 @@ public final class BlockRenderLayerRegistry {
         if(registryLocked){
             throw new IllegalStateException(String.format(
                 "RenderLayer %s was added too late.",
-                layer.toString()
+                    layer
             ));
         }
         

@@ -47,7 +47,7 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
         this.vertexFormat = vertexFormat;
         this.initCallback = initCallback;
         this.renderLayerSupplier = RenderLayerSupplier.shader(
-                location.toString() + "_" + System.identityHashCode(this),
+                String.format("%s_%d", location, System.identityHashCode(this)),
                 this::getProgram);
     }
 

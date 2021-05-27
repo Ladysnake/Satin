@@ -79,11 +79,6 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
     }
 
     @Override
-    public int getCurrentDepthTexture() {
-        return this.depthAttachment;
-    }
-
-    @Override
     public int getStillDepthMap() {
         return this.satin$stillDepthTexture;
     }
