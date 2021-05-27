@@ -27,6 +27,7 @@
       "config": "mixins.satin.client.json"
     }
   ],
+  "accessWidener": "satin.accesswidener",
   "depends": {
     "fabricloader": ">=0.11.3",
     "fabric-api-base": "*",

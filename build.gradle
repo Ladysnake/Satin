@@ -1,13 +1,13 @@
 import java.time.Year
 
 plugins {
-    id "fabric-loom" version "0.8-SNAPSHOT"
-    id "org.cadixdev.licenser" version "0.5.0"
+    id 'fabric-loom' version '0.8-SNAPSHOT'
+    id "org.cadixdev.licenser" version "0.6.0"
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id "com.jfrog.artifactory" version '4.21.0'
     id 'org.ajoberstar.grgit' version '3.1.1'
-    id 'com.github.breadmoirai.github-release' version '2.2.9'
-    id "maven-publish"
+    id 'com.github.breadmoirai.github-release' version '2.2.12'
+    id 'maven-publish'
 }
 
 archivesBaseName = rootProject.archives_base_name
@@ -39,15 +39,9 @@ allprojects {
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-        modApi fabricApi.module("fabric-api-base", project.fabric_version)
-        modApi fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
-//        modRuntime "io.github.prospector:modmenu:${project.modmenu_version}"
-
         compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
         compileOnly "com.google.code.findbugs:jsr305:${findbugs_version}"
         compileOnly "org.apiguardian:apiguardian-api:${apiguardian_version}"
-
-        testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0-M1"
     }
 
     processResources {
@@ -58,13 +52,31 @@ allprojects {
         }
     }
 
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     tasks.withType(JavaCompile).configureEach {
+        // ensure that the encoding is set to UTF-8, no matter what the system default is
+        // this fixes some edge cases with special characters not displaying correctly
+        // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+        // If Javadoc is generated, this must be specified in that task too.
         it.options.encoding = "UTF-8"
+
+        // Minecraft 1.17 (21w19a) upwards uses Java 16.
         it.options.release = 16
     }
+}
+
+repositories {
+    maven {
+        url = 'https://maven.terraformersmc.com/releases'
+        content {
+            includeGroup 'com.terraformersmc'
+        }
+    }
+}
+
+dependencies {
+    modApi fabricApi.module("fabric-api-base", project.fabric_version)
+    modApi fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
+    modRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 minecraft {
@@ -87,8 +99,6 @@ jar {
 license {
     header = rootProject.file("code_quality/${project.license_header}_HEADER.txt")
 
-    // Apply licenses only to main source set
-    sourceSets = [project.sourceSets.main]
     include "**/*.java"
 
     newLine = false // Disables the empty line between the header and package name
@@ -97,7 +107,7 @@ license {
     //export variables
     ext {
         year = Year.now()
-        projectDisplayName = project.name
+        projectDisplayName = project.display_name
         projectOwners = rootProject.owners
         if (project.license_header.contains('GPL')) {
             if (!project.hasProperty("gpl_version")) {

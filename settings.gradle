@@ -8,7 +8,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'Satin'
+rootProject.name = 'satin'
 
 ['core', 'basic', 'depth', 'render-layer'].forEach {
     include it
