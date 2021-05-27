@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -70,7 +70,7 @@ public interface ReadableDepthFramebuffer {
      *
      * @return the gl id of the depth texture, or -1 if it cannot be obtained
      * @see #getStillDepthMap()
-     * @deprecated use {@link Framebuffer#method_30278}
+     * @deprecated use {@link Framebuffer#getDepthAttachment()}
      */
     @CheckForSigned
     @Deprecated

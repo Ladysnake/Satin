@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,16 +17,10 @@
  */
 package ladysnake.satin.mixin.client.render;
 
-import ladysnake.satin.impl.RenderLayerDuplicator;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormat;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
-
-import java.util.function.Consumer;
 
 @Mixin(RenderLayer.class)
 public abstract class RenderLayerMixin extends RenderPhase {

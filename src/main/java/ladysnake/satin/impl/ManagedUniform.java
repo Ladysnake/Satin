@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,15 @@
  */
 package ladysnake.satin.impl;
 
-import ladysnake.satin.api.managed.uniform.*;
+import ladysnake.satin.api.managed.uniform.Uniform1f;
+import ladysnake.satin.api.managed.uniform.Uniform1i;
+import ladysnake.satin.api.managed.uniform.Uniform2f;
+import ladysnake.satin.api.managed.uniform.Uniform2i;
+import ladysnake.satin.api.managed.uniform.Uniform3f;
+import ladysnake.satin.api.managed.uniform.Uniform3i;
+import ladysnake.satin.api.managed.uniform.Uniform4f;
+import ladysnake.satin.api.managed.uniform.Uniform4i;
+import ladysnake.satin.api.managed.uniform.UniformMat4;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.render.Shader;

@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 /**
  * A {@link ManagedShaderEffect} that can be {@link #setup} several times in its lifetime,

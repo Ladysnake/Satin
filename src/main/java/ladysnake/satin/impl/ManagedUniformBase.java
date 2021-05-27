@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,6 @@
  */
 package ladysnake.satin.impl;
 
-import net.minecraft.client.gl.JsonEffectGlShader;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.render.Shader;
 

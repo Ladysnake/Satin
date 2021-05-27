@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,8 +20,8 @@ package ladysnake.satin.impl;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.event.ResolutionChangeCallback;
-import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ManagedCoreShader;
+import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.render.VertexFormat;

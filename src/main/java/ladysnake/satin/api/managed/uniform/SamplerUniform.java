@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,9 +21,6 @@ import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.AbstractTexture;
 import org.apiguardian.api.API;
 
-import java.util.function.IntSupplier;
-
-import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
 @API(status = MAINTAINED)

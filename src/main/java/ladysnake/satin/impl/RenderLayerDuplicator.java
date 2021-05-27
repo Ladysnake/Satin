@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2020 Ladysnake
+ * Copyright (C) 2019-2021 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,17 +17,8 @@
  */
 package ladysnake.satin.impl;
 
-import ladysnake.satin.mixin.client.render.RenderLayerMixin;
-import ladysnake.satin.mixin.client.render.RenderLayerAccessor;
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.client.render.RenderLayer;
-import org.objectweb.asm.Type;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 public final class RenderLayerDuplicator {
