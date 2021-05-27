@@ -77,6 +77,8 @@ dependencies {
     modApi fabricApi.module("fabric-api-base", project.fabric_version)
     modApi fabricApi.module("fabric-resource-loader-v0", project.fabric_version)
     modRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0-M1"
 }
 
 minecraft {
