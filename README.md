@@ -10,6 +10,8 @@ A lightweight Fabric library for OpenGL shader usage.
 
 You can add the library by inserting the following in your `build.gradle` (Requires Loom 0.2.4+):
 
+**Note: since MC 1.17 builds, the Satin dependency must be lowercase.**
+
 ```gradle
 repositories {
         maven {
@@ -23,9 +25,9 @@ repositories {
 }
 
 dependencies {
-    modImplementation "io.github.ladysnake:Satin:${satin_version}"
+    modImplementation "io.github.ladysnake:satin:${satin_version}"
     // Include Satin as a Jar-in-Jar dependency (optional)
-    include "io.github.ladysnake:Satin:${satin_version}"
+    include "io.github.ladysnake:satin:${satin_version}"
 }
 ```
 
