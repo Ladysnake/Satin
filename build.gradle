@@ -17,10 +17,6 @@ subprojects {
     apply plugin: 'fabric-loom'
     archivesBaseName = rootProject.archives_base_name + "-" + project.name
     group = rootProject.maven_group + "." + rootProject.archives_base_name
-
-    dependencies {
-        implementation rootProject.sourceSets.main.output
-    }
 }
 
 allprojects {
@@ -29,6 +25,10 @@ allprojects {
     targetCompatibility = JavaVersion.VERSION_16
 
     version = rootProject.mod_version
+
+    configurations {
+        dev
+    }
 
     repositories {
     }
@@ -62,6 +62,12 @@ allprojects {
         // Minecraft 1.17 (21w19a) upwards uses Java 16.
         it.options.release = 16
     }
+
+    afterEvaluate {
+        artifacts {
+            dev file: file("${project.buildDir}/libs/$archivesBaseName-${version}-dev.jar"), type: "jar", builtBy: jar
+        }
+    }
 }
 
 repositories {
@@ -70,6 +76,12 @@ repositories {
         content {
             includeGroup 'com.terraformersmc'
         }
+    }
+}
+
+subprojects {
+    dependencies {
+        implementation project(path: ":", configuration: "dev")
     }
 }
 
