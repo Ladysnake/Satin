@@ -65,8 +65,8 @@ public final class SatinRenderLayer {
         BlockRenderLayerMap.INSTANCE.putBlock(SatinTestBlocks.DEBUG_BLOCK, blockRenderLayer);
         FabricDefaultAttributeRegistry.register(ILLUSION_GOLEM, IronGolemEntity.createIronGolemAttributes());
         FabricDefaultAttributeRegistry.register(RAINBOW_WITHER, WitherEntity.createWitherAttributes());
-        EntityRendererRegistry.INSTANCE.register(ILLUSION_GOLEM, (dispatcher, ctx) -> new IllusionGolemEntityRenderer(dispatcher));
-        EntityRendererRegistry.INSTANCE.register(RAINBOW_WITHER, (dispatcher, ctx) -> new RainbowWitherEntityRenderer(dispatcher));
+        EntityRendererRegistry.INSTANCE.register(ILLUSION_GOLEM, (ctx) -> new IllusionGolemEntityRenderer(ctx));
+        EntityRendererRegistry.INSTANCE.register(RAINBOW_WITHER, (ctx) -> new RainbowWitherEntityRenderer(ctx));
         ClientTickCallback.EVENT.register(client -> ticks++);
         EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformSTime.set((ticks + tickDelta) * 0.05f));
         ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
