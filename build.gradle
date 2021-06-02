@@ -81,7 +81,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.0-M1"
 }
 
-minecraft {
+loom {
     accessWidener = file("src/main/resources/satin.accesswidener")
 }
 
