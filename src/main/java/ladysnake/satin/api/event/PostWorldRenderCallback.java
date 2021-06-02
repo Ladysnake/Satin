@@ -20,7 +20,7 @@ package ladysnake.satin.api.event;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.options.GraphicsMode;
+import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.render.Camera;
 
 /**

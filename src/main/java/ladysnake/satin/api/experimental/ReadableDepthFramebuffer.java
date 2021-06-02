@@ -20,7 +20,7 @@ package ladysnake.satin.api.experimental;
 import ladysnake.satin.api.event.PostWorldRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.options.GraphicsMode;
+import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.render.WorldRenderer;
 import org.apiguardian.api.API;
 
