@@ -173,4 +173,9 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
 
     @API(status = INTERNAL)
     public abstract void setup(int newWidth, int newHeight);
+
+    @Override
+    public String toString() {
+        return "%s[%s]".formatted(this.getClass().getSimpleName(), this.location);
+    }
 }

@@ -6,6 +6,10 @@ Updated to 1.17
 **Changes**
 - `ManagedShaderProgram` has been replaced with `ManagedCoreShader`
   - shader files referenced from one of those should be moved from `assets/shaders/program` to `assets/shaders/core`
+  
+**Fixes**
+- Shader uniforms no longer get their value reset after resource reloading
+- Fixed the first call to `ManagedUniform#set` not doing anything when the values were all `0`
 
 *Reminder: we Core Profile now !*
 
