@@ -55,21 +55,8 @@ public final class ManagedUniform extends ManagedUniformBase implements
                 .map(s -> s.getUniformByName(this.name))
                 .filter(Objects::nonNull)
                 .toArray(GlUniform[]::new);
-        if (!this.firstUpload) {
-            this.uploadCurrentValues();
-        }
+        this.syncCurrentValues();
         return this.targets.length > 0;
-    }
-
-    private void uploadCurrentValues() {
-        for (GlUniform target : this.targets) {
-            if (target.getIntData() != null) {
-                target.setForDataType(i0, i1, i2, i3);
-            } else {
-                assert target.getFloatData() != null;
-                target.setForDataType(f0, f1, f2, f3);
-            }
-        }
     }
 
     @Override
@@ -77,9 +64,23 @@ public final class ManagedUniform extends ManagedUniformBase implements
         GlUniform uniform = shader.getUniform(this.name);
         if (uniform != null) {
             this.targets = new GlUniform[] {uniform};
+            this.syncCurrentValues();
             return true;
         }
         return false;
+    }
+
+    private void syncCurrentValues() {
+        if (!this.firstUpload) {
+            for (GlUniform target : this.targets) {
+                if (target.getIntData() != null) {
+                    target.setForDataType(i0, i1, i2, i3);
+                } else {
+                    assert target.getFloatData() != null;
+                    target.setForDataType(f0, f1, f2, f3);
+                }
+            }
+        }
     }
 
     @Override
