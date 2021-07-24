@@ -13,7 +13,8 @@
   "contact": {
     "sources": "https://github.com/Ladysnake/Satin",
     "issues": "https://github.com/Ladysnake/Satin/issues",
-    "discord": "ladysnake.glitch.me/discord"
+    "discord": "ladysnake.glitch.me/discord",
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/satin-api"
   },
   "environment": "client",
   "entrypoints": {
