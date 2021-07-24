@@ -27,6 +27,12 @@
       "type": "float",
       "count": 4,
       "values": [1.0, 1.0, 1.0, 1.0]
+    },
+    {
+      "name": "Multiplier",
+      "type": "int",
+      "count": 1,
+      "values": [ 1 ]
     }
   ]
 }
