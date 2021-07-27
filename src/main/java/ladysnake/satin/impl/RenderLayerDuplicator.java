@@ -34,7 +34,7 @@ public final class RenderLayerDuplicator {
     }
 
     private static void checkDefaultImpl(RenderLayer existing) {
-        if (!(existing instanceof RenderLayer.MultiPhase)) {
+        if (!(existing instanceof SatinRenderLayer)) {
             throw new IllegalArgumentException("Unrecognized RenderLayer implementation " + existing.getClass() + ". Layer duplication is only applicable to the default (MultiPhase) implementation");
         }
     }

@@ -23,6 +23,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -72,7 +73,11 @@ public final class SatinMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        return null;
+        List<String> compatMixins = new ArrayList<>();
+        if (FabricLoader.getInstance().isModLoaded("iris")) {
+            compatMixins.add("iris.IrisRenderLayerWrapperMixin");
+        }
+        return compatMixins;
     }
 
     @Override
