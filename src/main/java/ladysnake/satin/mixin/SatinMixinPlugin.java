@@ -29,7 +29,6 @@ import java.util.Set;
 
 public final class SatinMixinPlugin implements IMixinConfigPlugin {
     private static final boolean ALLOW_RENDER_LAYER_MIXINS;
-    private static final boolean ENABLE_SHADER_EFFECT_LOCATION_MIXIN;
 
     static {
         FabricLoader loader = FabricLoader.getInstance();
@@ -42,8 +41,6 @@ public final class SatinMixinPlugin implements IMixinConfigPlugin {
             }
             ALLOW_RENDER_LAYER_MIXINS = true;
         }
-        // Architectury actually does the same change, and they can't exactly depend on Satin so...
-        ENABLE_SHADER_EFFECT_LOCATION_MIXIN = !loader.isModLoaded("architectury");
     }
 
     @Override
@@ -60,8 +57,6 @@ public final class SatinMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.contains("blockrenderlayer")) {
             return ALLOW_RENDER_LAYER_MIXINS;
-        } else if (mixinClassName.endsWith("gl.JsonEffectGlShaderMixin")) {
-            return ENABLE_SHADER_EFFECT_LOCATION_MIXIN;
         }
         return true;
     }
