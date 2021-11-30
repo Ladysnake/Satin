@@ -49,8 +49,9 @@ public abstract class WorldRendererMixin {
         ),
         slice = @Slice(
             from = @At(
-                value = "INVOKE",
-                target = "Lnet/minecraft/client/render/WorldRenderer;updateChunks(J)V"
+                value = "INVOKE_STRING",
+                target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V",
+                args = "ldc=terrain"
             ),
             to = @At(
                 value = "INVOKE",
