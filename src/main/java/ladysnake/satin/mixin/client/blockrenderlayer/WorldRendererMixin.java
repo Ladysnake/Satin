@@ -63,7 +63,7 @@ public abstract class WorldRendererMixin {
     private void renderCustom(
         MatrixStack matrix, float delta, long time, boolean renderOutlines, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightManager, Matrix4f frustumMatrix,
         CallbackInfo info,
-        Profiler profiler, Vec3d vec3d, double x, double y, double z
+        Profiler profiler, boolean bl, Vec3d vec3d, double x, double y, double z
     ) {
         // Render all the custom ones
         for(RenderLayer layer : BlockRenderLayerRegistry.INSTANCE.getLayers()) {
