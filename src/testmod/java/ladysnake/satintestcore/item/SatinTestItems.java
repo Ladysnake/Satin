@@ -1,7 +1,7 @@
 package ladysnake.satintestcore.item;
 
-import ladysnake.satintestcore.SatinTestCore;
 import ladysnake.satintestcore.block.SatinTestBlocks;
+import ladysnake.satintestcore.SatinTestCore;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;

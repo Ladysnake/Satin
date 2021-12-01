@@ -1,17 +1,20 @@
 {
   "schemaVersion": 1,
-  "id": "satinbasictest",
+  "id": "satintestcore",
   "version": "1.0.0",
 
-  "name": "Satin Basic Test Mod",
-  "description": "Test mod for basic satin features",
+  "name": "Satin Test Core",
+  "description": "Core features for all test mods",
   "licence": "LGPL-3.0-or-later",
   "authors": [
     "Pyrofab"
   ],
   "environment": "client",
   "entrypoints": {
-    "client": [
+    "main": [
+      "ladysnake.satintestcore.SatinTestCore",
+      "ladysnake.satinrenderlayer.SatinRenderLayerTest::onInitializeClient",
+      "ladysnake.satindepthtest.SatinDepthTest",
       "ladysnake.satinbasictest.SatinBasicTest"
     ]
   },

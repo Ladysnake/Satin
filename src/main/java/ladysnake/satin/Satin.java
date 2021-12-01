@@ -22,6 +22,8 @@ import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.resource.ResourceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,6 +47,8 @@ public class Satin implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        MinecraftClient.getInstance().worldRenderer.close();
+        System.exit(0);
         ResolutionChangeCallback.EVENT.register(ReloadableShaderEffectManager.INSTANCE);
         // Subscribe the shader manager to MinecraftClient's resource manager to reload shaders like normal assets.
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(ReloadableShaderEffectManager.INSTANCE);

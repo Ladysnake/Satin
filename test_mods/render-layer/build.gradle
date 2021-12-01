@@ -1,4 +1,0 @@
-dependencies {
-    implementation project(path: ":core", configuration: "dev")
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_version}"
-}

@@ -7,7 +7,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 public class SatinDepthTest implements ClientModInitializer {
-    public static final String MOD_ID = "satindepthtest";
+    public static final String MOD_ID = "ladysnake/satindepthtest";
     @Override
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(DepthFx.INSTANCE);

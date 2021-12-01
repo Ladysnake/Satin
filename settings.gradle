@@ -17,8 +17,3 @@ pluginManagement {
 }
 
 rootProject.name = 'satin'
-
-['core', 'basic', 'depth', 'render-layer'].forEach {
-    include it
-    project(":$it").projectDir = file("test_mods/" + it)
-}
