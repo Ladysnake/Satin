@@ -21,8 +21,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.IronGolemEntityRenderer;
 import net.minecraft.entity.passive.IronGolemEntity;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class IllusionGolemEntityRenderer extends IronGolemEntityRenderer {
     public IllusionGolemEntityRenderer(EntityRendererFactory.Context ctx) {

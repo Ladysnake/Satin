@@ -23,8 +23,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.WitherEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.boss.WitherEntity;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class RainbowWitherEntityRenderer extends WitherEntityRenderer {
     public RainbowWitherEntityRenderer(EntityRendererFactory.Context entityRenderDispatcher) {
