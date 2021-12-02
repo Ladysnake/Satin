@@ -26,7 +26,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.util.Identifier;
 
 public final class SatinBasicTest implements ClientModInitializer {
-    public static final String MOD_ID = "ladysnake/satinbasictest";
+    public static final String MOD_ID = "satinbasictest";
 
     private boolean renderingBlit = false;
     // literally the same as minecraft's blit, we are just checking that custom paths work

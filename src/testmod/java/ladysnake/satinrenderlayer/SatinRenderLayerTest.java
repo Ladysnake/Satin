@@ -30,7 +30,7 @@ import ladysnake.satin.api.util.RenderLayerHelper;
 import ladysnake.satintestcore.block.SatinTestBlocks;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.MinecraftClient;
@@ -50,11 +50,11 @@ public final class SatinRenderLayerTest {
     public static final EntityType<IronGolemEntity> ILLUSION_GOLEM =
             Registry.register(
                     Registry.ENTITY_TYPE,
-                    new Identifier("ladysnake/satinrenderlayer", "illusion_golem"),
+                    new Identifier("satinrenderlayer", "illusion_golem"),
                     FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, IronGolemEntity::new).dimensions(EntityType.IRON_GOLEM.getDimensions()).build()
             );
 
-    public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(new Identifier("ladysnake/satinrenderlayer", "shaders/post/illusion.json"),
+    public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(new Identifier("satinrenderlayer", "shaders/post/illusion.json"),
             effect -> effect.setUniformValue("ColorModulate", 1.2f, 0.7f, 0.2f, 1.0f));
     public static final ManagedFramebuffer illusionBuffer = illusionEffect.getTarget("final");
 
@@ -63,7 +63,7 @@ public final class SatinRenderLayerTest {
     public static final EntityType<WitherEntity> RAINBOW_WITHER =
             Registry.register(
                     Registry.ENTITY_TYPE,
-                    new Identifier("ladysnake/satinrenderlayer", "rainbow_wither"),
+                    new Identifier("satinrenderlayer", "rainbow_wither"),
                     FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, (EntityType<WitherEntity> entityType, World world) -> {
                         WitherEntity witherEntity = new WitherEntity(entityType, world);
                         witherEntity.setAiDisabled(true);
@@ -71,7 +71,7 @@ public final class SatinRenderLayerTest {
                     }).dimensions(EntityType.WITHER.getDimensions()).build()
             );
 
-    public static final ManagedCoreShader rainbow = ShaderEffectManager.getInstance().manageCoreShader(new Identifier("ladysnake/satinrenderlayer", "rainbow"));
+    public static final ManagedCoreShader rainbow = ShaderEffectManager.getInstance().manageCoreShader(new Identifier("satinrenderlayer", "rainbow"));
     private static final Uniform1f uniformSTime = rainbow.findUniform1f("STime");
 
     private static int ticks;
@@ -82,8 +82,8 @@ public final class SatinRenderLayerTest {
         BlockRenderLayerMap.INSTANCE.putBlock(SatinTestBlocks.DEBUG_BLOCK, blockRenderLayer);
         FabricDefaultAttributeRegistry.register(ILLUSION_GOLEM, IronGolemEntity.createIronGolemAttributes());
         FabricDefaultAttributeRegistry.register(RAINBOW_WITHER, WitherEntity.createWitherAttributes());
-        EntityRendererRegistry.INSTANCE.register(ILLUSION_GOLEM, IllusionGolemEntityRenderer::new);
-        EntityRendererRegistry.INSTANCE.register(RAINBOW_WITHER, RainbowWitherEntityRenderer::new);
+        EntityRendererRegistry.register(ILLUSION_GOLEM, IllusionGolemEntityRenderer::new);
+        EntityRendererRegistry.register(RAINBOW_WITHER, RainbowWitherEntityRenderer::new);
         ClientTickEvents.END_CLIENT_TICK.register(client -> ticks++);
         EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformSTime.set((ticks + tickDelta) * 0.05f));
         ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
