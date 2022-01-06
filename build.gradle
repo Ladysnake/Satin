@@ -59,9 +59,8 @@ dependencies {
     })
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     modApi "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    modRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modCompileOnly "maven.modrinth:iris:${project.iris_version}"
-    modRuntimeOnly "maven.modrinth:iris:${project.iris_version}"
+    modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modCompileOnly modLocalRuntime("maven.modrinth:iris:${project.iris_version}")
 
     compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
     compileOnly "com.google.code.findbugs:jsr305:${findbugs_version}"

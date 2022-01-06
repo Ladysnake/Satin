@@ -1,4 +1,4 @@
-apply from: 'https://raw.githubusercontent.com/NerdHubMC/Gradle-Scripts/master/scripts/fabric/publish/changelog.gradle'
+apply from: 'utilities.gradle'
 
 task checkGitStatus() {
     group = 'publishing'
