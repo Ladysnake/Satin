@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2021 Ladysnake
+ * Copyright (C) 2019-2022 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -264,8 +264,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
         Satin.LOGGER.error("Could not create screen shader {}", this.getLocation(), e);
     }
 
-    @Nullable
-    protected ShaderEffect getShaderOrLog() {
+    private @Nullable ShaderEffect getShaderOrLog() {
         if (!this.isInitialized() && !this.isErrored()) {
             this.initializeOrLog(MinecraftClient.getInstance().getResourceManager());
         }
