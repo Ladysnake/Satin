@@ -55,7 +55,7 @@ public abstract class WorldRendererMixin {
             ),
             to = @At(
                 value = "INVOKE",
-                target = "Lnet/minecraft/client/render/SkyProperties;isDarkened()Z"
+                target = "Lnet/minecraft/client/render/DimensionEffects;isDarkened()Z"
             )
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT

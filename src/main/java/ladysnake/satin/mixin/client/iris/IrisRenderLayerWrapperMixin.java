@@ -17,7 +17,6 @@
  */
 package ladysnake.satin.mixin.client.iris;
 
-import ladysnake.satin.api.util.RenderLayerHelper;
 import ladysnake.satin.impl.RenderLayerDuplicator;
 import net.coderbot.iris.layer.IrisRenderTypeWrapper;
 import net.coderbot.iris.layer.UseProgramRenderStateShard;

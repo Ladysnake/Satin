@@ -91,7 +91,7 @@ public final class SatinRenderLayerTest {
                     illusionEffect.render(tickDelta);
                     client.getFramebuffer().beginWrite(true);
                     RenderSystem.enableBlend();
-                    RenderSystem.blendFuncSeparate(GlStateManager.class_4535.SRC_ALPHA, GlStateManager.class_4534.ONE_MINUS_SRC_ALPHA, GlStateManager.class_4535.ZERO, GlStateManager.class_4534.ONE);
+                    RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
                     illusionBuffer.draw(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight(), false);
                     illusionBuffer.clear();
                     client.getFramebuffer().beginWrite(true);
