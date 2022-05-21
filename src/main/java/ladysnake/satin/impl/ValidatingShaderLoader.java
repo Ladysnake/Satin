@@ -111,11 +111,12 @@ public final class ValidatingShaderLoader implements ShaderLoader {
      *
      * @param fileLocation the path to the file to read
      * @return a string with the content of the file
+     * @throws java.io.FileNotFoundException if the designated shader file does not exist
      */
     private String fromFile(ResourceManager resourceManager, Identifier fileLocation) throws IOException {
         StringBuilder source = new StringBuilder();
 
-        try (InputStream in = resourceManager.getResource(fileLocation).getInputStream();
+        try (InputStream in = resourceManager.getResourceOrThrow(fileLocation).getInputStream();
              BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
