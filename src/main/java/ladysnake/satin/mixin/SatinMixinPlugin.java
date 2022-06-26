@@ -17,8 +17,9 @@
  */
 package ladysnake.satin.mixin;
 
-import ladysnake.satin.Satin;
 import net.fabricmc.loader.api.FabricLoader;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -28,16 +29,17 @@ import java.util.List;
 import java.util.Set;
 
 public final class SatinMixinPlugin implements IMixinConfigPlugin {
+    private static final Logger LOGGER = LogManager.getLogger("Satin");
     private static final boolean ALLOW_RENDER_LAYER_MIXINS;
 
     static {
         FabricLoader loader = FabricLoader.getInstance();
         if (loader.isModLoaded("canvas")) {
-            Satin.LOGGER.warn("[Satin] Canvas is present, custom block renders will not work");
+            LOGGER.warn("[Satin] Canvas is present, custom block renders will not work");
             ALLOW_RENDER_LAYER_MIXINS = false;
         } else {
             if (loader.isModLoaded("sodium")) {
-                Satin.LOGGER.warn("[Satin] Sodium is present, custom block renders may not work");
+                LOGGER.warn("[Satin] Sodium is present, custom block renders may not work");
             }
             ALLOW_RENDER_LAYER_MIXINS = true;
         }
