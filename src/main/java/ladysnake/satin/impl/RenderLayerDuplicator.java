@@ -18,14 +18,28 @@
 package ladysnake.satin.impl;
 
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexFormat;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public final class RenderLayerDuplicator {
 
-    public static RenderLayer copy(RenderLayer existing, String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
+    public static RenderLayer copy(RenderLayer existing, String newName,  Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
+        return copy(existing, newName, null, op);
+    }
+
+    /**
+     *
+     * @param existing the {@link RenderLayer} to copy
+     * @param newName a unique name for the new {@link RenderLayer}
+     * @param vertexFormat the new vertex format, or {@code null} if {@code existing}'s format should be used
+     * @param op the transformation to apply to {@code existing}'s parameters
+     * @return a new {@link RenderLayer} based on {@code existing}
+     */
+    public static RenderLayer copy(RenderLayer existing, String newName, @Nullable VertexFormat vertexFormat, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
         checkDefaultImpl(existing);
-        return ((SatinRenderLayer) existing).satin$copy(newName, op);
+        return ((SatinRenderLayer) existing).satin$copy(newName, vertexFormat, op);
     }
 
     public static RenderLayer.MultiPhaseParameters copyPhaseParameters(RenderLayer existing, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
@@ -40,7 +54,7 @@ public final class RenderLayerDuplicator {
     }
 
     public interface SatinRenderLayer {
-        RenderLayer satin$copy(String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op);
+        RenderLayer satin$copy(String newName, @Nullable VertexFormat vertexFormat, Consumer<RenderLayer.MultiPhaseParameters.Builder> op);
         RenderLayer.MultiPhaseParameters satin$copyPhaseParameters(Consumer<RenderLayer.MultiPhaseParameters.Builder> op);
     }
 }

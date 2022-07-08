@@ -21,6 +21,8 @@ import ladysnake.satin.impl.RenderLayerDuplicator;
 import net.coderbot.iris.layer.IrisRenderTypeWrapper;
 import net.coderbot.iris.layer.UseProgramRenderStateShard;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexFormat;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,8 +37,8 @@ public abstract class IrisRenderLayerWrapperMixin implements RenderLayerDuplicat
     @Shadow @Final private UseProgramRenderStateShard useProgram;
 
     @Override
-    public RenderLayer satin$copy(String newName, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
-        return new IrisRenderTypeWrapper(newName, RenderLayerDuplicator.copy(this.unwrap(), newName + "_wrapped", op), this.useProgram);
+    public RenderLayer satin$copy(String newName, @Nullable VertexFormat vertexFormat, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
+        return new IrisRenderTypeWrapper(newName, RenderLayerDuplicator.copy(this.unwrap(), newName + "_wrapped", vertexFormat, op), this.useProgram);
     }
 
     @Override

@@ -1,4 +1,16 @@
 ------------------------------------------------------
+Version 1.9.0
+------------------------------------------------------
+**Changes**
+- The vertex format specified in `ShaderEffectManager#manageCoreShader` is now used by `RenderLayer`s created from `ManagedCoreShader#getRenderLayer`
+
+------------------------------------------------------
+Version 1.8.1
+------------------------------------------------------
+**Fixes**
+- Fixed mixin crash when Sodium or Canvas was installed
+
+------------------------------------------------------
 Version 1.8.0
 ------------------------------------------------------
 Updated to MC 1.19

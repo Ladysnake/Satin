@@ -20,6 +20,7 @@ package ladysnake.satin.mixin.client.render;
 import ladysnake.satin.impl.RenderLayerDuplicator;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexFormat;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,10 +38,10 @@ public abstract class RenderLayerMultiPhaseMixin extends RenderLayer implements 
     }
 
     @Override
-    public RenderLayer satin$copy(String newName, Consumer<MultiPhaseParameters.Builder> op) {
+    public RenderLayer satin$copy(String newName, @Nullable VertexFormat vertexFormat, Consumer<MultiPhaseParameters.Builder> op) {
         return RenderLayerAccessor.satin$of(
                 newName,
-                this.getVertexFormat(),
+                vertexFormat == null ? this.getVertexFormat() : vertexFormat,
                 this.getDrawMode(),
                 this.getExpectedBufferSize(),
                 this.hasCrumbling(),

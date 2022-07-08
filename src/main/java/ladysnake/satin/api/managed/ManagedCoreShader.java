@@ -49,6 +49,8 @@ public interface ManagedCoreShader extends UniformFinder {
      * Gets a simple {@link RenderLayer} that is functionally identical to {@code baseLayer},
      * but with a different {@link RenderPhase.Target} that enables this program.
      *
+     * <p>The new {@link RenderLayer} will use this shader's vertex format as specified in {@link ShaderEffectManager#manageCoreShader(Identifier, VertexFormat, Consumer)}.
+     *
      * @param baseLayer the layer to copy
      * @return a render layer using this shader program
      * @see ladysnake.satin.api.util.RenderLayerHelper#copy(RenderLayer, String, Consumer)
