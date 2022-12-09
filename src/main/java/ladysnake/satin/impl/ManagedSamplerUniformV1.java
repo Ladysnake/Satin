@@ -18,7 +18,7 @@
 package ladysnake.satin.impl;
 
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.texture.AbstractTexture;
 
 public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
@@ -45,7 +45,7 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.cachedValue != value) {
             for (SamplerAccess target : targets) {
-                ((Shader) target).addSampler(this.name, value);
+                ((ShaderProgram) target).addSampler(this.name, value);
             }
             this.cachedValue = value;
         }

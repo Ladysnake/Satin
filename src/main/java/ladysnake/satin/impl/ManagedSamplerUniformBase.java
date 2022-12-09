@@ -21,9 +21,9 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import ladysnake.satin.api.managed.uniform.SamplerUniform;
 import net.minecraft.client.gl.GlUniform;
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.client.gl.ShaderProgram;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,11 +47,11 @@ public abstract class ManagedSamplerUniformBase extends ManagedUniformBase imple
     }
 
     @Override
-    public boolean findUniformTargets(List<PostProcessShader> shaders) {
+    public boolean findUniformTargets(List<PostEffectPass> shaders) {
         List<SamplerAccess> targets = new ArrayList<>(shaders.size());
         IntList rawTargets = new IntArrayList(shaders.size());
-        for (PostProcessShader shader : shaders) {
-            JsonEffectGlShader program = shader.getProgram();
+        for (PostEffectPass shader : shaders) {
+            JsonEffectShaderProgram program = shader.getProgram();
             SamplerAccess access = (SamplerAccess) program;
             if (access.satin$hasSampler(this.name)) {
                 targets.add(access);
@@ -68,7 +68,7 @@ public abstract class ManagedSamplerUniformBase extends ManagedUniformBase imple
     }
 
     @Override
-    public boolean findUniformTarget(Shader shader) {
+    public boolean findUniformTarget(ShaderProgram shader) {
         return findUniformTarget(((SamplerAccess) shader));
     }
 

@@ -17,15 +17,17 @@
  */
 package ladysnake.satin.mixin.client;
 
-import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.gl.ShaderEffect;
+//import net.minecraft.client.gl.PostProcessShader;
+//import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.client.gl.PostEffectProcessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.List;
 
-@Mixin(ShaderEffect.class)
+@Mixin(PostEffectProcessor.class)
 public interface AccessiblePassesShaderEffect {
     @Accessor
-    List<PostProcessShader> getPasses();
+    List<PostEffectPass> getPasses();
 }

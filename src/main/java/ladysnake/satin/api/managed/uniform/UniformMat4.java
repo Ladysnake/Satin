@@ -17,8 +17,8 @@
  */
 package ladysnake.satin.api.managed.uniform;
 
-import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
+import org.joml.Matrix4f;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
 

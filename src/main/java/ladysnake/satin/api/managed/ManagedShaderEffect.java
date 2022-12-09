@@ -31,11 +31,11 @@ import ladysnake.satin.api.managed.uniform.UniformFinder;
 import ladysnake.satin.api.managed.uniform.UniformMat4;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -57,19 +57,19 @@ import static org.apiguardian.api.API.Status.*;
  */
 public interface ManagedShaderEffect extends UniformFinder {
     /**
-     * Returns this object's managed {@link ShaderEffect}, creating and initializing it if it doesn't exist.
+     * Returns this object's managed {@link PostEffectProcessor}, creating and initializing it if it doesn't exist.
      * <p>
      * This method will return <code>null</code> if an error occurs during initialization.
      * <p>
      * <em>Note: calling this before the graphic context is ready will cause issues.</em>
      *
-     * @return the {@link ShaderEffect} managed by this object
+     * @return the {@link PostEffectProcessor} managed by this object
      * @see #initialize()
      * @see #isInitialized()
      */
     @Nullable
     @API(status = MAINTAINED, since = "1.0.0")
-    ShaderEffect getShaderEffect();
+    PostEffectProcessor getShaderEffect();
 
     /**
      * Initializes this shader, allocating required system resources

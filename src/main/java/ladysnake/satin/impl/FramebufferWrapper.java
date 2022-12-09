@@ -21,7 +21,7 @@ import ladysnake.satin.Satin;
 import ladysnake.satin.api.managed.ManagedFramebuffer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.Window;
 
@@ -42,7 +42,7 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
         );
     }
 
-    void findTarget(@Nullable ShaderEffect shaderEffect) {
+    void findTarget(@Nullable PostEffectProcessor shaderEffect) {
         if (shaderEffect == null) {
             this.wrapped = null;
         } else {

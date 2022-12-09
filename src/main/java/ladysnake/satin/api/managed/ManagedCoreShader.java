@@ -18,9 +18,9 @@
 package ladysnake.satin.api.managed;
 
 import ladysnake.satin.api.managed.uniform.UniformFinder;
+import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.Shader;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  */
 @API(status = API.Status.EXPERIMENTAL, since = "1.6.0")
 public interface ManagedCoreShader extends UniformFinder {
-    Shader getProgram();
+    ShaderProgram getProgram();
 
     /**
      * Releases this shader's resources.

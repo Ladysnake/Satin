@@ -18,8 +18,8 @@
 package ladysnake.satin.mixin.client.gl;
 
 import ladysnake.satin.impl.SamplerAccess;
-import net.minecraft.client.gl.Program;
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.ShaderProgram;
+import net.minecraft.client.gl.ShaderStage;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.resource.ResourceManager;
@@ -35,7 +35,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
 import java.util.Map;
 
-@Mixin(Shader.class)
+@Mixin(ShaderProgram.class)
 public abstract class CoreShaderMixin implements SamplerAccess {
     @Shadow @Final private Map<String, Object> samplers;
 
@@ -67,8 +67,8 @@ public abstract class CoreShaderMixin implements SamplerAccess {
         return new Identifier(split.getNamespace(), "shaders/core/" + split.getPath() + ".json");
     }
 
-    @ModifyVariable(method = "loadProgram", at = @At("STORE"), ordinal = 1)
-    private static String fixPath(String path, final ResourceFactory factory, Program.Type type, String name) {
+    @ModifyVariable(method = "loadShader", at = @At("STORE"), ordinal = 1)
+    private static String fixPath(String path, final ResourceFactory factory, ShaderStage.Type type, String name) {
         if (!name.contains(":")) {
             return path;
         }

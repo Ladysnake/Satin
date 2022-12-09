@@ -20,7 +20,7 @@ package ladysnake.satin.mixin.client.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.PickEntityShaderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
@@ -37,9 +37,12 @@ import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Shadow private ShaderEffect shader;
 
-    @Shadow protected abstract void loadShader(Identifier location);
+
+
+    @Shadow @Nullable private PostEffectProcessor postProcessor;
+
+    @Shadow abstract void loadPostProcessor(Identifier id);
 
     /**
      * Fires {@link ShaderEffectRenderCallback#EVENT}
@@ -66,10 +69,10 @@ public abstract class GameRendererMixin {
      */
     @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN"), require = 0)
     private void useCustomEntityShader(@Nullable Entity entity, CallbackInfo info) {
-        if (this.shader == null) {
+        if (this.postProcessor == null) {
             // Mixin does not like method references to shadowed methods
             //noinspection Convert2MethodRef
-            PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, loc -> this.loadShader(loc), () -> this.shader);
+            PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, loc -> this.loadPostProcessor(loc), () -> this.postProcessor);
         }
     }
 }
