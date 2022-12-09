@@ -19,7 +19,7 @@ package ladysnake.satin.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 
@@ -42,5 +42,5 @@ public interface PickEntityShaderCallback {
                 }
             });
 
-    void pickEntityShader(@Nullable Entity entity, Consumer<Identifier> loadShaderFunc, Supplier<ShaderEffect> appliedShaderGetter);
+    void pickEntityShader(@Nullable Entity entity, Consumer<Identifier> loadShaderFunc, Supplier<PostEffectProcessor> appliedShaderGetter);
 }

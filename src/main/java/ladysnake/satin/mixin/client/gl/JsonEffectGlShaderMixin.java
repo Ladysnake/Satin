@@ -18,8 +18,8 @@
 package ladysnake.satin.mixin.client.gl;
 
 import ladysnake.satin.impl.SamplerAccess;
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.Program;
+import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.ShaderStage;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -37,7 +37,7 @@ import java.util.function.IntSupplier;
  * Minecraft does not take into account domains when parsing a shader program.
  * These hooks redirect identifier instantiations to allow specifying a domain for shader files.
  */
-@Mixin(JsonEffectGlShader.class)
+@Mixin(JsonEffectShaderProgram.class)
 public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
     @Shadow @Final private Map<String, IntSupplier> samplerBinds;
 
@@ -56,7 +56,7 @@ public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
     public abstract List<String> satin$getSamplerNames();
 
     @Override
-    @Accessor("samplerShaderLocs")
+    @Accessor("samplerLocations")
     public abstract List<Integer> satin$getSamplerShaderLocs();
 
     /**
@@ -101,7 +101,7 @@ public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
             ),
             method = "loadEffect"
     )
-    private static Identifier constructProgramIdentifier(String arg, ResourceManager unused, Program.Type shaderType, String id) {
+    private static Identifier constructProgramIdentifier(String arg, ResourceManager unused, ShaderStage.Type shaderType, String id) {
         if (!arg.contains(":")) {
             return new Identifier(arg);
         }

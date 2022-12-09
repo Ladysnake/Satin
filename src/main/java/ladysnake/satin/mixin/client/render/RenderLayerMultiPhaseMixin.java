@@ -56,7 +56,7 @@ public abstract class RenderLayerMultiPhaseMixin extends RenderLayer implements 
         @SuppressWarnings("ConstantConditions") RenderLayerMixin.MultiPhaseParametersAccessor access = ((RenderLayerMixin.MultiPhaseParametersAccessor) (Object) this.phases);
         MultiPhaseParameters.Builder builder = MultiPhaseParameters.builder()
                 .texture(access.getTexture())
-                .shader(access.getShader())
+                .program(access.getProgram())
                 .transparency(access.getTransparency())
                 .depthTest(access.getDepthTest())
                 .cull(access.getCull())

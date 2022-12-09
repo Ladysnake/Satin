@@ -18,8 +18,7 @@
 package ladysnake.satin.api.managed;
 
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
-import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.render.Shader;
+import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
@@ -41,7 +40,7 @@ public interface ShaderEffectManager {
     }
 
     /**
-     * Manages a post-process {@link ShaderEffect} loaded from a json definition file
+     * Manages a post-process {@link PostEffectProcessor} loaded from a json definition file
      *
      * @param location the location of the json within your mod's assets
      * @return a screen shader that will be automatically reloaded as needed
@@ -50,7 +49,7 @@ public interface ShaderEffectManager {
     ManagedShaderEffect manage(Identifier location);
 
     /**
-     * Manages a post-process {@link ShaderEffect} loaded from a json definition file
+     * Manages a post-process {@link PostEffectProcessor} loaded from a json definition file
      *
      * @param location         the location of the json within your mod's assets
      * @param initCallback a block ran once the shader effect is initialized
@@ -80,7 +79,7 @@ public interface ShaderEffectManager {
     }
 
     /**
-     * Manages a core {@link Shader} loaded from a json definition file
+     * Manages a core {@link net.minecraft.client.gl.ShaderProgram} loaded from a json definition file
      *
      * <p>This overload forwards to {@link #manageCoreShader(Identifier, VertexFormat)} with {@link VertexFormats#POSITION_COLOR_TEXTURE_OVERLAY_LIGHT_NORMAL},
      * the format used by entity rendering
@@ -96,7 +95,7 @@ public interface ShaderEffectManager {
     ManagedCoreShader manageCoreShader(Identifier location);
 
     /**
-     * Manages a core {@link Shader} loaded from a json definition file
+     * Manages a core {@link net.minecraft.client.gl.ShaderProgram} loaded from a json definition file
      *
      * <p>The shader location must be in {@code assets/shaders/core}.
      * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
@@ -110,7 +109,7 @@ public interface ShaderEffectManager {
     ManagedCoreShader manageCoreShader(Identifier location, VertexFormat vertexFormat);
 
     /**
-     * Manages a core {@link Shader} loaded from a json definition file
+     * Manages a core {@link net.minecraft.client.gl.ShaderProgram} loaded from a json definition file
      *
      * <p>The shader location must be in {@code assets/shaders/core}.
      * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:

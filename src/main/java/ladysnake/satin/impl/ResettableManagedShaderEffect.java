@@ -28,13 +28,14 @@ import ladysnake.satin.api.util.ShaderPrograms;
 import ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.JsonEffectGlShader;
-import net.minecraft.client.gl.ShaderEffect;
+import net.minecraft.client.gl.JsonEffectShaderProgram;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
 import org.apiguardian.api.API;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -54,7 +55,7 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
  * @see ManagedShaderEffect
  * @since 1.0.0
  */
-public final class ResettableManagedShaderEffect extends ResettableManagedShaderBase<ShaderEffect> implements ManagedShaderEffect {
+public final class ResettableManagedShaderEffect extends ResettableManagedShaderBase<PostEffectProcessor> implements ManagedShaderEffect {
 
     /**Callback to run once each time the shader effect is initialized*/
     private final Consumer<ManagedShaderEffect> initCallback;
@@ -79,7 +80,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
 
     @Nullable
     @Override
-    public ShaderEffect getShaderEffect() {
+    public PostEffectProcessor getShaderEffect() {
         return getShaderOrLog();
     }
 
@@ -89,8 +90,8 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    protected ShaderEffect parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException {
-        return new ShaderEffect(mc.getTextureManager(), resourceManager, mc.getFramebuffer(), location);
+    protected PostEffectProcessor parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException {
+        return new PostEffectProcessor(mc.getTextureManager(), resourceManager, mc.getFramebuffer(), location);
     }
 
     @Override
@@ -114,7 +115,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
      */
     @Override
     public void render(float tickDelta) {
-        ShaderEffect sg = this.getShaderEffect();
+        PostEffectProcessor sg = this.getShaderEffect();
         if (sg != null) {
             RenderSystem.disableBlend();
             RenderSystem.disableDepthTest();
@@ -247,15 +248,15 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     public void setupDynamicUniforms(int index, Runnable dynamicSetBlock) {
         AccessiblePassesShaderEffect sg = (AccessiblePassesShaderEffect) this.getShaderEffect();
         if (sg != null) {
-            JsonEffectGlShader sm = sg.getPasses().get(index).getProgram();
-            ShaderPrograms.useShader(sm.getProgramRef());
+            JsonEffectShaderProgram sm = sg.getPasses().get(index).getProgram();
+            ShaderPrograms.useShader(sm.getGlRef());
             dynamicSetBlock.run();
             ShaderPrograms.useShader(0);
         }
     }
 
     @Override
-    protected boolean setupUniform(ManagedUniformBase uniform, ShaderEffect shader) {
+    protected boolean setupUniform(ManagedUniformBase uniform, PostEffectProcessor shader) {
         return uniform.findUniformTargets(((AccessiblePassesShaderEffect) shader).getPasses());
     }
 
@@ -264,7 +265,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
         Satin.LOGGER.error("Could not create screen shader {}", this.getLocation(), e);
     }
 
-    private @Nullable ShaderEffect getShaderOrLog() {
+    private @Nullable PostEffectProcessor getShaderOrLog() {
         if (!this.isInitialized() && !this.isErrored()) {
             this.initializeOrLog(MinecraftClient.getInstance().getResourceManager());
         }

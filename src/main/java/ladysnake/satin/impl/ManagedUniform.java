@@ -27,9 +27,9 @@ import ladysnake.satin.api.managed.uniform.Uniform4f;
 import ladysnake.satin.api.managed.uniform.Uniform4i;
 import ladysnake.satin.api.managed.uniform.UniformMat4;
 import net.minecraft.client.gl.GlUniform;
-import net.minecraft.client.gl.PostProcessShader;
-import net.minecraft.client.render.Shader;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.client.gl.ShaderProgram;
+import org.joml.Matrix4f;
 
 import java.util.List;
 import java.util.Objects;
@@ -49,9 +49,9 @@ public final class ManagedUniform extends ManagedUniformBase implements
     }
 
     @Override
-    public boolean findUniformTargets(List<PostProcessShader> shaders) {
+    public boolean findUniformTargets(List<PostEffectPass> shaders) {
         this.targets = shaders.stream()
-                .map(PostProcessShader::getProgram)
+                .map(PostEffectPass::getProgram)
                 .map(s -> s.getUniformByName(this.name))
                 .filter(Objects::nonNull)
                 .toArray(GlUniform[]::new);
@@ -60,7 +60,7 @@ public final class ManagedUniform extends ManagedUniformBase implements
     }
 
     @Override
-    public boolean findUniformTarget(Shader shader) {
+    public boolean findUniformTarget(ShaderProgram shader) {
         GlUniform uniform = shader.getUniform(this.name);
         if (uniform != null) {
             this.targets = new GlUniform[] {uniform};
