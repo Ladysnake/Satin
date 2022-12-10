@@ -39,8 +39,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public final class SatinRenderLayerTest {
@@ -49,7 +50,7 @@ public final class SatinRenderLayerTest {
 
     public static final EntityType<IronGolemEntity> ILLUSION_GOLEM =
             Registry.register(
-                    Registry.ENTITY_TYPE,
+                    Registries.ENTITY_TYPE,
                     new Identifier("satinrenderlayer", "illusion_golem"),
                     FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, IronGolemEntity::new).dimensions(EntityType.IRON_GOLEM.getDimensions()).build()
             );
@@ -62,7 +63,7 @@ public final class SatinRenderLayerTest {
 
     public static final EntityType<WitherEntity> RAINBOW_WITHER =
             Registry.register(
-                    Registry.ENTITY_TYPE,
+                    Registries.ENTITY_TYPE,
                     new Identifier("satinrenderlayer", "rainbow_wither"),
                     FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, (EntityType<WitherEntity> entityType, World world) -> {
                         WitherEntity witherEntity = new WitherEntity(entityType, world);
