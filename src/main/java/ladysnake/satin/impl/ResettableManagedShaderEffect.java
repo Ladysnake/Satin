@@ -119,7 +119,6 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
         if (sg != null) {
             RenderSystem.disableBlend();
             RenderSystem.disableDepthTest();
-            RenderSystem.enableTexture();
             RenderSystem.resetTextureMatrix();
             sg.render(tickDelta);
             MinecraftClient.getInstance().getFramebuffer().beginWrite(true);
