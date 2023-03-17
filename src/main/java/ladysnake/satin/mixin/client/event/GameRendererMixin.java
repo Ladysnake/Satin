@@ -55,14 +55,6 @@ public abstract class GameRendererMixin {
         ShaderEffectRenderCallback.EVENT.invoker().renderShaderEffects(tickDelta);
     }
 
-    @Inject(
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getFramebuffer()Lnet/minecraft/client/gl/Framebuffer;"),
-            method = "render"
-    )
-    private void fixMojankGl(float tickDelta, long nanoTime, boolean renderLevel, CallbackInfo info) {
-        RenderSystem.enableTexture();
-    }
-
     /**
      * Fires {@link PickEntityShaderCallback#EVENT}
      * Disabled by optifine
