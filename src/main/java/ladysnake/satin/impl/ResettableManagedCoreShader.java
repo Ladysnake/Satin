@@ -21,6 +21,7 @@ import com.google.common.base.Preconditions;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.uniform.SamplerUniform;
+import net.fabricmc.fabric.impl.client.rendering.FabricShader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.Shader;
@@ -54,7 +55,8 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
 
     @Override
     protected Shader parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException {
-        return new Shader(resourceManager, this.getLocation().toString(), this.vertexFormat);
+        // Easiest way of getting modded shader locations to work
+        return new FabricShader(resourceManager, this.getLocation(), this.vertexFormat);
     }
 
     @Override
