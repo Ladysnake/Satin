@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,8 +22,6 @@ import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.resource.ResourceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

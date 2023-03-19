@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,10 +30,10 @@ import java.util.List;
 import java.util.function.IntSupplier;
 
 /**
- * Mojank working in divergent branches for half a century, {@link net.minecraft.client.render.Shader}
- * is a copy of an old implementation of {@link net.minecraft.client.gl.JsonEffectGlShader}.
- * The latter has since been updated to have the {@link net.minecraft.client.gl.JsonEffectGlShader#bindSampler(String, IntSupplier)}
- * while the former still uses {@link net.minecraft.client.render.Shader#addSampler(String, Object)}.
+ * Mojank working in divergent branches for half a century, {@link net.minecraft.client.gl.ShaderProgram}
+ * is a copy of an old implementation of {@link net.minecraft.client.gl.JsonEffectShaderProgram}.
+ * The latter has since been updated to have the {@link net.minecraft.client.gl.JsonEffectShaderProgram#bindSampler(String, IntSupplier)}
+ * while the former still uses {@link net.minecraft.client.gl.ShaderProgram#addSampler(String, Object)}.
  *
  * <p>So we need to deal with both those extremely similar implementations
  */
