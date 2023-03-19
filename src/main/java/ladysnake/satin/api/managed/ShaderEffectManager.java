@@ -112,7 +112,7 @@ public interface ShaderEffectManager {
      * Manages a core {@link net.minecraft.client.gl.ShaderProgram} loaded from a json definition file
      *
      * <p>The shader location must be in {@code assets/shaders/core}.
-     * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
+     * E.g. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
      * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
      *
      * @param location the location of the json within your mod's assets

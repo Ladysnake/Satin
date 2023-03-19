@@ -45,7 +45,7 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     private final Set<ResettableManagedShaderBase<?>> managedShaders = new ReferenceOpenHashSet<>();
 
     /**
-     * Manages a post processing shader loaded from a json definition file
+     * Manages a post-processing shader loaded from a json definition file
      *
      * @param location the location of the json within your mod's assets
      * @return a lazily initialized shader effect
@@ -56,7 +56,7 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     }
 
     /**
-     * Manages a post processing shader loaded from a json definition file
+     * Manages a post-processing shader loaded from a json definition file
      *
      * @param location            the location of the json within your mod's assets
      * @param initCallback a block ran once the shader effect is initialized
