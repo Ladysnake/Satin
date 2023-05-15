@@ -17,7 +17,7 @@
  */
 package ladysnake.satindepthtest;
 
-import ladysnake.satin.api.event.PostWorldRenderCallback;
+import ladysnake.satin.api.event.PostWorldRenderCallbackV2;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
@@ -29,6 +29,7 @@ import ladysnake.satin.api.util.GlMatrices;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -38,7 +39,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
-public class DepthFx implements PostWorldRenderCallback, ShaderEffectRenderCallback, ClientTickEvents.EndTick {
+public class DepthFx implements PostWorldRenderCallbackV2, ShaderEffectRenderCallback, ClientTickEvents.EndTick {
     public static final Identifier FANCY_NIGHT_SHADER_ID = new Identifier(SatinDepthTest.MOD_ID, "shaders/post/rainbow_ping.json");
     public static final DepthFx INSTANCE = new DepthFx();
 
@@ -74,7 +75,7 @@ public class DepthFx implements PostWorldRenderCallback, ShaderEffectRenderCallb
     }
 
     @Override
-    public void onWorldRendered(Camera camera, float tickDelta, long nanoTime) {
+    public void onWorldRendered(MatrixStack matrices, Camera camera, float tickDelta, long nanoTime) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (isWorldNight(mc.player)) {
             uniformSTime.set((ticks + tickDelta) / 20f);

@@ -1,4 +1,10 @@
 ------------------------------------------------------
+Version 1.12.0
+------------------------------------------------------
+**Additions**
+- Satin's float uniforms now have a setter overload that accepts a JOML vector object as argument
+
+------------------------------------------------------
 Version 1.11.0
 ------------------------------------------------------
 Updated to MC 1.19.4

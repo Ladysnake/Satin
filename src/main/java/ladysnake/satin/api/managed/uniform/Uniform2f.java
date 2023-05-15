@@ -18,6 +18,7 @@
 package ladysnake.satin.api.managed.uniform;
 
 import org.apiguardian.api.API;
+import org.joml.Vector2f;
 
 import static org.apiguardian.api.API.Status.MAINTAINED;
 
@@ -32,4 +33,14 @@ public interface Uniform2f {
     @API(status = MAINTAINED, since = "1.4.0")
     void set(float value0, float value1);
 
+    /**
+     * Sets the value of a uniform declared in json
+     *
+     * <p>The vector's value is read once when this method is called.
+     * Further mutations to the vector will have no effect on this uniform's value.
+     *
+     * @param value the vector of new values
+     */
+    @API(status = MAINTAINED, since = "1.11.0")
+    void set(Vector2f value);
 }
