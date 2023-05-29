@@ -24,7 +24,6 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +35,9 @@ public final class SatinMixinPlugin implements IMixinConfigPlugin {
         FabricLoader loader = FabricLoader.getInstance();
         if (loader.isModLoaded("canvas")) {
             LOGGER.warn("[Satin] Canvas is present, custom block renders will not work");
+            ALLOW_RENDER_LAYER_MIXINS = false;
+        } else if (loader.isModLoaded("iris")) {
+            LOGGER.warn("[Satin] Iris is present, custom block renders will not work");
             ALLOW_RENDER_LAYER_MIXINS = false;
         } else {
             if (loader.isModLoaded("sodium")) {
@@ -70,11 +72,7 @@ public final class SatinMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public List<String> getMixins() {
-        List<String> compatMixins = new ArrayList<>();
-        if (FabricLoader.getInstance().isModLoaded("iris")) {
-            compatMixins.add("iris.IrisRenderLayerWrapperMixin");
-        }
-        return compatMixins;
+        return List.of();
     }
 
     @Override
