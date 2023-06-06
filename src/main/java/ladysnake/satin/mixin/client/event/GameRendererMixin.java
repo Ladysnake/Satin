@@ -19,9 +19,11 @@ package ladysnake.satin.mixin.client.event;
 
 import ladysnake.satin.api.event.PickEntityShaderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -66,5 +68,10 @@ public abstract class GameRendererMixin {
             //noinspection Convert2MethodRef
             PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, loc -> this.loadPostProcessor(loc), () -> this.postProcessor);
         }
+    }
+
+    @Inject(method = "loadPrograms", at = @At(value = "RETURN"))
+    private void loadSatinPrograms(ResourceFactory factory, CallbackInfo ci) {
+        ReloadableShaderEffectManager.INSTANCE.reload(factory);
     }
 }

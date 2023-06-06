@@ -29,7 +29,7 @@ import ladysnake.satin.api.managed.uniform.Uniform4i;
 import ladysnake.satin.api.managed.uniform.UniformFinder;
 import ladysnake.satin.api.managed.uniform.UniformMat4;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 
@@ -58,7 +58,7 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
     }
 
     @API(status = INTERNAL)
-    public void initializeOrLog(ResourceManager mgr) {
+    public void initializeOrLog(ResourceFactory mgr) {
         try {
             this.initialize(mgr);
         } catch (IOException e) {
@@ -69,14 +69,14 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
 
     protected abstract void logInitError(IOException e);
 
-    public void initialize(ResourceManager resourceManager) throws IOException {
+    protected void initialize(ResourceFactory resourceManager) throws IOException {
         this.release();
         MinecraftClient mc = MinecraftClient.getInstance();
         this.shader = parseShader(resourceManager, mc, this.location);
         this.setup(mc.getWindow().getFramebufferWidth(), mc.getWindow().getFramebufferHeight());
     }
 
-    protected abstract S parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException;
+    protected abstract S parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws IOException;
 
     public void release() {
         if (this.isInitialized()) {

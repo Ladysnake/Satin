@@ -23,10 +23,9 @@ import ladysnake.satin.api.event.ResolutionChangeCallback;
 import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 
 import java.util.Set;
@@ -38,7 +37,7 @@ import java.util.function.Consumer;
  * @see ShaderEffectManager
  * @see ResettableManagedShaderEffect
  */
-public final class ReloadableShaderEffectManager implements ShaderEffectManager, SimpleSynchronousResourceReloadListener, ResolutionChangeCallback {
+public final class ReloadableShaderEffectManager implements ShaderEffectManager, ResolutionChangeCallback {
     public static final ReloadableShaderEffectManager INSTANCE = new ReloadableShaderEffectManager();
     public static final Identifier SHADER_RESOURCE_KEY = new Identifier("dissolution:shaders");
 
@@ -107,15 +106,9 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
         managedShaders.remove(shader);
     }
 
-    @Override
-    public Identifier getFabricId() {
-        return SHADER_RESOURCE_KEY;
-    }
-
-    @Override
-    public void reload(ResourceManager mgr) {
+    public void reload(ResourceFactory shaderResources) {
         for (ResettableManagedShaderBase<?> ss : managedShaders) {
-            ss.initializeOrLog(mgr);
+            ss.initializeOrLog(shaderResources);
         }
     }
 

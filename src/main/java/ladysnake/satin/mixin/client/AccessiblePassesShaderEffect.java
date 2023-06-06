@@ -17,8 +17,6 @@
  */
 package ladysnake.satin.mixin.client;
 
-//import net.minecraft.client.gl.PostProcessShader;
-//import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.PostEffectProcessor;
 import org.spongepowered.asm.mixin.Mixin;
