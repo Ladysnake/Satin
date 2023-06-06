@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,6 @@
  */
 package ladysnake.satin.mixin.client;
 
-//import net.minecraft.client.gl.PostProcessShader;
-//import net.minecraft.client.gl.ShaderEffect;
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.PostEffectProcessor;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,6 +42,11 @@ public final class ManagedSamplerUniformV2 extends ManagedSamplerUniformBase imp
     @Override
     public void set(int textureName) {
         set(() -> textureName);
+    }
+
+    @Override
+    protected void set(Object value) {
+        this.set((IntSupplier) value);
     }
 
     @Override

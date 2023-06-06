@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -30,9 +30,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.JsonEffectShaderProgram;
 import net.minecraft.client.gl.PostEffectProcessor;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.AbstractTexture;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 import org.joml.Matrix4f;
@@ -90,8 +89,8 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    protected PostEffectProcessor parseShader(ResourceManager resourceManager, MinecraftClient mc, Identifier location) throws IOException {
-        return new PostEffectProcessor(mc.getTextureManager(), resourceManager, mc.getFramebuffer(), location);
+    protected PostEffectProcessor parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws IOException {
+        return new PostEffectProcessor(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), location);
     }
 
     @Override

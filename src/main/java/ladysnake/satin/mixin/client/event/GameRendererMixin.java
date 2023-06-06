@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,9 +20,11 @@ package ladysnake.satin.mixin.client.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.PickEntityShaderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,7 +42,8 @@ public abstract class GameRendererMixin {
 
 
 
-    @Shadow @Nullable private PostEffectProcessor postProcessor;
+    @Shadow @Nullable
+    PostEffectProcessor postProcessor;
 
     @Shadow abstract void loadPostProcessor(Identifier id);
 
@@ -74,5 +77,10 @@ public abstract class GameRendererMixin {
             //noinspection Convert2MethodRef
             PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, loc -> this.loadPostProcessor(loc), () -> this.postProcessor);
         }
+    }
+
+    @Inject(method = "loadPrograms", at = @At(value = "RETURN"))
+    private void loadSatinPrograms(ResourceFactory factory, CallbackInfo ci) {
+        ReloadableShaderEffectManager.INSTANCE.reload(factory);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -41,7 +41,8 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
         this.set((Object)textureName);
     }
 
-    private void set(Object value) {
+    @Override
+    protected void set(Object value) {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.cachedValue != value) {
             for (SamplerAccess target : targets) {

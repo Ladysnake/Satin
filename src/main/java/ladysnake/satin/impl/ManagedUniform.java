@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -39,7 +39,7 @@ public final class ManagedUniform extends ManagedUniformBase implements
         Uniform1f, Uniform2f, Uniform3f, Uniform4f,
         UniformMat4 {
 
-    protected GlUniform[] targets = new GlUniform[0];
+    private GlUniform[] targets = new GlUniform[0];
     private int i0, i1, i2, i3;
     private float f0, f1, f2, f3;
     private boolean firstUpload = true;

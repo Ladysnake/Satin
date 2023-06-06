@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,7 +40,6 @@ import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffer {
     @Shadow @Final public boolean useDepthAttachment;
 
-    @Shadow protected int depthAttachment;
     @Shadow public int textureWidth;
     @Shadow public int textureHeight;
 
