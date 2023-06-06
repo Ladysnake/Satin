@@ -45,6 +45,11 @@ public final class ManagedSamplerUniformV2 extends ManagedSamplerUniformBase imp
     }
 
     @Override
+    protected void set(Object value) {
+        this.set((IntSupplier) value);
+    }
+
+    @Override
     public void set(IntSupplier value) {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.cachedValue != value) {

@@ -60,6 +60,7 @@ public abstract class ManagedSamplerUniformBase extends ManagedUniformBase imple
         }
         this.targets = targets.toArray(new SamplerAccess[0]);
         this.locations = rawTargets.toArray(new int[0]);
+        this.syncCurrentValues();
         return this.targets.length > 0;
     }
 
@@ -76,10 +77,21 @@ public abstract class ManagedSamplerUniformBase extends ManagedUniformBase imple
         if (access.satin$hasSampler(this.name)) {
             this.targets = new SamplerAccess[] {access};
             this.locations = new int[] {getSamplerLoc(access)};
+            this.syncCurrentValues();
             return true;
         }
         return false;
     }
+
+    private void syncCurrentValues() {
+        Object value = this.cachedValue;
+        if (value != null) { // after the first upload
+            this.cachedValue = null;
+            this.set(value);
+        }
+    }
+
+    protected abstract void set(Object value);
 
     @Override
     public void setDirect(int activeTexture) {

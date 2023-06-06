@@ -1,4 +1,13 @@
 ------------------------------------------------------
+Version 1.12.1
+------------------------------------------------------
+**Changes**
+- Optimized shader loading (should now be faster)
+
+**Fixes**
+- Fixed managed sampler uniforms losing data upon resource reloading (Ported fix from v1.10.1 to MC 1.19.4)
+
+------------------------------------------------------
 Version 1.12.0
 ------------------------------------------------------
 **Additions**
@@ -11,6 +20,12 @@ Version 1.12.0
 Version 1.11.0
 ------------------------------------------------------
 Updated to MC 1.19.4
+
+------------------------------------------------------
+Version 1.10.1
+------------------------------------------------------
+**Fixes**
+- Fixed managed sampler uniforms losing data upon resource reloading
 
 ------------------------------------------------------
 Version 1.10.0

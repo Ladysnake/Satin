@@ -41,7 +41,8 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
         this.set((Object)textureName);
     }
 
-    private void set(Object value) {
+    @Override
+    protected void set(Object value) {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.cachedValue != value) {
             for (SamplerAccess target : targets) {
