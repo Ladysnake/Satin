@@ -61,7 +61,7 @@ public abstract class WorldRendererMixin {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    private void renderCustom(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci, Profiler profiler, boolean bl, Vec3d vec3d, double x, double y, double z) {
+    private void renderCustom(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f positionMatrix, CallbackInfo ci, Profiler profiler, Vec3d vec3d, double x, double y, double z) {
         // Render all the custom ones
         for(RenderLayer layer : BlockRenderLayerRegistry.INSTANCE.getLayers()) {
             renderLayer(layer, matrices, x, y, z, positionMatrix);
