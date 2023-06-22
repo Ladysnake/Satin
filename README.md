@@ -70,6 +70,8 @@ Simply having Satin installed alters the game in a few ways, mainly related to S
 copy paste. Satin redirects a call to upload the right buffer.
 - **Shader locations**: Satin patches shader processors to accept a resource domain in the specification
 of a program name and of a fragment/vertex shader file.
+- **Custom Target Formats**: Satin allows shader targets to specify different formats to `RGBA8`. 
+Supported formats are `RGBA8`, `RGBA16`, `RGBA16F`, and `RGBA32F`.
 - ~~**Readable depth**~~: Satin offered access to a Framebuffer's depth texture before it was cool (superseded in 1.16).
 
 Satin **does not** set the shader in `GameRenderer`, except if a mod registers a `PickEntityShaderCallback`.
