@@ -2,7 +2,7 @@ package ladysnake.satin.mixin.client.gl;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ladysnake.satin.impl.CustomFramebuffers;
+import ladysnake.satin.impl.CustomFormatFramebuffer;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.util.JsonHelper;
@@ -32,7 +32,7 @@ public class PostEffectProcessorMixin {
     private void satin$parseCustomTargetFormat(JsonElement jsonTarget, CallbackInfo ci, JsonObject jsonObject, String name, int width, int height) {
         String format = JsonHelper.getString(jsonObject, "format", null);
         if (format != null) {
-            this.satin$addTarget(name, CustomFramebuffers.createFramebuffer(width, height, format));
+            this.satin$addTarget(name, CustomFormatFramebuffer.createFramebuffer(width, height, format));
         }
     }
 
@@ -42,7 +42,8 @@ public class PostEffectProcessorMixin {
      * @param name          the name of the framebuffer to add
      * @param framebuffer   the framebuffer to add
      */
-    @Unique private void satin$addTarget(String name, Framebuffer framebuffer) {
+    @Unique
+    private void satin$addTarget(String name, Framebuffer framebuffer) {
         this.targetsByName.put(name, framebuffer);
         if (framebuffer.textureWidth == this.width && framebuffer.textureHeight == this.height) {
             this.defaultSizedTargets.add(framebuffer);
