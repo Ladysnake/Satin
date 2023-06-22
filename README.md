@@ -1,7 +1,7 @@
 ## **The Ladysnake maven is moving!**
 
 **As Jfrog is ending their free service for OSS projects, we have to move the maven repository before the 1st of July 2023.
-We will be updating this page as soon as the new maven is operational - you will then have to update your buildscripts with the new URL.**
+See below for the new maven instructions - you will have to update your buildscripts with the new URL before the cutoff date to avoid dependency resolution failures.**
 
 
 # Satin
@@ -22,10 +22,10 @@ You can add the library by inserting the following in your `build.gradle` (Requi
 repositories {
         maven {
         name = 'Ladysnake Mods'
-        url = 'https://ladysnake.jfrog.io/artifactory/mods'
+        url = 'https://maven.ladysnake.org/releases'
         content {
             includeGroup 'io.github.ladysnake'
-            includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+            includeGroupByRegex 'dev\\.onyxstudios.*'
         }
     }
 }
