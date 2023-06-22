@@ -14,6 +14,7 @@
     "gl.DepthGlFramebufferMixin",
     "gl.GlUniformMixin",
     "gl.JsonEffectGlShaderMixin",
+    "gl.PostEffectProcessorMixin",
     "render.RenderLayerAccessor",
     "render.RenderLayerMixin",
     "render.RenderLayerMixin$MultiPhaseParametersAccessor",
@@ -24,6 +25,5 @@
     "defaultRequire": 1
   },
   "client": [
-    "gl.PostEffectProcessorMixin"
   ]
 }
