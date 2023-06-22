@@ -22,5 +22,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "gl.PostEffectProcessorMixin"
+  ]
 }
