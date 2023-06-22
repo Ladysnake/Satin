@@ -17,7 +17,8 @@
     "client": [
       "ladysnake.satinrenderlayer.SatinRenderLayerTest::onInitializeClient",
       "ladysnake.satindepthtest.SatinDepthTest",
-      "ladysnake.satinbasictest.SatinBasicTest"
+      "ladysnake.satinbasictest.SatinBasicTest",
+      "ladysnake.satincustomformattest.SatinCustomFormatTest"
     ]
   },
   "depends": {
