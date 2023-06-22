@@ -33,6 +33,7 @@ public class PostEffectProcessorMixin {
         String format = JsonHelper.getString(jsonObject, "format", null);
         if (format != null) {
             this.satin$addTarget(name, CustomFormatFramebuffer.createFramebuffer(width, height, format));
+            ci.cancel();
         }
     }
 
