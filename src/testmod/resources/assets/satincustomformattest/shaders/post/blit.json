@@ -1,0 +1,47 @@
+{
+  "targets": [
+    {
+      "name": "swap",
+      "format": "RGBA8"
+    },
+    {
+      "name": "swap16",
+      "format": "RGBA16"
+    },
+    {
+      "name": "swap16f",
+      "format": "RGBA16F"
+    },
+    {
+      "name": "swap32f",
+      "format": "RGBA32F"
+    }
+  ],
+  "passes": [
+    {
+      "name": "blit",
+      "intarget": "minecraft:main",
+      "outtarget": "swap"
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "swap16"
+    },
+    {
+      "name": "blit",
+      "intarget": "swap16",
+      "outtarget": "swap16f"
+    },
+    {
+      "name": "blit",
+      "intarget": "swap16f",
+      "outtarget": "swap32f"
+    },
+    {
+      "name": "blit",
+      "intarget": "swap32f",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}
