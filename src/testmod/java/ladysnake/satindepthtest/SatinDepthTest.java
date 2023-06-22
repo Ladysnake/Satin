@@ -30,7 +30,7 @@ public class SatinDepthTest implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(DepthFx.INSTANCE);
         ShaderEffectRenderCallback.EVENT.register(DepthFx.INSTANCE);
         PostWorldRenderCallbackV2.EVENT.register(DepthFx.INSTANCE);
-        SatinTestItems.DEBUG_ITEM.registerDebugCallback((world, player, hand) -> {
+        SatinTestItems.DEBUG_ITEM.registerDebugCallback(MOD_ID, (world, player, hand) -> {
             if (world.isClient) {
                 DepthFx.INSTANCE.testShader.release();
             }

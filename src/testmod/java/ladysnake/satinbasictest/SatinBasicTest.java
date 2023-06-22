@@ -40,7 +40,7 @@ public final class SatinBasicTest implements ClientModInitializer {
                 testShader.render(tickDelta);
             }
         });
-        SatinTestItems.DEBUG_ITEM.registerDebugCallback((world, player, hand) -> {
+        SatinTestItems.DEBUG_ITEM.registerDebugCallback(MOD_ID, (world, player, hand) -> {
             if (world.isClient) {
                 renderingBlit = !renderingBlit;
                 color.set((float) Math.random(), (float) Math.random(), (float) Math.random(), 1.0f);
