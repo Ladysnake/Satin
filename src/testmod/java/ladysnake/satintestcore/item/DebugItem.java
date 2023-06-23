@@ -17,7 +17,6 @@
  */
 package ladysnake.satintestcore.item;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,37 +27,29 @@ import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DebugItem extends Item {
     private int debugMode;
-    private final List<DebugCallback> callbacks = new ArrayList<>();
-    private Map<DebugCallback, String> callbackNames = new HashMap<>();
+    private final List<DebugMode> debugModes = new ArrayList<>();
 
     public DebugItem(Settings settings) {
         super(settings);
     }
 
-    public void registerDebugCallback(DebugCallback callback) {
-        this.callbacks.add(callback);
-    }
-
-    public void registerDebugCallback(String name, DebugCallback callback) {
-        this.callbacks.add(callback);
-        this.callbackNames.put(callback, name);
+    public void registerDebugMode(String name, DebugCallback callback) {
+        this.debugModes.add(new DebugMode(name, callback));
     }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
         if (player.isSneaking() && !world.isClient) {
-            if (this.callbacks.size() > 1) {
-                debugMode = (debugMode + 1) % this.callbacks.size();
-                player.sendMessage(Text.translatable("Switched mode to %s", this.callbackNames.getOrDefault(this.callbacks.get(debugMode), ""+debugMode)), true);
+            if (this.debugModes.size() > 1) {
+                debugMode = (debugMode + 1) % this.debugModes.size();
+                player.sendMessage(Text.translatable("Switched mode to %s", this.debugModes.get(debugMode).name()), true);
             }
         } else if (!player.isSneaking()) {
-            this.callbacks.get(debugMode).use(world, player, hand);
+            this.debugModes.get(debugMode).callback().use(world, player, hand);
         }
         return new TypedActionResult<>(ActionResult.SUCCESS, player.getStackInHand(hand));
     }

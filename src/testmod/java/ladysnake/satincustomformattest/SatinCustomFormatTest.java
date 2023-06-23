@@ -42,7 +42,7 @@ public final class SatinCustomFormatTest implements ClientModInitializer {
                 testShader.render(tickDelta);
             }
         });
-        SatinTestItems.DEBUG_ITEM.registerDebugCallback(MOD_ID, (world, player, hand) -> {
+        SatinTestItems.DEBUG_ITEM.registerDebugMode(MOD_ID, (world, player, hand) -> {
             if (world.isClient) {
                 renderingBlit = !renderingBlit;
                 color.set((float) Math.random() * 0.5f + 0.75f, (float) Math.random() * 0.5f + 0.75f, (float) Math.random() * 0.5f + 0.75f, 1.0f);
