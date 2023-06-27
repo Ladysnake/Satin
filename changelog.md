@@ -1,4 +1,18 @@
 ------------------------------------------------------
+Version 1.13.1
+------------------------------------------------------
+Updated to MC 1.20.1
+
+**Additions**
+- Added the `satin:format` framebuffer extension
+
+**Changes**
+- Moved publication to the ladysnake maven (`maven.ladysnake.org/releases` instead of `ladysnake.jfrog.io/mods`)
+- Changed the maven group to `org.ladysnake`
+
+Refer to the readme for updated buildscript instructions.
+
+------------------------------------------------------
 Version 1.13.0
 ------------------------------------------------------
 Updated to MC 1.20

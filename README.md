@@ -48,18 +48,6 @@ You can find the current version of Satin in the [releases](https://github.com/L
 
 *If you wish your mod to be 100% standalone, you also need to include the `fabric-api-base` and `fabric-resource-loader-v0` modules from Fabric API in your mod jar.*
 
-## Updating from 1.16 to 1.17
-
-1. Update your Satin dependency
-2. If you only use post process shaders, you are mostly done.
-   You should already be able to play, but it's preferable you also update your shaders to Core Profile (go to step 4).
-3. If you use custom shaders for your entities, follow these steps:
-    1. Move the relevant shader files from `assets/shaders/program` to `assets/shaders/core`
-    2. Replace references to `ManagedShaderProgram` with references to `ManagedCoreShader`
-    3. Replace calls to `ShaderEffectManager#manageProgram` with calls to `ShaderEffectManager#manageCoreShader`
-4. Update your shaders to Core Profile: https://docs.substance3d.com/sddoc/switching-your-shaders-to-opengl-core-profile-172819178.html
-    - You can refer to vanilla shaders for examples
-
 ## Using Satin
 
 ### Changes to Vanilla
@@ -70,8 +58,9 @@ Simply having Satin installed alters the game in a few ways, mainly related to S
 copy paste. Satin redirects a call to upload the right buffer.
 - **Shader locations**: Satin patches shader processors to accept a resource domain in the specification
 of a program name and of a fragment/vertex shader file.
-- **Custom Target Formats**: Satin allows shader targets to specify different formats to `RGBA8`. 
-Supported formats are `RGBA8`, `RGBA16`, `RGBA16F`, and `RGBA32F`.
+- **Custom Target Formats**: Satin adds a `satin:format` property to [post-process shader JSONs](https://github.com/Ladysnake/Satin/wiki/Post-Process-Shader-format)
+  to allow shader targets to specify different formats to `RGBA8`.
+  Supported formats are `RGBA8`, `RGBA16`, `RGBA16F`, and `RGBA32F`.
 - ~~**Readable depth**~~: Satin offered access to a Framebuffer's depth texture before it was cool (superseded in 1.16).
 
 Satin **does not** set the shader in `GameRenderer`, except if a mod registers a `PickEntityShaderCallback`.
@@ -115,6 +104,7 @@ public class GreyscaleMinecraft implements ClientModInitializer {
 For examples of json shader definitions, look for the `assets/minecraft/shaders` folder in the minecraft source (description of those shaders can be found on the [Minecraft Wiki](https://minecraft.gamepedia.com/Shaders)). There is also a real application of this library in [Requiem](https://github.com/Ladysnake/Requiem/blob/d95c4f5c55/src/main/java/ladysnake/requiem/client/RequiemFx.java).
 
 ### RenderLayer Utilities
+
 The `ManagedFramebuffer` and `ManagedShaderProgram` classes have methods to obtain clones of existing `RenderLayer` objects,
 with a custom `Target`. This target causes draw calls to happen on the `ManagedFramebuffer` for the former, or using the
 shader program for the latter. This can be notably used to render custom effects on entities and block entities.
@@ -145,4 +135,5 @@ and the moment it starts rendering HUD's and GUI's
 *Note that those events may move to a more dedicated library at some point.*
 
 ## Full documentation
+
 This [repository's wiki](https://github.com/Ladysnake/Satin/wiki) provides documentation to write and use shaders with Satin API.
