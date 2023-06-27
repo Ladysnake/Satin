@@ -20,6 +20,7 @@ package ladysnake.satin.mixin.client.gl;
 import com.mojang.blaze3d.platform.GlConst;
 import ladysnake.satin.impl.CustomFormatFramebuffers;
 import net.minecraft.client.gl.Framebuffer;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,9 +40,9 @@ public abstract class CustomFormatFramebufferMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void satin$setFormat(boolean useDepth, CallbackInfo ci) {
-        Integer format = CustomFormatFramebuffers.getCustomFormat();
+        @Nullable CustomFormatFramebuffers.TextureFormat format = CustomFormatFramebuffers.getCustomFormat();
         if (format != null) {
-            this.satin$format = format;
+            this.satin$format = format.value;
             CustomFormatFramebuffers.clearCustomFormat();
         }
     }
