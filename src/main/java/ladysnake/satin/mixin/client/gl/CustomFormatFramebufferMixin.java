@@ -39,10 +39,10 @@ public abstract class CustomFormatFramebufferMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void satin$setFormat(boolean useDepth, CallbackInfo ci) {
-        Integer format = CustomFormatFramebuffers.FORMAT.get();
+        Integer format = CustomFormatFramebuffers.getCustomFormat();
         if (format != null) {
             this.satin$format = format;
-            CustomFormatFramebuffers.FORMAT.remove();
+            CustomFormatFramebuffers.clearCustomFormat();
         }
     }
 

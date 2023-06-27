@@ -17,9 +17,7 @@
  */
 package ladysnake.satin.impl;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Framebuffer;
-import net.minecraft.client.gl.SimpleFramebuffer;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -31,7 +29,7 @@ public class CustomFormatFramebuffers {
     public static final String FORMAT_KEY = "satin:format";
 
     /**
-     * Creates a framebuffer with the given width, height, and pixel format.
+     * Prepares a framebuffer creation for the given pixel format.
      * <p>Valid formats are:</p>
      * <ul>
      *     <li>RGBA8</li>
@@ -39,24 +37,27 @@ public class CustomFormatFramebuffers {
      *     <li>RGBA16F</li>
      *     <li>RGBA32F</li>
      * </ul>
-     * @param width         the framebuffer width
-     * @param height        the framebuffer height
      * @param formatString  the pixel format, as specified by {@link #decodeFormatString(String)}
-     * @return              the framebuffer
      */
-    public static Framebuffer createFramebuffer(int width, int height, String formatString) {
-        int format = decodeFormatString(formatString);
-        FORMAT.set(format);
+    public static void prepareCustomFormat(String formatString) {
         // FORMAT's value is then consumed in gl.FramebufferMixin
-        return new SimpleFramebuffer(width, height, true, MinecraftClient.IS_SYSTEM_MAC);
+        FORMAT.set(decodeFormatString(formatString));
+    }
+
+    public static @Nullable Integer getCustomFormat() {
+        return FORMAT.get();
+    }
+
+    public static void clearCustomFormat() {
+        FORMAT.remove();
     }
 
     /**
      * Decodes a pixel format specified by name into its corresponding OpenGL enum.
-     * <strong>This only supports the formats needed for {@link #createFramebuffer(int, int, String)}.</strong>
+     * <strong>This only supports the formats needed for {@link #prepareCustomFormat(String)}.</strong>
      * @param formatString  the format name
      * @return              the format enum value
-     * @see #createFramebuffer(int, int, String)
+     * @see #prepareCustomFormat(String)
      */
     private static int decodeFormatString(String formatString) {
         return switch (formatString) {
