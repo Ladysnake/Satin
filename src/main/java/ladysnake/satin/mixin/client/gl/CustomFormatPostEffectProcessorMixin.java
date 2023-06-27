@@ -47,7 +47,7 @@ public class CustomFormatPostEffectProcessorMixin {
 
     @Inject(method = "parseTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/PostEffectProcessor;addTarget(Ljava/lang/String;II)V", ordinal = 1), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private void satin$parseCustomTargetFormat(JsonElement jsonTarget, CallbackInfo ci, JsonObject jsonObject, String name, int width, int height) {
-        String format = JsonHelper.getString(jsonObject, "format", null);
+        String format = JsonHelper.getString(jsonObject, CustomFormatFramebuffers.FORMAT_KEY, null);
         if (format != null) {
             this.satin$addTarget(name, CustomFormatFramebuffers.createFramebuffer(width, height, format));
             ci.cancel();

@@ -2,19 +2,19 @@
   "targets": [
     {
       "name": "swap",
-      "format": "RGBA8"
+      "satin:format": "RGBA8"
     },
     {
       "name": "swap16",
-      "format": "RGBA16"
+      "satin:format": "RGBA16"
     },
     {
       "name": "swap16f",
-      "format": "RGBA16F"
+      "satin:format": "RGBA16F"
     },
     {
       "name": "swap32f",
-      "format": "RGBA32F"
+      "satin:format": "RGBA32F"
     }
   ],
   "passes": [

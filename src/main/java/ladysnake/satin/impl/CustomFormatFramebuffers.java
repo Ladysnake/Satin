@@ -28,6 +28,7 @@ import org.lwjgl.opengl.GL30;
  */
 public class CustomFormatFramebuffers {
     public static final ThreadLocal<Integer> FORMAT = new ThreadLocal<>();
+    public static final String FORMAT_KEY = "satin:format";
 
     /**
      * Creates a framebuffer with the given width, height, and pixel format.
