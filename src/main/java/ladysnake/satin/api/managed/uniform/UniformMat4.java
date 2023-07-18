@@ -32,4 +32,5 @@ public interface UniformMat4 {
     @API(status = MAINTAINED, since = "1.4.0")
     void set(Matrix4f value);
 
+    void set(float[] values);
 }

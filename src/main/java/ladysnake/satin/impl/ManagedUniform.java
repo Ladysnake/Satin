@@ -257,4 +257,15 @@ public final class ManagedUniform extends ManagedUniformBase implements
             }
         }
     }
+
+    @Override
+    public void set(float[] values) {
+        GlUniform[] targets = this.targets;
+        int nbTargets = targets.length;
+        if (nbTargets > 0) {
+            for (GlUniform target : targets) {
+                target.set(values);
+            }
+        }
+    }
 }
