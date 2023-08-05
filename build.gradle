@@ -1,6 +1,6 @@
 plugins {
     id 'fabric-loom' version "1.0.+"
-    id 'io.github.ladysnake.chenille' version '0.10.2'
+    id 'io.github.ladysnake.chenille' version '0.11.3'
     id 'io.github.juuxel.loom-quiltflower' version "1.8.0"
 }
 
@@ -11,7 +11,7 @@ version = project.mod_version
 chenille {
     configurePublishing {
         mainArtifact = remapJar.archiveFile
-        withArtifactory()
+        withLadysnakeMaven()
         withCurseforgeRelease()
         withModrinthRelease()
         withGithubRelease()
@@ -85,6 +85,27 @@ java {
     // if it is present.
     // If you remove this line, sources will not be generated.
     withSourcesJar()
+}
+
+
+
+publishing {
+    publications {
+        create("relocation", MavenPublication) {
+            pom {
+                // Old artifact coordinates
+                groupId = "io.github.ladysnake"
+
+                distributionManagement {
+                    relocation {
+                        // New artifact coordinates
+                        groupId = "org.ladysnake"
+                        message = "groupId has been changed"
+                    }
+                }
+            }
+        }
+    }
 }
 
 jar {
