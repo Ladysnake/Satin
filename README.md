@@ -18,7 +18,7 @@ You can add the library by inserting the following in your `build.gradle` (Requi
 
 **Note 1: since MC 1.17 builds, the Satin dependency must be lowercase.**  
 **Note 2: since MC 1.20.1 builds (1.14.0), the maven group changed from `io.github.ladysnake` to `org.ladysnake`.**  
-**Note 3: since June 2023, the maven url changed from `ladysnake.jfrog.io/mods` to `maven.ladysnake.org/releases`.**  
+**Note 3: since June 2023, the maven url changed from `ladysnake.jfrog.io/artifactory/mods` to `maven.ladysnake.org/releases`.**  
 
 ```gradle
 repositories {
