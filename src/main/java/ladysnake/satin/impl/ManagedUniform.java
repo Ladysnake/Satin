@@ -258,8 +258,11 @@ public final class ManagedUniform extends ManagedUniformBase implements
         }
     }
 
-    @Override
-    public void set(float[] values) {
+    public void setFromArray(float[] values, int count) {
+        if (count != values.length) {
+            throw new IllegalArgumentException("Mismatched values size, expected " + count + " but got " + values.length);
+        }
+
         GlUniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
