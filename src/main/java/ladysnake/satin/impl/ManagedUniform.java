@@ -34,15 +34,17 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public final class ManagedUniform extends ManagedUniformBase implements
         Uniform1i, Uniform2i, Uniform3i, Uniform4i,
         Uniform1f, Uniform2f, Uniform3f, Uniform4f,
         UniformMat4 {
 
-    private GlUniform[] targets = new GlUniform[0];
+    private static final GlUniform[] NO_TARGETS = new GlUniform[0];
+
+    private GlUniform[] targets = NO_TARGETS;
     private int i0, i1, i2, i3;
     private float f0, f1, f2, f3;
     private boolean firstUpload = true;
@@ -53,13 +55,23 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public boolean findUniformTargets(List<PostEffectPass> shaders) {
-        this.targets = shaders.stream()
-                .map(PostEffectPass::getProgram)
-                .map(s -> s.getUniformByName(this.name))
-                .filter(Objects::nonNull)
-                .toArray(GlUniform[]::new);
-        this.syncCurrentValues();
-        return this.targets.length > 0;
+        List<GlUniform> list = new ArrayList<>();
+        for (PostEffectPass shader : shaders) {
+            GlUniform uniform = shader.getProgram().getUniformByName(this.name);
+
+            if (uniform != null) {
+                list.add(uniform);
+            }
+        }
+
+        if (list.size() > 0) {
+            this.targets = list.toArray(new GlUniform[0]);
+            this.syncCurrentValues();
+            return true;
+        } else {
+            this.targets = NO_TARGETS;
+            return false;
+        }
     }
 
     @Override
@@ -69,8 +81,10 @@ public final class ManagedUniform extends ManagedUniformBase implements
             this.targets = new GlUniform[] {uniform};
             this.syncCurrentValues();
             return true;
+        } else {
+            this.targets = NO_TARGETS;
+            return false;
         }
-        return false;
     }
 
     private void syncCurrentValues() {
