@@ -44,13 +44,16 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     private static final GlUniform[] NO_TARGETS = new GlUniform[0];
 
+    private final int count;
+
     private GlUniform[] targets = NO_TARGETS;
     private int i0, i1, i2, i3;
     private float f0, f1, f2, f3;
     private boolean firstUpload = true;
 
-    public ManagedUniform(String name) {
+    public ManagedUniform(String name, int count) {
         super(name);
+        this.count = count;
     }
 
     @Override
@@ -60,6 +63,9 @@ public final class ManagedUniform extends ManagedUniformBase implements
             GlUniform uniform = shader.getProgram().getUniformByName(this.name);
 
             if (uniform != null) {
+                if (uniform.getCount() != this.count) {
+                    throw new IllegalStateException("Mismatched number of values, expected " + this.count + " but JSON definition declares " + uniform.getCount());
+                }
                 list.add(uniform);
             }
         }
@@ -258,8 +264,9 @@ public final class ManagedUniform extends ManagedUniformBase implements
         }
     }
 
-    public void setFromArray(float[] values, int count) {
-        if (count != values.length) {
+    @Override
+    public void setFromArray(float[] values) {
+        if (this.count != values.length) {
             throw new IllegalArgumentException("Mismatched values size, expected " + count + " but got " + values.length);
         }
 
