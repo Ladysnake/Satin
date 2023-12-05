@@ -34,7 +34,7 @@
     "fabric-api-base": "*",
     "fabric-resource-loader-v0": "*",
     "fabric-rendering-v1": ">=2.1.0",
-    "minecraft": ">=1.19.3",
+    "minecraft": ">=1.20.3",
     "java": ">=16"
   },
   "conflicts": {
