@@ -1,7 +1,7 @@
 ------------------------------------------------------
 Version 1.15.0
 ------------------------------------------------------
-Updated to MC 1.20.3 (thanks FriedrichPaul!)
+Updated to MC 1.20.3 (thanks DietrichPaul!)
 
 **Changes**
 - Slightly optimized shader uniform loading
