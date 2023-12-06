@@ -30,11 +30,10 @@
   ],
   "accessWidener": "satin.accesswidener",
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": "*",
     "fabric-api-base": "*",
     "fabric-resource-loader-v0": "*",
-    "minecraft": ">=1.18-",
-    "java": ">=16"
+    "minecraft": ">=1.19.2"
   },
   "conflicts": {
     "optifabric": "*"
