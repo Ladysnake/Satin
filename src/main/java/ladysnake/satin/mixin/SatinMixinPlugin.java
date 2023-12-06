@@ -72,7 +72,8 @@ public final class SatinMixinPlugin implements IMixinConfigPlugin {
     public List<String> getMixins() {
         List<String> compatMixins = new ArrayList<>();
         if (FabricLoader.getInstance().isModLoaded("iris")) {
-            compatMixins.add("iris.IrisRenderLayerWrapperMixin");
+            compatMixins.add("iris.InnerWrappedRenderTypeMixin");
+            compatMixins.add("iris.OuterWrappedRenderTypeMixin");
         }
         return compatMixins;
     }

@@ -18,9 +18,9 @@
 package ladysnake.satin.mixin.client.iris;
 
 import ladysnake.satin.impl.RenderLayerDuplicator;
-import net.coderbot.iris.layer.IrisRenderTypeWrapper;
-import net.coderbot.iris.layer.UseProgramRenderStateShard;
+import net.coderbot.iris.layer.OuterWrappedRenderType;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -30,15 +30,15 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.function.Consumer;
 
 @SuppressWarnings({"UnusedMixin", "unused"})    // added through mixin plugin
-@Mixin(IrisRenderTypeWrapper.class)
-public abstract class IrisRenderLayerWrapperMixin implements RenderLayerDuplicator.SatinRenderLayer {
+@Mixin(OuterWrappedRenderType.class)
+public abstract class OuterWrappedRenderTypeMixin implements RenderLayerDuplicator.SatinRenderLayer {
     @Shadow public abstract RenderLayer unwrap();
 
-    @Shadow @Final private UseProgramRenderStateShard useProgram;
+    @Shadow @Final private RenderPhase extra;
 
     @Override
     public RenderLayer satin$copy(String newName, @Nullable VertexFormat vertexFormat, Consumer<RenderLayer.MultiPhaseParameters.Builder> op) {
-        return new IrisRenderTypeWrapper(newName, RenderLayerDuplicator.copy(this.unwrap(), newName + "_wrapped", vertexFormat, op), this.useProgram);
+        return new OuterWrappedRenderType(newName, RenderLayerDuplicator.copy(this.unwrap(), newName + "_wrapped", vertexFormat, op), this.extra);
     }
 
     @Override
