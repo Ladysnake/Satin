@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,9 +21,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import ladysnake.satin.api.event.EntitiesPreRenderCallback;
 import ladysnake.satin.api.event.ShaderEffectRenderCallback;
+import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.ManagedFramebuffer;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
-import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.ShaderEffectManager;
 import ladysnake.satin.api.managed.uniform.Uniform1f;
 import ladysnake.satin.api.util.RenderLayerHelper;

@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2022 Ladysnake
+ * Copyright (C) 2019-2023 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,8 +17,8 @@
  */
 package ladysnake.satintestcore.item;
 
-import ladysnake.satintestcore.block.SatinTestBlocks;
 import ladysnake.satintestcore.SatinTestCore;
+import ladysnake.satintestcore.block.SatinTestBlocks;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
