@@ -32,4 +32,15 @@ public interface UniformMat4 {
     @API(status = MAINTAINED, since = "1.4.0")
     void set(Matrix4f value);
 
+    /**
+     * Sets the value of a 4x4 matrix uniform through a float array
+     *
+     * <p> The {@code values} array must have a length of 16, and contain the matrix elements in column-major order.
+     *
+     * @param values an array representing a 4x4 matrix
+     * @throws IllegalArgumentException if {@code values} has an invalid length
+     * @apiNote {@link #set(Matrix4f)} should generally be preferred due to its inherent type safety
+     */
+    @API(status = MAINTAINED, since = "1.15.0")
+    void setFromArray(float[] values);
 }

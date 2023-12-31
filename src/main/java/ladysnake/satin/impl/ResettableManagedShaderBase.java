@@ -128,47 +128,47 @@ public abstract class ResettableManagedShaderBase<S extends AutoCloseable> imple
 
     @Override
     public Uniform1i findUniform1i(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 1), uniformName, "uniform");
     }
 
     @Override
     public Uniform2i findUniform2i(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 2), uniformName, "uniform");
     }
 
     @Override
     public Uniform3i findUniform3i(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 3), uniformName, "uniform");
     }
 
     @Override
     public Uniform4i findUniform4i(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 4), uniformName, "uniform");
     }
 
     @Override
     public Uniform1f findUniform1f(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 1), uniformName, "uniform");
     }
 
     @Override
     public Uniform2f findUniform2f(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 2), uniformName, "uniform");
     }
 
     @Override
     public Uniform3f findUniform3f(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 3), uniformName, "uniform");
     }
 
     @Override
     public Uniform4f findUniform4f(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 4), uniformName, "uniform");
     }
 
     @Override
     public UniformMat4 findUniformMat4(String uniformName) {
-        return manageUniform(this.managedUniforms, ManagedUniform::new, uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 16), uniformName, "uniform");
     }
 
     @API(status = INTERNAL)
