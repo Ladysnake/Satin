@@ -2,7 +2,7 @@
 Version 1.9.1
 ------------------------------------------------------
 **Fixes**
-- Fixed incompatibility with newer Fabric API for 1.19.2
+- Fixed incompatibility with newer Fabric API for 1.19.2 (thanks unilock for the backport !)
 
 ------------------------------------------------------
 Version 1.9.0
