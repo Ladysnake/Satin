@@ -1,4 +1,12 @@
 ------------------------------------------------------
+Version 1.16.0
+------------------------------------------------------
+Updated to MC 1.20.4 proper (thanks DietrichPaul!)
+
+**Additions**
+- Added a new `UniformMat4#setFromArray` method for those cases where going through a matrix is too impractical
+
+------------------------------------------------------
 Version 1.15.0
 ------------------------------------------------------
 Updated to MC 1.20.3 (thanks DietrichPaul!)
