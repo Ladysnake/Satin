@@ -1,7 +1,6 @@
-import java.time.Year
-
 plugins {
-    id 'io.github.ladysnake.chenille' version '0.8.0'
+    id 'fabric-loom' version '1.4-SNAPSHOT'
+    id 'io.github.ladysnake.chenille' version '0.11.3'
     id 'io.github.juuxel.loom-quiltflower' version "1.6.0"
 }
 
@@ -12,7 +11,7 @@ version = project.mod_version
 chenille {
     configurePublishing {
         mainArtifact = remapJar.archivePath
-        withArtifactory()
+        withLadysnakeMaven()
         withCurseforgeRelease()
         withModrinthRelease()
         withGithubRelease()
