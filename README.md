@@ -104,7 +104,7 @@ public class GreyscaleMinecraft implements ClientModInitializer {
 }
 ```
 
-For examples of json shader definitions, look for the `assets/minecraft/shaders` folder in the minecraft source (description of those shaders can be found on the [Minecraft Wiki](https://minecraft.gamepedia.com/Shaders)). There is also a real application of this library in [Requiem](https://github.com/Ladysnake/Requiem/blob/d95c4f5c55/src/main/java/ladysnake/requiem/client/RequiemFx.java).
+For examples of json shader definitions, look for the `assets/minecraft/shaders` folder in the minecraft source (description of those shaders can be found on the [Minecraft Wiki](https://minecraft.wiki/w/Shaders)). There is also a real application of this library in [Requiem](https://github.com/Ladysnake/Requiem/blob/d95c4f5c55/src/main/java/ladysnake/requiem/client/RequiemFx.java).
 
 ### RenderLayer Utilities
 
