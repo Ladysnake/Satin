@@ -1,4 +1,15 @@
 ------------------------------------------------------
+Version 1.17.0
+------------------------------------------------------
+Updated to MC 1.20.5
+
+**Additions**
+- Added `PostWorldRenderCallbackV3`, with the projection and model-view matrices passed in
+
+**Changes**
+- The `nanoTime` parameter in `PostWorldRenderCallback` and `PostWorldRenderCallbackV2` has been deprecated, and is subject to removal in a future version
+
+------------------------------------------------------
 Version 1.16.0
 ------------------------------------------------------
 Updated to MC 1.20.4 proper (thanks DietrichPaul!)
