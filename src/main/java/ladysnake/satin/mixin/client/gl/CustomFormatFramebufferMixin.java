@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2023 Ladysnake
+ * Copyright (C) 2019-2024 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,7 +50,7 @@ public abstract class CustomFormatFramebufferMixin {
     @ModifyArg(
             method = "initFbo",
             slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;setTexFilter(I)V"),
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/Framebuffer;setTexFilter(IZ)V"),
                     to = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_glBindFramebuffer(II)V")
             ),
             at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/GlStateManager;_texImage2D(IIIIIIIILjava/nio/IntBuffer;)V"),

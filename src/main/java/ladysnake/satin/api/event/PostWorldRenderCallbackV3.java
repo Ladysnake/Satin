@@ -19,32 +19,28 @@ package ladysnake.satin.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.option.GraphicsMode;
 import net.minecraft.client.render.Camera;
+import net.minecraft.client.util.math.MatrixStack;
+import org.joml.Matrix4f;
 
-/**
- * @see PostWorldRenderCallbackV2
- * @see PostWorldRenderCallbackV3
- */
 @FunctionalInterface
-public interface PostWorldRenderCallback {
+public interface PostWorldRenderCallbackV3 {
     /**
      * Fired after Minecraft has rendered everything in the world, before it renders hands, HUDs and GUIs.
-     *
-     * <p>{@link net.minecraft.client.gl.PostEffectProcessor}s <strong>must not</strong> be rendered in this callback, as they will prevent
-     * {@link GraphicsMode#FABULOUS fabulous graphics} and other effects from working properly.
      */
-    Event<PostWorldRenderCallback> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallback.class,
-            (listeners) -> (camera, tickDelta, nanoTime) -> {
-                for (PostWorldRenderCallback handler : listeners) {
-                    handler.onWorldRendered(camera, tickDelta, nanoTime);
+    Event<PostWorldRenderCallbackV3> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallbackV3.class,
+            (listeners) -> (matrices, projectionMat, modelViewMath, camera, tickDelta) -> {
+                for (PostWorldRenderCallbackV3 handler : listeners) {
+                    handler.onWorldRendered(matrices, projectionMat, modelViewMath, camera, tickDelta);
                 }
             });
 
     /**
+     * @param posingStack a blank {@link MatrixStack} that can be used for rendering custom elements
+     * @param projectionMat the base projection matrix for world rendering
+     * @param modelViewMat the model-view matrix corresponding to the camera's perspective
      * @param camera the camera from which perspective the world is being rendered
      * @param tickDelta fraction of time between two consecutive ticks (before 0 and 1)
-     * @param nanoTime the nanosecond at which world rendering started
      */
-    void onWorldRendered(Camera camera, float tickDelta, @Deprecated(forRemoval = true) long nanoTime);
+    void onWorldRendered(MatrixStack posingStack, Matrix4f projectionMat, Matrix4f modelViewMat, Camera camera, float tickDelta);
 }

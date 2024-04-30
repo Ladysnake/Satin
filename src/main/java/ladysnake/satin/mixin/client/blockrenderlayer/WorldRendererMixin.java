@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2023 Ladysnake
+ * Copyright (C) 2019-2024 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,9 +23,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.profiler.Profiler;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,14 +34,15 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
-    @Shadow protected abstract void renderLayer(RenderLayer layer, MatrixStack matrix, double x, double y, double z, Matrix4f frustumMatrix);
+
+    @Shadow protected abstract void renderLayer(RenderLayer renderLayer, double x, double y, double z, Matrix4f matrix4f, Matrix4f positionMatrix);
 
     //TODO
     @Inject(
         method = "render",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/WorldRenderer;renderLayer(Lnet/minecraft/client/render/RenderLayer;Lnet/minecraft/client/util/math/MatrixStack;DDDLorg/joml/Matrix4f;)V",
+            target = "Lnet/minecraft/client/render/WorldRenderer;renderLayer(Lnet/minecraft/client/render/RenderLayer;DDDLorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V",
             ordinal = 2,
             shift = At.Shift.AFTER
         ),
@@ -61,10 +59,10 @@ public abstract class WorldRendererMixin {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    private void renderCustom(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+    private void renderCustom(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
         // Render all the custom ones
         for(RenderLayer layer : BlockRenderLayerRegistry.INSTANCE.getLayers()) {
-            renderLayer(layer, matrices, camera.getPos().x, camera.getPos().y, camera.getPos().z, projectionMatrix);
+            renderLayer(layer, camera.getPos().x, camera.getPos().y, camera.getPos().z, matrix4f, matrix4f2);
         }
     }
 

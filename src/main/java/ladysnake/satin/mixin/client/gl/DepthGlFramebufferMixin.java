@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2023 Ladysnake
+ * Copyright (C) 2019-2024 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,6 +27,7 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -57,6 +58,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
         }
     }
 
+    @Unique
     private int satin$setupDepthTexture() {
         int shadowMap = GL11.glGenTextures();
         RenderSystem.bindTexture(shadowMap);

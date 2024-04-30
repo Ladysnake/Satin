@@ -1,6 +1,6 @@
 /*
  * Satin
- * Copyright (C) 2019-2023 Ladysnake
+ * Copyright (C) 2019-2024 Ladysnake
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,9 +17,11 @@
  */
 package ladysnake.satin.mixin.client.event;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import ladysnake.satin.api.event.EntitiesPostRenderCallback;
 import ladysnake.satin.api.event.EntitiesPreRenderCallback;
 import ladysnake.satin.api.event.PostWorldRenderCallbackV2;
+import ladysnake.satin.api.event.PostWorldRenderCallbackV3;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
@@ -59,7 +61,7 @@ public abstract class WorldRendererMixin {
             method = "render",
             at = @At(value = "CONSTANT", args = "stringValue=entities", ordinal = 0)
     )
-    private void firePreRenderEntities(MatrixStack matrix, float tickDelta, long time, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, Matrix4f matrix4f, CallbackInfo ci) {
+    private void firePreRenderEntities(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
         EntitiesPreRenderCallback.EVENT.invoker().beforeEntitiesRender(camera, frustum, tickDelta);
     }
 
@@ -67,7 +69,7 @@ public abstract class WorldRendererMixin {
             method = "render",
             at = @At(value = "CONSTANT", args = "stringValue=blockentities", ordinal = 0)
     )
-    private void firePostRenderEntities(MatrixStack matrix, float tickDelta, long time, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, Matrix4f matrix4f, CallbackInfo ci) {
+    private void firePostRenderEntities(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
         EntitiesPostRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickDelta);
     }
 
@@ -79,8 +81,9 @@ public abstract class WorldRendererMixin {
                     @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V", ordinal = 1, shift = At.Shift.AFTER)
             }
     )
-    private void hookPostWorldRender(MatrixStack matrices, float tickDelta, long nanoTime, boolean renderBlockOutline, Camera camera, GameRenderer renderer, LightmapTextureManager lmTexManager, Matrix4f matrix4f, CallbackInfo ci) {
+    private void hookPostWorldRender(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci, @Local MatrixStack matrices) {
         ((ReadableDepthFramebuffer) MinecraftClient.getInstance().getFramebuffer()).freezeDepthMap();
-        PostWorldRenderCallbackV2.EVENT.invoker().onWorldRendered(matrices, camera, tickDelta, nanoTime);
+        PostWorldRenderCallbackV2.EVENT.invoker().onWorldRendered(matrices, camera, tickDelta, limitTime);
+        PostWorldRenderCallbackV3.EVENT.invoker().onWorldRendered(matrices, matrix4f, matrix4f2, camera, tickDelta);
     }
 }
