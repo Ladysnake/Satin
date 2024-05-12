@@ -20,11 +20,15 @@ package ladysnake.satin.impl;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.event.ResolutionChangeCallback;
+import ladysnake.satin.api.event.WorldRendererReloadCallback;
 import ladysnake.satin.api.managed.ManagedCoreShader;
 import ladysnake.satin.api.managed.ManagedShaderEffect;
 import ladysnake.satin.api.managed.ShaderEffectManager;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.util.Window;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 
@@ -37,7 +41,7 @@ import java.util.function.Consumer;
  * @see ShaderEffectManager
  * @see ResettableManagedShaderEffect
  */
-public final class ReloadableShaderEffectManager implements ShaderEffectManager, ResolutionChangeCallback {
+public final class ReloadableShaderEffectManager implements ShaderEffectManager, ResolutionChangeCallback, WorldRendererReloadCallback {
     public static final ReloadableShaderEffectManager INSTANCE = new ReloadableShaderEffectManager();
     public static final Identifier SHADER_RESOURCE_KEY = new Identifier("dissolution:shaders");
 
@@ -114,6 +118,16 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
 
     @Override
     public void onResolutionChanged(int newWidth, int newHeight) {
+        runShaderSetup(newWidth, newHeight);
+    }
+
+    @Override
+    public void onRendererReload(WorldRenderer renderer) {
+        Window window = MinecraftClient.getInstance().getWindow();
+        runShaderSetup(window.getFramebufferWidth(), window.getFramebufferHeight());
+    }
+
+    private void runShaderSetup(int newWidth, int newHeight) {
         if (!Satin.areShadersDisabled() && !managedShaders.isEmpty()) {
             for (ResettableManagedShaderBase<?> ss : managedShaders) {
                 if (ss.isInitialized()) {

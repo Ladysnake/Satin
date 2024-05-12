@@ -1,4 +1,14 @@
 ------------------------------------------------------
+Version 1.18.0
+------------------------------------------------------
+**Additions**
+- Added `WorldRendererReloadCallback`, an event that gets triggered when e.g. video settings are updated or the player joins a world
+
+**Changes**
+- Shaders' init callbacks now also run during the above event
+  - This fixes resource leaks caused by setting a sampler uniform to a vanilla Framebuffer in those callbacks
+
+------------------------------------------------------
 Version 1.17.0
 ------------------------------------------------------
 Updated to MC 1.20.5

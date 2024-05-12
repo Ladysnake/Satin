@@ -18,6 +18,7 @@
 package ladysnake.satin;
 
 import ladysnake.satin.api.event.ResolutionChangeCallback;
+import ladysnake.satin.api.event.WorldRendererReloadCallback;
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -44,9 +45,9 @@ public class Satin implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ResolutionChangeCallback.EVENT.register(ReloadableShaderEffectManager.INSTANCE);
+        WorldRendererReloadCallback.EVENT.register(ReloadableShaderEffectManager.INSTANCE);
         if (FabricLoader.getInstance().isModLoaded("optifabric")) {
             LOGGER.warn("[Satin] Optifine present in the instance, custom entity post process shaders will not work");
         }
     }
-
 }

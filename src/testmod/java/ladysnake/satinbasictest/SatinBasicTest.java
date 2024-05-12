@@ -24,13 +24,18 @@ import ladysnake.satin.api.managed.uniform.Uniform4f;
 import ladysnake.satintestcore.item.SatinTestItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.minecraft.util.Identifier;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public final class SatinBasicTest implements ClientModInitializer {
     public static final String MOD_ID = "satinbasictest";
+    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     private boolean renderingBlit = false;
     // literally the same as minecraft's blit, we are just checking that custom paths work
-    private final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(new Identifier(MOD_ID, "shaders/post/blit.json"));
+    private final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(new Identifier(MOD_ID, "shaders/post/blit.json"), (effect) -> {
+        LOGGER.info("Test shader got updated");
+    });
     private final Uniform4f color = testShader.findUniform4f("ColorModulate");
 
     @Override

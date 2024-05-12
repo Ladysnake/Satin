@@ -11,11 +11,11 @@
     "event.MinecraftClientMixin",
     "event.WorldRendererMixin",
     "gl.CoreShaderMixin",
-    "gl.DepthGlFramebufferMixin",
     "gl.CustomFormatFramebufferMixin",
+    "gl.CustomFormatPostEffectProcessorMixin",
+    "gl.DepthGlFramebufferMixin",
     "gl.GlUniformMixin",
     "gl.JsonEffectGlShaderMixin",
-    "gl.CustomFormatPostEffectProcessorMixin",
     "render.RenderLayerAccessor",
     "render.RenderLayerMixin",
     "render.RenderLayerMixin$MultiPhaseParametersAccessor",
@@ -26,5 +26,6 @@
     "defaultRequire": 1
   },
   "client": [
+    "render.WorldRendererMixin"
   ]
 }
