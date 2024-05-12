@@ -1,9 +1,3 @@
-## **The Ladysnake maven is moving!**
-
-**As Jfrog is ending their free service for OSS projects, we have to move the maven repository before the 1st of July 2023.
-See below for the new maven instructions - you will have to update your buildscripts with the new URL before the cutoff date to avoid dependency resolution failures.**
-
-
 # Satin
 
 [![](https://jitpack.io/v/Ladysnake/Satin.svg)](https://jitpack.io/#Ladysnake/Satin)
