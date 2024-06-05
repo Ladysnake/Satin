@@ -38,7 +38,8 @@
     "java": ">=16"
   },
   "conflicts": {
-    "optifabric": "*"
+    "optifabric": "*",
+    "vivecraft": "*"
   },
   "custom": {
     "badges": [ "library" ]

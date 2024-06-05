@@ -7,6 +7,7 @@ Version 1.18.0
 **Changes**
 - Shaders' init callbacks now also run during the above event
   - This fixes resource leaks caused by setting a sampler uniform to a vanilla Framebuffer in those callbacks
+- Added a warning in the logs for bad framerate when installed together with the Vivecraft mod
 
 ------------------------------------------------------
 Version 1.17.0

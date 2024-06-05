@@ -49,5 +49,8 @@ public class Satin implements ClientModInitializer {
         if (FabricLoader.getInstance().isModLoaded("optifabric")) {
             LOGGER.warn("[Satin] Optifine present in the instance, custom entity post process shaders will not work");
         }
+        if (FabricLoader.getInstance().isModLoaded("vivecraft")) {
+            LOGGER.warn("[Satin] Vivecraft present in the instance, you may experience degraded performance - try turning eye stencil off in VR settings");
+        }
     }
 }
