@@ -12,13 +12,13 @@
   "environment": "client",
   "entrypoints": {
     "main": [
-      "ladysnake.satintestcore.SatinTestCore"
+      "org.ladysnake.satintestcore.SatinTestCore"
     ],
     "client": [
-      "ladysnake.satinrenderlayer.SatinRenderLayerTest::onInitializeClient",
-      "ladysnake.satindepthtest.SatinDepthTest",
-      "ladysnake.satinbasictest.SatinBasicTest",
-      "ladysnake.satincustomformattest.SatinCustomFormatTest"
+      "org.ladysnake.satinrenderlayer.SatinRenderLayerTest::onInitializeClient",
+      "org.ladysnake.satindepthtest.SatinDepthTest",
+      "org.ladysnake.satinbasictest.SatinBasicTest",
+      "org.ladysnake.satincustomformattest.SatinCustomFormatTest"
     ]
   },
   "depends": {

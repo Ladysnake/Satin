@@ -1,10 +1,16 @@
 ------------------------------------------------------
-Version 1.19.0
+Version 2.0.0
 ------------------------------------------------------
 Updated to MC 1.21
 
 **Changes**
-- The previously deprecated `nanoTime` parameter in `PostWorldRenderCallback` and `PostWorldRenderCallbackV2` has been removed
+- The root package has been changed from `ladysnake.satin` to `org.ladysnake.satin`
+  - global search-replace of `ladysnake.satin` -> `org.ladysnake.satin` should do the trick for the migration in your projects
+
+**Removals**
+- Removed the `nanoTime` parameter in `PostWorldRenderCallback` and `PostWorldRenderCallbackV2` (deprecated since 1.17.0)
+- Removed the `ShaderEffectManager#manageProgram` methods (deprecated since 1.6.0)
+- Removed deprecated `GlMatrices` methods (deprecated since 1.1.0)
 
 ------------------------------------------------------
 Version 1.18.0

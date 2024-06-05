@@ -19,7 +19,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "ladysnake.satin.Satin"
+      "org.ladysnake.satin.Satin"
     ]
   },
   "mixins": [
