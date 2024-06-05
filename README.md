@@ -81,7 +81,7 @@ Here is the whole java code for a mod that applies a basic shader to the game:
 ```java
 public class GreyscaleMinecraft implements ClientModInitializer {
     private static final ManagedShaderEffect GREYSCALE_SHADER = ShaderEffectManager.getInstance()
-    		.manage(new Identifier("shaderexample", "shaders/post/greyscale.json"));
+    		.manage(Identifier.of("shaderexample", "shaders/post/greyscale.json"));
     private static boolean enabled = true;  // can be disabled whenever you want
     
     @Override

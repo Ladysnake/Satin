@@ -31,7 +31,7 @@ public final class SatinCustomFormatTest implements ClientModInitializer {
     private boolean renderingBlit = false;
     // this shader has the same overall effect as Minecraft's blit,
     // but blits the texture around between various framebuffer formats
-    private final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(new Identifier(MOD_ID, "shaders/post/blit.json"));
+    private final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(Identifier.of(MOD_ID, "shaders/post/blit.json"));
     // note that this is applied ~4x, so may be more intense than expected.
     private final Uniform4f color = testShader.findUniform4f("ColorModulate");
 

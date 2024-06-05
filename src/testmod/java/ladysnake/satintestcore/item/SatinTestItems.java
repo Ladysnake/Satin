@@ -30,7 +30,7 @@ public class SatinTestItems {
     public static final BlockItem DEBUG_BLOCK = new BlockItem(SatinTestBlocks.DEBUG_BLOCK, new Item.Settings());
 
     public static void init() {
-        Registry.register(Registries.ITEM, new Identifier(SatinTestCore.MOD_ID, "debug_item"), DEBUG_ITEM);
+        Registry.register(Registries.ITEM, Identifier.of(SatinTestCore.MOD_ID, "debug_item"), DEBUG_ITEM);
         Registry.register(Registries.ITEM, Registries.BLOCK.getId(SatinTestBlocks.DEBUG_BLOCK), DEBUG_BLOCK);
     }
 }

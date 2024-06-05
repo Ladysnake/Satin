@@ -22,6 +22,7 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.WorldRenderer;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
@@ -59,7 +60,7 @@ public abstract class WorldRendererMixin {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    private void renderCustom(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+    private void renderCustom(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
         // Render all the custom ones
         for(RenderLayer layer : BlockRenderLayerRegistry.INSTANCE.getLayers()) {
             renderLayer(layer, camera.getPos().x, camera.getPos().y, camera.getPos().z, matrix4f, matrix4f2);

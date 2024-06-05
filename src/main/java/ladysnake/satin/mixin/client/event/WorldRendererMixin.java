@@ -20,7 +20,6 @@ package ladysnake.satin.mixin.client.event;
 import com.llamalad7.mixinextras.sugar.Local;
 import ladysnake.satin.api.event.EntitiesPostRenderCallback;
 import ladysnake.satin.api.event.EntitiesPreRenderCallback;
-import ladysnake.satin.api.event.PostWorldRenderCallbackV2;
 import ladysnake.satin.api.event.PostWorldRenderCallbackV3;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import net.minecraft.client.MinecraftClient;
@@ -28,6 +27,7 @@ import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
@@ -61,16 +61,16 @@ public abstract class WorldRendererMixin {
             method = "render",
             at = @At(value = "CONSTANT", args = "stringValue=entities", ordinal = 0)
     )
-    private void firePreRenderEntities(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
-        EntitiesPreRenderCallback.EVENT.invoker().beforeEntitiesRender(camera, frustum, tickDelta);
+    private void firePreRenderEntities(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+        EntitiesPreRenderCallback.EVENT.invoker().beforeEntitiesRender(camera, frustum, tickCounter.getTickDelta(false));
     }
 
     @Inject(
             method = "render",
             at = @At(value = "CONSTANT", args = "stringValue=blockentities", ordinal = 0)
     )
-    private void firePostRenderEntities(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
-        EntitiesPostRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickDelta);
+    private void firePostRenderEntities(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
+        EntitiesPostRenderCallback.EVENT.invoker().onEntitiesRendered(camera, frustum, tickCounter.getTickDelta(false));
     }
 
     @Inject(
@@ -81,9 +81,8 @@ public abstract class WorldRendererMixin {
                     @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V", ordinal = 1, shift = At.Shift.AFTER)
             }
     )
-    private void hookPostWorldRender(float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci, @Local MatrixStack matrices) {
+    private void hookPostWorldRender(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci, @Local MatrixStack matrices) {
         ((ReadableDepthFramebuffer) MinecraftClient.getInstance().getFramebuffer()).freezeDepthMap();
-        PostWorldRenderCallbackV2.EVENT.invoker().onWorldRendered(matrices, camera, tickDelta, limitTime);
-        PostWorldRenderCallbackV3.EVENT.invoker().onWorldRendered(matrices, matrix4f, matrix4f2, camera, tickDelta);
+        PostWorldRenderCallbackV3.EVENT.invoker().onWorldRendered(matrices, matrix4f, matrix4f2, camera, tickCounter.getTickDelta(true));
     }
 }

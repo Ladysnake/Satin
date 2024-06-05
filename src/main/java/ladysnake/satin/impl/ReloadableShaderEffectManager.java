@@ -43,7 +43,7 @@ import java.util.function.Consumer;
  */
 public final class ReloadableShaderEffectManager implements ShaderEffectManager, ResolutionChangeCallback, WorldRendererReloadCallback {
     public static final ReloadableShaderEffectManager INSTANCE = new ReloadableShaderEffectManager();
-    public static final Identifier SHADER_RESOURCE_KEY = new Identifier("dissolution:shaders");
+    public static final Identifier SHADER_RESOURCE_KEY = Identifier.of("dissolution:shaders");
 
     private final Set<ResettableManagedShaderBase<?>> managedShaders = new ReferenceOpenHashSet<>();
 

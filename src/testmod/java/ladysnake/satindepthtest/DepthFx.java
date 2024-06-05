@@ -40,7 +40,7 @@ import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 public class DepthFx implements PostWorldRenderCallbackV2, ShaderEffectRenderCallback, ClientTickEvents.EndTick {
-    public static final Identifier FANCY_NIGHT_SHADER_ID = new Identifier(SatinDepthTest.MOD_ID, "shaders/post/rainbow_ping.json");
+    public static final Identifier FANCY_NIGHT_SHADER_ID = Identifier.of(SatinDepthTest.MOD_ID, "shaders/post/rainbow_ping.json");
     public static final DepthFx INSTANCE = new DepthFx();
 
     private final MinecraftClient mc = MinecraftClient.getInstance();
@@ -75,7 +75,7 @@ public class DepthFx implements PostWorldRenderCallbackV2, ShaderEffectRenderCal
     }
 
     @Override
-    public void onWorldRendered(MatrixStack matrices, Camera camera, float tickDelta, long nanoTime) {
+    public void onWorldRendered(MatrixStack matrices, Camera camera, float tickDelta) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (isWorldNight(mc.player)) {
             uniformSTime.set((ticks + tickDelta) / 20f);

@@ -65,8 +65,8 @@ public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
      */
     @WrapOperation(
             at = @At(
-                    value = "NEW",
-                    target = "net/minecraft/util/Identifier",
+                    value = "INVOKE",
+                    target = "net/minecraft/util/Identifier.ofVanilla (Ljava/lang/String;)Lnet/minecraft/util/Identifier;",
                     ordinal = 0
             ),
             method = "<init>"
@@ -75,14 +75,14 @@ public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
         if (!id.contains(":")) {
             return original.call(arg);
         }
-        Identifier split = new Identifier(id);
-        return new Identifier(split.getNamespace(), "shaders/program/" + split.getPath() + ".json");
+        Identifier split = Identifier.of(id);
+        return Identifier.of(split.getNamespace(), "shaders/program/" + split.getPath() + ".json");
     }
 
     @WrapOperation(
             at = @At(
-                    value = "NEW",
-                    target = "net/minecraft/util/Identifier",
+                    value = "INVOKE",
+                    target = "net/minecraft/util/Identifier.ofVanilla (Ljava/lang/String;)Lnet/minecraft/util/Identifier;",
                     ordinal = 0
             ),
             method = "loadEffect"
@@ -91,7 +91,7 @@ public abstract class JsonEffectGlShaderMixin implements SamplerAccess {
         if (!arg.contains(":")) {
             return original.call(arg);
         }
-        Identifier split = new Identifier(id);
-        return new Identifier(split.getNamespace(), "shaders/program/" + split.getPath() + shaderType.getFileExtension());
+        Identifier split = Identifier.of(id);
+        return Identifier.of(split.getNamespace(), "shaders/program/" + split.getPath() + shaderType.getFileExtension());
     }
 }

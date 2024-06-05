@@ -22,6 +22,7 @@ import ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import ladysnake.satin.impl.ReloadableShaderEffectManager;
 import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.Entity;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
@@ -38,13 +39,11 @@ import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-
-
-
     @Shadow @Nullable
     PostEffectProcessor postProcessor;
 
-    @Shadow abstract void loadPostProcessor(Identifier id);
+    @Shadow
+    protected abstract void loadPostProcessor(Identifier id);
 
     /**
      * Fires {@link ShaderEffectRenderCallback#EVENT}
@@ -53,8 +52,8 @@ public abstract class GameRendererMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/WorldRenderer;drawEntityOutlinesFramebuffer()V", shift = AFTER),
             method = "render"
     )
-    private void hookShaderRender(float tickDelta, long nanoTime, boolean renderLevel, CallbackInfo info) {
-        ShaderEffectRenderCallback.EVENT.invoker().renderShaderEffects(tickDelta);
+    private void hookShaderRender(RenderTickCounter tickCounter, boolean tick, CallbackInfo ci) {
+        ShaderEffectRenderCallback.EVENT.invoker().renderShaderEffects(tickCounter.getTickDelta(tick));
     }
 
     /**

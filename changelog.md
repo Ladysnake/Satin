@@ -1,4 +1,12 @@
 ------------------------------------------------------
+Version 1.19.0
+------------------------------------------------------
+Updated to MC 1.21
+
+**Changes**
+- The previously deprecated `nanoTime` parameter in `PostWorldRenderCallback` and `PostWorldRenderCallbackV2` has been removed
+
+------------------------------------------------------
 Version 1.18.0
 ------------------------------------------------------
 **Additions**

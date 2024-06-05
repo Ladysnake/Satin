@@ -28,6 +28,6 @@ public class SatinTestBlocks {
     public static final Block DEBUG_BLOCK = new Block(Block.Settings.copy(Blocks.AMETHYST_BLOCK));
     
     public static void init() {
-        Registry.register(Registries.BLOCK, new Identifier(SatinTestCore.MOD_ID, "debug_block"), DEBUG_BLOCK);
+        Registry.register(Registries.BLOCK, Identifier.of(SatinTestCore.MOD_ID, "debug_block"), DEBUG_BLOCK);
     }
 }

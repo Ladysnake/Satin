@@ -30,6 +30,7 @@ public interface PostWorldRenderCallbackV3 {
      */
     Event<PostWorldRenderCallbackV3> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallbackV3.class,
             (listeners) -> (matrices, projectionMat, modelViewMath, camera, tickDelta) -> {
+                PostWorldRenderCallbackV2.EVENT.invoker().onWorldRendered(matrices, camera, tickDelta);
                 for (PostWorldRenderCallbackV3 handler : listeners) {
                     handler.onWorldRendered(matrices, projectionMat, modelViewMath, camera, tickDelta);
                 }

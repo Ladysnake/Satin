@@ -35,16 +35,15 @@ public interface PostWorldRenderCallback {
      * {@link GraphicsMode#FABULOUS fabulous graphics} and other effects from working properly.
      */
     Event<PostWorldRenderCallback> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallback.class,
-            (listeners) -> (camera, tickDelta, nanoTime) -> {
+            (listeners) -> (camera, tickDelta) -> {
                 for (PostWorldRenderCallback handler : listeners) {
-                    handler.onWorldRendered(camera, tickDelta, nanoTime);
+                    handler.onWorldRendered(camera, tickDelta);
                 }
             });
 
     /**
-     * @param camera the camera from which perspective the world is being rendered
+     * @param camera    the camera from which perspective the world is being rendered
      * @param tickDelta fraction of time between two consecutive ticks (before 0 and 1)
-     * @param nanoTime the nanosecond at which world rendering started
      */
-    void onWorldRendered(Camera camera, float tickDelta, @Deprecated(forRemoval = true) long nanoTime);
+    void onWorldRendered(Camera camera, float tickDelta);
 }

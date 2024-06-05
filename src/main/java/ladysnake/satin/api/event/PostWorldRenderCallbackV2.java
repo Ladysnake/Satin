@@ -32,18 +32,17 @@ public interface PostWorldRenderCallbackV2 {
      * {@link GraphicsMode#FABULOUS fabulous graphics} and other effects from working properly.
      */
     Event<PostWorldRenderCallbackV2> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallbackV2.class,
-            (listeners) -> (posingStack, camera, tickDelta, nanoTime) -> {
-                PostWorldRenderCallback.EVENT.invoker().onWorldRendered(camera, tickDelta, nanoTime);
+            (listeners) -> (posingStack, camera, tickDelta) -> {
+                PostWorldRenderCallback.EVENT.invoker().onWorldRendered(camera, tickDelta);
                 for (PostWorldRenderCallbackV2 handler : listeners) {
-                    handler.onWorldRendered(posingStack, camera, tickDelta, nanoTime);
+                    handler.onWorldRendered(posingStack, camera, tickDelta);
                 }
             });
 
     /**
      * @param posingStack a blank {@link MatrixStack} that can be used for rendering custom elements
-     * @param camera the camera from which perspective the world is being rendered
-     * @param tickDelta fraction of time between two consecutive ticks (before 0 and 1)
-     * @param nanoTime the nanosecond at which world rendering started
+     * @param camera      the camera from which perspective the world is being rendered
+     * @param tickDelta   fraction of time between two consecutive ticks (before 0 and 1)
      */
-    void onWorldRendered(MatrixStack posingStack, Camera camera, float tickDelta, @Deprecated(forRemoval = true) long nanoTime);
+    void onWorldRendered(MatrixStack posingStack, Camera camera, float tickDelta);
 }

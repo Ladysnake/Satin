@@ -86,7 +86,7 @@ public interface ShaderEffectManager {
      *
      * <p>The shader location must be in {@code assets/shaders/core}.
      * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
-     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
+     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(Identifier.of("mymod", "myshader")}</pre>
      *
      * @param location the location of the json within your mod's assets
      * @return a core render shader that will be reloaded as needed
@@ -99,7 +99,7 @@ public interface ShaderEffectManager {
      *
      * <p>The shader location must be in {@code assets/shaders/core}.
      * Eg. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
-     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
+     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(Identifier.of("mymod", "myshader")}</pre>
      *
      * @param location the location of the json within your mod's assets
      * @param vertexFormat the format expected by your shader
@@ -113,7 +113,7 @@ public interface ShaderEffectManager {
      *
      * <p>The shader location must be in {@code assets/shaders/core}.
      * E.g. to get a shader located at {@code mymod/assets/shaders/core/myshader.json}:
-     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(new Identifier("mymod", "myshader")}</pre>
+     * <pre>{@code ShaderEffectManager.getInstance().manageCoreShader(Identifier.of("mymod", "myshader")}</pre>
      *
      * @param location the location of the json within your mod's assets
      * @param vertexFormat the format expected by your shader

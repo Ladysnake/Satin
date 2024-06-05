@@ -33,7 +33,7 @@ public final class SatinBasicTest implements ClientModInitializer {
 
     private boolean renderingBlit = false;
     // literally the same as minecraft's blit, we are just checking that custom paths work
-    private final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(new Identifier(MOD_ID, "shaders/post/blit.json"), (effect) -> {
+    private final ManagedShaderEffect testShader = ShaderEffectManager.getInstance().manage(Identifier.of(MOD_ID, "shaders/post/blit.json"), (effect) -> {
         LOGGER.info("Test shader got updated");
     });
     private final Uniform4f color = testShader.findUniform4f("ColorModulate");
