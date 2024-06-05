@@ -1,31 +1,31 @@
 {
   "required": true,
-  "compatibilityLevel": "JAVA_16",
-  "package": "ladysnake.satin.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "package": "org.ladysnake.satin.mixin.client",
   "plugin": "org.ladysnake.satin.mixin.SatinMixinPlugin",
   "mixins": [
-    "org.ladysnake.satin.mixin.client.AccessiblePassesShaderEffect",
-    "org.ladysnake.satin.mixin.client.blockrenderlayer.RenderLayerMixin",
-    "org.ladysnake.satin.mixin.client.blockrenderlayer.WorldRendererMixin",
-    "org.ladysnake.satin.mixin.client.event.GameRendererMixin",
-    "org.ladysnake.satin.mixin.client.event.MinecraftClientMixin",
-    "org.ladysnake.satin.mixin.client.event.WorldRendererMixin",
-    "org.ladysnake.satin.mixin.client.gl.CoreShaderMixin",
-    "org.ladysnake.satin.mixin.client.gl.CustomFormatFramebufferMixin",
-    "org.ladysnake.satin.mixin.client.gl.CustomFormatPostEffectProcessorMixin",
-    "org.ladysnake.satin.mixin.client.gl.DepthGlFramebufferMixin",
-    "org.ladysnake.satin.mixin.client.gl.GlUniformMixin",
-    "org.ladysnake.satin.mixin.client.gl.JsonEffectGlShaderMixin",
-    "org.ladysnake.satin.mixin.client.render.RenderLayerAccessor",
-    "org.ladysnake.satin.mixin.client.render.RenderLayerMixin",
-    "org.ladysnake.satin.mixin.client.render.RenderLayerMultiPhaseMixin",
-    "org.ladysnake.satin.mixin.client.render.RenderPhaseAccessor",
-    "render.RenderLayerMixin$MultiPhaseParametersAccessor"
+    "AccessiblePassesShaderEffect",
+    "blockrenderlayer.RenderLayerMixin",
+    "blockrenderlayer.WorldRendererMixin",
+    "event.GameRendererMixin",
+    "event.MinecraftClientMixin",
+    "event.WorldRendererMixin",
+    "gl.CoreShaderMixin",
+    "gl.CustomFormatFramebufferMixin",
+    "gl.CustomFormatPostEffectProcessorMixin",
+    "gl.DepthGlFramebufferMixin",
+    "gl.GlUniformMixin",
+    "gl.JsonEffectGlShaderMixin",
+    "render.RenderLayerAccessor",
+    "render.RenderLayerMixin",
+    "render.RenderLayerMixin$MultiPhaseParametersAccessor",
+    "render.RenderLayerMultiPhaseMixin",
+    "render.RenderPhaseAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
-    "org.ladysnake.satin.mixin.client.render.WorldRendererMixin"
+    "render.WorldRendererMixin"
   ]
 }
