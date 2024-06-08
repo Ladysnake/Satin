@@ -22,11 +22,7 @@ import ladysnake.satin.api.event.EntitiesPreRenderCallback;
 import ladysnake.satin.api.event.PostWorldRenderCallbackV2;
 import ladysnake.satin.api.experimental.ReadableDepthFramebuffer;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Frustum;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
 import org.objectweb.asm.Opcodes;
@@ -70,7 +66,7 @@ public abstract class WorldRendererMixin {
 
     @Inject(
             method = "render",
-            slice = @Slice(from = @At(value = "FIELD:LAST", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/render/WorldRenderer;transparencyShader:Lnet/minecraft/client/gl/ShaderEffect;")),
+            slice = @Slice(from = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/render/WorldRenderer;transparencyShader:Lnet/minecraft/client/gl/ShaderEffect;")),
             at = {
                     @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/ShaderEffect;render(F)V"),
                     @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;depthMask(Z)V", ordinal = 1, shift = At.Shift.AFTER)

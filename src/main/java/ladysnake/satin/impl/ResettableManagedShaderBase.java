@@ -18,16 +18,7 @@
 package ladysnake.satin.impl;
 
 import ladysnake.satin.Satin;
-import ladysnake.satin.api.managed.uniform.Uniform1f;
-import ladysnake.satin.api.managed.uniform.Uniform1i;
-import ladysnake.satin.api.managed.uniform.Uniform2f;
-import ladysnake.satin.api.managed.uniform.Uniform2i;
-import ladysnake.satin.api.managed.uniform.Uniform3f;
-import ladysnake.satin.api.managed.uniform.Uniform3i;
-import ladysnake.satin.api.managed.uniform.Uniform4f;
-import ladysnake.satin.api.managed.uniform.Uniform4i;
-import ladysnake.satin.api.managed.uniform.UniformFinder;
-import ladysnake.satin.api.managed.uniform.UniformMat4;
+import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -35,11 +26,7 @@ import org.apiguardian.api.API;
 
 import javax.annotation.CheckForNull;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;

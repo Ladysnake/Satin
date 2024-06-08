@@ -17,18 +17,7 @@
  */
 package ladysnake.satin.api.managed;
 
-import ladysnake.satin.api.managed.uniform.SamplerUniform;
-import ladysnake.satin.api.managed.uniform.SamplerUniformV2;
-import ladysnake.satin.api.managed.uniform.Uniform1f;
-import ladysnake.satin.api.managed.uniform.Uniform1i;
-import ladysnake.satin.api.managed.uniform.Uniform2f;
-import ladysnake.satin.api.managed.uniform.Uniform2i;
-import ladysnake.satin.api.managed.uniform.Uniform3f;
-import ladysnake.satin.api.managed.uniform.Uniform3i;
-import ladysnake.satin.api.managed.uniform.Uniform4f;
-import ladysnake.satin.api.managed.uniform.Uniform4i;
-import ladysnake.satin.api.managed.uniform.UniformFinder;
-import ladysnake.satin.api.managed.uniform.UniformMat4;
+import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;

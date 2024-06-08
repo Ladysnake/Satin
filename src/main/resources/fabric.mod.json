@@ -40,5 +40,11 @@
   },
   "custom": {
     "badges": [ "library" ]
-  }
+  },
+  "suggests": {},
+  "breaks": {},
+  "jars": [],
+  "languageAdapters": {},
+  "recommends": {},
+  "contributors": []
 }

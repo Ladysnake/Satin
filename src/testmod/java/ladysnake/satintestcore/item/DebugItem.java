@@ -46,7 +46,7 @@ public class DebugItem extends Item {
         if (player.isSneaking() && !world.isClient) {
             if (this.callbacks.size() > 1) {
                 debugMode = (debugMode + 1) % this.callbacks.size();
-                player.sendMessage(Text.translatable("Switched mode to %s", debugMode), true);
+                player.sendMessage(Text.literal("Switched mode to %s" + debugMode), true);
             }
         } else {
             this.callbacks.get(debugMode).use(world, player, hand);

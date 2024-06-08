@@ -17,15 +17,7 @@
  */
 package ladysnake.satin.impl;
 
-import ladysnake.satin.api.managed.uniform.Uniform1f;
-import ladysnake.satin.api.managed.uniform.Uniform1i;
-import ladysnake.satin.api.managed.uniform.Uniform2f;
-import ladysnake.satin.api.managed.uniform.Uniform2i;
-import ladysnake.satin.api.managed.uniform.Uniform3f;
-import ladysnake.satin.api.managed.uniform.Uniform3i;
-import ladysnake.satin.api.managed.uniform.Uniform4f;
-import ladysnake.satin.api.managed.uniform.Uniform4i;
-import ladysnake.satin.api.managed.uniform.UniformMat4;
+import ladysnake.satin.api.managed.uniform.*;
 import net.minecraft.client.gl.GlUniform;
 import net.minecraft.client.gl.PostProcessShader;
 import net.minecraft.client.render.Shader;
@@ -39,7 +31,7 @@ public final class ManagedUniform extends ManagedUniformBase implements
         Uniform1f, Uniform2f, Uniform3f, Uniform4f,
         UniformMat4 {
 
-    protected GlUniform[] targets = new GlUniform[0];
+    private GlUniform[] targets = new GlUniform[0];
     private int i0, i1, i2, i3;
     private float f0, f1, f2, f3;
     private boolean firstUpload = true;

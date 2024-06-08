@@ -1,16 +1,23 @@
+import org.cadixdev.gradle.licenser.LicenseExtension
+
 plugins {
-    id 'fabric-loom' version '1.4-SNAPSHOT'
-    id 'io.github.ladysnake.chenille' version '0.11.3'
-    id 'io.github.juuxel.loom-quiltflower' version "1.6.0"
+    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'io.github.ladysnake.chenille' version '0.13.1'
+    // id 'io.github.juuxel.loom-vineflower' version '1.11.0'
 }
 
-archivesBaseName = project.archives_base_name
+base {
+    archivesName = project.archives_base_name
+}
+
 group = project.maven_group
 version = project.mod_version
 
+
+
 chenille {
     configurePublishing {
-        mainArtifact = remapJar.archivePath
+        mainArtifact = remapJar.archiveFile
         withLadysnakeMaven()
         withCurseforgeRelease()
         withModrinthRelease()
@@ -33,7 +40,7 @@ loom {
         testmodClient {
             client()
             name = "Testmod Client"
-            source sourceSets.testmod
+            source = sourceSets.testmod
         }
     }
 }
@@ -76,9 +83,11 @@ loom {
     accessWidenerPath = file("src/main/resources/satin.accesswidener")
 }
 
-quiltflower {
+/*
+loom-vineflower {
     addToRuntimeClasspath.set(true)
 }
+*/
 
 java {
     // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
@@ -93,3 +102,8 @@ jar {
     }
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:$loader_version")
+    }
+}
