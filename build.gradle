@@ -1,6 +1,6 @@
 plugins {
-    id 'fabric-loom' version '1.4-SNAPSHOT'
-    id 'io.github.ladysnake.chenille' version '0.11.3'
+    id 'org.quiltmc.loom' version '1.6.+'
+    id 'io.github.ladysnake.chenille' version '0.13.0'
     id 'io.github.juuxel.loom-quiltflower' version "1.6.0"
 }
 
@@ -49,9 +49,9 @@ dependencies {
     // To change the versions see the gradle.properties file
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-    modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+    modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
+    modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}"
+//    modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
     modCompileOnly ("maven.modrinth:iris:${project.iris_version}")
 
     compileOnly "org.jetbrains:annotations:${jb_annotations_version}"
