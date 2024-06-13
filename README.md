@@ -38,7 +38,7 @@ You can then add the library version to your `gradle.properties`file:
 
 ```properties
 # Satin library
-satin_version = 1.x.y
+satin_version = 2.x.y
 ```
 
 You can find the current version of Satin in the [releases](https://github.com/Ladysnake/Satin/releases) tab of the repository on Github.
