@@ -1,47 +1,74 @@
 {
-  "targets": [
-    {
+  "targets": {
+    "swap": {
       "name": "swap",
       "satin:format": "RGBA8"
     },
-    {
-      "name": "swap16",
+    "swap16": {
       "satin:format": "RGBA16"
     },
-    {
-      "name": "swap16f",
+    "swap16f": {
       "satin:format": "RGBA16F"
     },
-    {
-      "name": "swap32f",
+    "swap32f": {
       "satin:format": "RGBA32F"
     }
-  ],
+  },
   "passes": [
     {
-      "name": "blit",
-      "intarget": "minecraft:main",
-      "outtarget": "swap"
+      "program": "blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "minecraft:main",
+          "bilinear": true
+        }
+      ],
+      "output": "swap"
     },
     {
-      "name": "blit",
-      "intarget": "swap",
-      "outtarget": "swap16"
+      "program": "blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap",
+          "bilinear": true
+        }
+      ],
+      "output": "swap16"
     },
     {
-      "name": "blit",
-      "intarget": "swap16",
-      "outtarget": "swap16f"
+      "program": "blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap16",
+          "bilinear": true
+        }
+      ],
+      "output": "swap16f"
     },
     {
-      "name": "blit",
-      "intarget": "swap16f",
-      "outtarget": "swap32f"
+      "program": "blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap16f",
+          "bilinear": true
+        }
+      ],
+      "output": "swap32f"
     },
     {
-      "name": "blit",
-      "intarget": "swap32f",
-      "outtarget": "minecraft:main"
+      "program": "blit",
+      "inputs": [
+        {
+          "sampler_name": "In",
+          "target": "swap32f",
+          "bilinear": true
+        }
+      ],
+      "output": "minecraft:main"
     }
   ]
 }

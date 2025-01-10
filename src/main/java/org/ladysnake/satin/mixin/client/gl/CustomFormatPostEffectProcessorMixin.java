@@ -17,10 +17,38 @@
  */
 package org.ladysnake.satin.mixin.client.gl;
 
+import net.minecraft.client.gl.PostEffectPipeline;
 import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.gl.SimpleFramebufferFactory;
+import net.minecraft.client.render.FrameGraphBuilder;
+import net.minecraft.util.Identifier;
+import org.joml.Matrix4f;
+import org.ladysnake.satin.impl.CustomFormatFramebuffers;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Mixin(PostEffectProcessor.class)
 public class CustomFormatPostEffectProcessorMixin {
+    private @Unique Map<Identifier, CustomFormatFramebuffers.TextureFormat> targetFormats;
 
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void satin$loadTargetFormats(List passes, Map internalTargets, Set externalTargets, CallbackInfo ci) {
+        this.targetFormats = CustomFormatFramebuffers.getFormatsForProcessor();
+    }
+
+    @Inject(method = "render(Lnet/minecraft/client/render/FrameGraphBuilder;IILnet/minecraft/client/gl/PostEffectProcessor$FramebufferSet;)V",
+            at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;", ordinal = 1),
+    locals = LocalCapture.CAPTURE_FAILHARD)
+    private void satin$setCustomTargetFormatForFramebufferFactory(FrameGraphBuilder builder, int textureWidth, int textureHeight, PostEffectProcessor.FramebufferSet framebufferSet, CallbackInfo ci, Matrix4f matrix4f, Map map, Iterator var7, Map.Entry<Identifier, PostEffectPipeline.Targets> entry, Identifier identifier2, SimpleFramebufferFactory simpleFramebufferFactory) {
+        CustomFormatFramebuffers.setCustomFormatForFactory(simpleFramebufferFactory, this.targetFormats.get(identifier2));
+    }
 }

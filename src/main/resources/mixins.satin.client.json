@@ -25,6 +25,9 @@
     "defaultRequire": 1
   },
   "client": [
+    "gl.CustomFormatShaderLoaderMixin",
+    "gl.CustomFormatShaderLoaderMixin$CacheMixin",
+    "gl.CustomFormatSimpleFramebufferFactoryMixin",
     "gl.ShaderLoaderMixin",
     "render.GameRendererAccessor",
     "render.WorldRendererMixin"
