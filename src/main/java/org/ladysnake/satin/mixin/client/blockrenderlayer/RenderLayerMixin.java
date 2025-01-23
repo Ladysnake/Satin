@@ -18,30 +18,29 @@
 package org.ladysnake.satin.mixin.client.blockrenderlayer;
 
 import com.google.common.collect.ImmutableList;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import org.ladysnake.satin.impl.BlockRenderLayerRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 @Mixin(RenderLayer.class)
 public abstract class RenderLayerMixin extends RenderPhase {
     private RenderLayerMixin() {
         super(null, null, null);
     }
-    
-    @Inject(
-        method = "getBlockLayers",
-        at = @At("RETURN"),
-        cancellable = true
+
+    @ModifyReturnValue(
+            method = "getBlockLayers",
+            at = @At("RETURN")
     )
-    private static void getBlockLayers(CallbackInfoReturnable<ImmutableList<Object>> info) {
-        info.setReturnValue(
-            ImmutableList.builder()
-            .addAll(info.getReturnValue())
-            .addAll(BlockRenderLayerRegistry.INSTANCE.getLayers()
-        ).build());
+    private static List<RenderLayer> getBlockLayers(List<RenderLayer> original) {
+        return ImmutableList.<RenderLayer>builder()
+                .addAll(original)
+                .addAll(BlockRenderLayerRegistry.INSTANCE.getLayers())
+                .build();
     }
 }
