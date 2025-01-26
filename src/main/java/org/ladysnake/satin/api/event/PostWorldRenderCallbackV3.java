@@ -27,7 +27,11 @@ import org.joml.Matrix4f;
 public interface PostWorldRenderCallbackV3 {
     /**
      * Fired after Minecraft has rendered everything in the world, before it renders hands, HUDs and GUIs.
+     *
+     * @deprecated  {@link net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents#LAST} is equivalent to this
+     * event
      */
+    @Deprecated
     Event<PostWorldRenderCallbackV3> EVENT = EventFactory.createArrayBacked(PostWorldRenderCallbackV3.class,
             (listeners) -> (matrices, projectionMat, modelViewMath, camera, tickDelta) -> {
                 PostWorldRenderCallbackV2.EVENT.invoker().onWorldRendered(matrices, camera, tickDelta);

@@ -26,7 +26,11 @@ import net.minecraft.client.render.Frustum;
 public interface EntitiesPostRenderCallback {
     /**
      * Fired after Minecraft has rendered all entities and before it renders block entities.
+     *
+     * @deprecated {@link net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents#AFTER_ENTITIES} in Fabric API
+     * is equivalent to this event
      */
+    @Deprecated
     Event<EntitiesPostRenderCallback> EVENT = EventFactory.createArrayBacked(EntitiesPostRenderCallback.class,
             (listeners) -> (camera, frustum, tickDelta) -> {
                 for (EntitiesPostRenderCallback handler : listeners) {

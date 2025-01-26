@@ -17,15 +17,15 @@
  */
 package org.ladysnake.satin.mixin.client.event;
 
-import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.Entity;
-import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.ladysnake.satin.api.event.PickEntityShaderCallback;
 import org.ladysnake.satin.api.event.ShaderEffectRenderCallback;
-import org.ladysnake.satin.impl.ReloadableShaderEffectManager;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,11 +39,12 @@ import static org.spongepowered.asm.mixin.injection.At.Shift.AFTER;
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin {
 
-    @Shadow @Nullable
-    PostEffectProcessor postProcessor;
+    @Shadow private @Nullable Identifier postProcessorId;
 
     @Shadow
-    protected abstract void loadPostProcessor(Identifier id);
+    protected abstract void setPostProcessor(Identifier id);
+
+    @Shadow @Final private MinecraftClient client;
 
     /**
      * Fires {@link ShaderEffectRenderCallback#EVENT}
@@ -62,15 +63,14 @@ public abstract class GameRendererMixin {
      */
     @Inject(method = "onCameraEntitySet", at = @At(value = "RETURN"), require = 0)
     private void useCustomEntityShader(@Nullable Entity entity, CallbackInfo info) {
-        if (this.postProcessor == null) {
+        if (this.postProcessorId == null) {
             // Mixin does not like method references to shadowed methods
             //noinspection Convert2MethodRef
-            PickEntityShaderCallback.EVENT.invoker().pickEntityShader(entity, loc -> this.loadPostProcessor(loc), () -> this.postProcessor);
+            PickEntityShaderCallback.EVENT.invoker().pickEntityShader(
+                    entity,
+                    loc -> this.setPostProcessor(loc),
+                    () -> this.client.getShaderLoader().loadPostEffect(this.postProcessorId, DefaultFramebufferSet.MAIN_ONLY)
+            );
         }
-    }
-
-    @Inject(method = "loadPrograms", at = @At(value = "RETURN"))
-    private void loadSatinPrograms(ResourceFactory factory, CallbackInfo ci) {
-        ReloadableShaderEffectManager.INSTANCE.reload(factory);
     }
 }

@@ -18,6 +18,7 @@
 package org.ladysnake.satin;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,7 @@ import org.apiguardian.api.API;
 import org.ladysnake.satin.api.event.ResolutionChangeCallback;
 import org.ladysnake.satin.api.event.WorldRendererReloadCallback;
 import org.ladysnake.satin.impl.ReloadableShaderEffectManager;
+import org.ladysnake.satin.impl.WorldRenderEventsDelegator;
 
 import static org.apiguardian.api.API.Status.STABLE;
 
@@ -52,5 +54,9 @@ public class Satin implements ClientModInitializer {
         if (FabricLoader.getInstance().isModLoaded("vivecraft")) {
             LOGGER.warn("[Satin] Vivecraft present in the instance, you may experience degraded performance - try turning eye stencil off in VR settings");
         }
+
+        WorldRenderEvents.BEFORE_ENTITIES.register(WorldRenderEventsDelegator.INSTANCE);
+        WorldRenderEvents.AFTER_ENTITIES.register(WorldRenderEventsDelegator.INSTANCE);
+        WorldRenderEvents.LAST.register(WorldRenderEventsDelegator.INSTANCE);
     }
 }
