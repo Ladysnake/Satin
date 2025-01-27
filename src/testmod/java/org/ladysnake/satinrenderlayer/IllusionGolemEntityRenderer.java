@@ -20,7 +20,7 @@ package org.ladysnake.satinrenderlayer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.IronGolemEntityRenderer;
-import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.client.render.entity.state.IronGolemEntityRenderState;
 import org.jetbrains.annotations.Nullable;
 
 public class IllusionGolemEntityRenderer extends IronGolemEntityRenderer {
@@ -28,10 +28,9 @@ public class IllusionGolemEntityRenderer extends IronGolemEntityRenderer {
         super(ctx);
     }
 
-    @Nullable
     @Override
-    protected RenderLayer getRenderLayer(IronGolemEntity entity, boolean showBody, boolean translucent, boolean glowing) {
-        RenderLayer baseLayer = super.getRenderLayer(entity, showBody, translucent, glowing);
+    protected @Nullable RenderLayer getRenderLayer(IronGolemEntityRenderState state, boolean showBody, boolean translucent, boolean showOutline) {
+        RenderLayer baseLayer = super.getRenderLayer(state, showBody, translucent, showOutline);
         return baseLayer == null ? null : SatinRenderLayerTest.illusionBuffer.getRenderLayer(baseLayer);
     }
 }

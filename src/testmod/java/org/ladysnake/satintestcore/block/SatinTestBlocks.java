@@ -21,13 +21,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import org.ladysnake.satintestcore.SatinTestCore;
 
 public class SatinTestBlocks {
-    public static final Block DEBUG_BLOCK = new Block(Block.Settings.copy(Blocks.AMETHYST_BLOCK));
-    
+    public static final RegistryKey<Block> DEBUG_BLOCK_ID = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(SatinTestCore.MOD_ID, "debug_block"));
+    public static final Block DEBUG_BLOCK = new Block(Block.Settings.copy(Blocks.AMETHYST_BLOCK).registryKey(DEBUG_BLOCK_ID));
+
     public static void init() {
-        Registry.register(Registries.BLOCK, Identifier.of(SatinTestCore.MOD_ID, "debug_block"), DEBUG_BLOCK);
+        Registry.register(Registries.BLOCK, DEBUG_BLOCK_ID, DEBUG_BLOCK);
     }
 }

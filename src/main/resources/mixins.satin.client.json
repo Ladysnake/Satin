@@ -13,7 +13,6 @@
     "gl.CustomFormatFramebufferMixin",
     "gl.CustomFormatPostEffectProcessorMixin",
     "gl.DepthGlFramebufferMixin",
-    "gl.GlUniformMixin",
     "render.RenderLayerAccessor",
     "render.RenderLayerMixin",
     "render.RenderLayerMixin$MultiPhaseParametersAccessor",

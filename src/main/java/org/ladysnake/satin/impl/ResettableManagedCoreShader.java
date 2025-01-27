@@ -51,7 +51,7 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
         this.renderLayerSupplier = RenderLayerSupplier.shader(
                 String.format("%s_%d", location, System.identityHashCode(this)),
                 vertexFormat,
-                this::getProgram);
+                new ShaderProgramKey(this.getLocation(), this.vertexFormat, Defines.EMPTY));
     }
 
     @Override

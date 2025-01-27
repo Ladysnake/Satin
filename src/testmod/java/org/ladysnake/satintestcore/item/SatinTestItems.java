@@ -21,16 +21,20 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import org.ladysnake.satintestcore.SatinTestCore;
 import org.ladysnake.satintestcore.block.SatinTestBlocks;
 
 public class SatinTestItems {
-    public static final DebugItem DEBUG_ITEM = new DebugItem(new Item.Settings());
-    public static final BlockItem DEBUG_BLOCK = new BlockItem(SatinTestBlocks.DEBUG_BLOCK, new Item.Settings());
+    private static final RegistryKey<Item> DEBUG_ITEM_ID = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(SatinTestCore.MOD_ID, "debug_item"));
+    public static final DebugItem DEBUG_ITEM = new DebugItem(new Item.Settings().registryKey(DEBUG_ITEM_ID));
+    private static final RegistryKey<Item> DEBUG_BLOCK_ID = RegistryKey.of(RegistryKeys.ITEM, SatinTestBlocks.DEBUG_BLOCK_ID.getValue());
+    public static final BlockItem DEBUG_BLOCK = new BlockItem(SatinTestBlocks.DEBUG_BLOCK, new Item.Settings().registryKey(DEBUG_BLOCK_ID));
 
     public static void init() {
-        Registry.register(Registries.ITEM, Identifier.of(SatinTestCore.MOD_ID, "debug_item"), DEBUG_ITEM);
-        Registry.register(Registries.ITEM, Registries.BLOCK.getId(SatinTestBlocks.DEBUG_BLOCK), DEBUG_BLOCK);
+        Registry.register(Registries.ITEM, DEBUG_ITEM_ID, DEBUG_ITEM);
+        Registry.register(Registries.ITEM, DEBUG_BLOCK_ID, DEBUG_BLOCK);
     }
 }

@@ -52,7 +52,7 @@ public abstract class DepthGlFramebufferMixin implements ReadableDepthFramebuffe
             method = "initFbo",
             at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, target = "Lnet/minecraft/client/gl/Framebuffer;depthAttachment:I", shift = AFTER)
     )
-    private void initFbo(int width, int height, boolean flushErrors, CallbackInfo ci) {
+    private void initFbo(int width, int height, CallbackInfo ci) {
         if (this.useDepthAttachment) {
             this.satin$stillDepthTexture = satin$setupDepthTexture();
         }

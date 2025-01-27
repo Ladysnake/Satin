@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class DebugItem extends Item {
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
+    public ActionResult use(World world, PlayerEntity player, Hand hand) {
         if (player.isSneaking() && !world.isClient) {
             if (this.debugModes.size() > 1) {
                 debugMode = (debugMode + 1) % this.debugModes.size();
@@ -51,7 +50,7 @@ public class DebugItem extends Item {
         } else if (!player.isSneaking()) {
             this.debugModes.get(debugMode).callback().use(world, player, hand);
         }
-        return new TypedActionResult<>(ActionResult.SUCCESS, player.getStackInHand(hand));
+        return ActionResult.SUCCESS;
     }
 
     @Override

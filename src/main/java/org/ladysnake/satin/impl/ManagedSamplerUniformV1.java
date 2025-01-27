@@ -23,6 +23,7 @@ import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.texture.AbstractTexture;
 
 import java.util.List;
+import java.util.function.IntSupplier;
 
 public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
     public ManagedSamplerUniformV1(String name) {
@@ -36,25 +37,25 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
 
     @Override
     public void set(AbstractTexture texture) {
-        this.set((Object) texture);
+        this.set(texture::getGlId);
     }
 
     @Override
     public void set(Framebuffer textureFbo) {
-        this.set((Object)textureFbo);
+        this.set(textureFbo::getColorAttachment);
     }
 
     @Override
     public void set(int textureName) {
-        this.set((Object)textureName);
+        this.set(() -> textureName);
     }
 
     @Override
-    protected void set(Object value) {
+    protected void set(IntSupplier value) {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.value != value) {
             for (SamplerAccess target : targets) {
-                ((ShaderProgram) target).addSamplerTexture(this.name, value);
+                ((ShaderProgram) target).addSamplerTexture(this.name, value.getAsInt());
             }
             this.value = value;
         }

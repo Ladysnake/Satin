@@ -24,15 +24,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.ladysnake.satin.api.managed.uniform.Uniform1f;
-import org.ladysnake.satin.api.managed.uniform.Uniform1i;
-import org.ladysnake.satin.api.managed.uniform.Uniform2f;
-import org.ladysnake.satin.api.managed.uniform.Uniform2i;
-import org.ladysnake.satin.api.managed.uniform.Uniform3f;
-import org.ladysnake.satin.api.managed.uniform.Uniform3i;
-import org.ladysnake.satin.api.managed.uniform.Uniform4f;
-import org.ladysnake.satin.api.managed.uniform.Uniform4i;
-import org.ladysnake.satin.api.managed.uniform.UniformMat4;
+import org.ladysnake.satin.api.managed.uniform.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +52,7 @@ public final class ManagedUniform extends ManagedUniformBase implements
     public boolean findUniformTargets(List<PostEffectPass> shaders) {
         List<GlUniform> list = new ArrayList<>();
         for (PostEffectPass shader : shaders) {
-            GlUniform uniform = shader.getProgram().getUniformByName(this.name);
+            GlUniform uniform = shader.getProgram().getUniform(this.name);
 
             if (uniform != null) {
                 if (uniform.getCount() != this.count) {
@@ -70,7 +62,7 @@ public final class ManagedUniform extends ManagedUniformBase implements
             }
         }
 
-        if (list.size() > 0) {
+        if (!list.isEmpty()) {
             this.targets = list.toArray(new GlUniform[0]);
             this.syncCurrentValues();
             return true;

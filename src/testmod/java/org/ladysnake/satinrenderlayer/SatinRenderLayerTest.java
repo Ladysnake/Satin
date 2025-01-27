@@ -25,12 +25,15 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -49,10 +52,9 @@ public final class SatinRenderLayerTest {
     /* * * * ManagedShaderEffect-based RenderLayer entity rendering * * * */
 
     public static final @NotNull EntityType<IronGolemEntity> ILLUSION_GOLEM =
-            Registry.register(
-                    Registries.ENTITY_TYPE,
-                    Identifier.of("satinrenderlayer", "illusion_golem"),
-                    EntityType.Builder.create(IronGolemEntity::new, SpawnGroup.CREATURE).dimensions(EntityType.IRON_GOLEM.getWidth(), EntityType.IRON_GOLEM.getHeight()).build()
+            registerEntity(
+                    "illusion_golem",
+                    EntityType.Builder.create(IronGolemEntity::new, SpawnGroup.CREATURE).dimensions(EntityType.IRON_GOLEM.getWidth(), EntityType.IRON_GOLEM.getHeight())
             );
 
     public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(Identifier.of("satinrenderlayer", "shaders/post/illusion.json"),
@@ -62,15 +64,20 @@ public final class SatinRenderLayerTest {
     /* * * * ManagedShaderProgram-based RenderLayer entity rendering * * * */
 
     public static final @NotNull EntityType<WitherEntity> RAINBOW_WITHER =
-            Registry.register(
-                    Registries.ENTITY_TYPE,
-                    Identifier.of("satinrenderlayer", "rainbow_wither"),
-                    EntityType.Builder.create((EntityType<WitherEntity> entityType, World world) -> {
-                        WitherEntity witherEntity = new WitherEntity(entityType, world);
-                        witherEntity.setAiDisabled(true);
-                        return witherEntity;
-                    }, SpawnGroup.CREATURE).dimensions(EntityType.WITHER.getWidth(), EntityType.WITHER.getHeight()).build()
-            );
+            registerEntity("rainbow_wither", EntityType.Builder.create((EntityType<WitherEntity> entityType, World world) -> {
+                WitherEntity witherEntity = new WitherEntity(entityType, world);
+                witherEntity.setAiDisabled(true);
+                return witherEntity;
+            }, SpawnGroup.CREATURE).dimensions(EntityType.WITHER.getWidth(), EntityType.WITHER.getHeight()));
+
+    private static <E extends Entity> EntityType<E> registerEntity(String id, EntityType.Builder<E> builder) {
+        Identifier identifier = Identifier.of("satinrenderlayer", id);
+        return Registry.register(
+                Registries.ENTITY_TYPE,
+                identifier,
+                builder.build(RegistryKey.of(RegistryKeys.ENTITY_TYPE, identifier))
+        );
+    }
 
     public static final ManagedCoreShader rainbow = ShaderEffectManager.getInstance().manageCoreShader(Identifier.of("satinrenderlayer", "rainbow"));
     private static final Uniform1f uniformSTime = rainbow.findUniform1f("STime");
