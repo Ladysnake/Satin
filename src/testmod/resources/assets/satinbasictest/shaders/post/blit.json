@@ -4,8 +4,8 @@
     "srcrgb": "srcalpha",
     "dstrgb": "1-srcalpha"
   },
-  "vertex": "satinbasictest:blit",
-  "fragment": "satinbasictest:blit",
+  "vertex": "satinbasictest:post/blit",
+  "fragment": "satinbasictest:post/blit",
   "attributes": ["Position"],
   "samplers": [{
     "name": "DiffuseSampler"
