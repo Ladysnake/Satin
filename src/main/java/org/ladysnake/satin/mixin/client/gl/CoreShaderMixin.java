@@ -26,21 +26,32 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 @Mixin(ShaderProgram.class)
 public abstract class CoreShaderMixin implements SamplerAccess {
-    @Shadow @Final private Map<String, ShaderProgramDefinition.Sampler> samplers;
+    @Shadow @Final private List<ShaderProgramDefinition.Sampler> samplers;
 
     @Override
     public void satin$removeSampler(String name) {
-        this.samplers.remove(name);
+        for (Iterator<ShaderProgramDefinition.Sampler> iterator = this.samplers.iterator(); iterator.hasNext(); ) {
+            ShaderProgramDefinition.Sampler sampler = iterator.next();
+            if (Objects.equals(sampler.name(), name)) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override
     public boolean satin$hasSampler(String name) {
-        return this.samplers.containsKey(name);
+        for (ShaderProgramDefinition.Sampler sampler : samplers) {
+            if (sampler.name().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
