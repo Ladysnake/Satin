@@ -18,6 +18,7 @@
 package org.ladysnake.satin.impl;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.ShaderLoader;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
@@ -34,7 +35,6 @@ import org.ladysnake.satin.api.managed.uniform.UniformFinder;
 import org.ladysnake.satin.api.managed.uniform.UniformMat4;
 
 import javax.annotation.CheckForNull;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -61,21 +61,21 @@ public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
     public void initializeOrLog(ResourceFactory mgr) {
         try {
             this.initialize(mgr);
-        } catch (IOException e) {
+        } catch (ShaderLoader.LoadException e) {
             this.errored = true;
             this.logInitError(e);
         }
     }
 
-    protected abstract void logInitError(IOException e);
+    protected abstract void logInitError(ShaderLoader.LoadException e);
 
-    protected void initialize(ResourceFactory resourceManager) throws IOException {
+    protected void initialize(ResourceFactory resourceManager) throws ShaderLoader.LoadException {
         this.release();
         this.shader = parseShader(resourceManager, MinecraftClient.getInstance(), this.location);
         this.setup();
     }
 
-    protected abstract S parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws IOException;
+    protected abstract S parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws ShaderLoader.LoadException;
 
     public void release() {
         if (this.isInitialized()) {

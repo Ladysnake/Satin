@@ -22,6 +22,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.client.gl.ShaderLoader;
 import net.minecraft.client.render.DefaultFramebufferSet;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.resource.ResourceFactory;
@@ -85,12 +86,16 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
 
     @Override
     public void initialize() throws IOException {
-        super.initialize(MinecraftClient.getInstance().getResourceManager());
+        try {
+            super.initialize(MinecraftClient.getInstance().getResourceManager());
+        } catch (ShaderLoader.LoadException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
-    protected PostEffectProcessor parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws IOException {
-        return mc.getShaderLoader().loadPostEffect(location, DefaultFramebufferSet.MAIN_ONLY);
+    protected PostEffectProcessor parseShader(ResourceFactory resourceFactory, MinecraftClient mc, Identifier location) throws ShaderLoader.LoadException {
+        return ((ShaderLoaderExt) mc.getShaderLoader()).satin$loadUnchecked(location, DefaultFramebufferSet.MAIN_ONLY);
     }
 
     @Override
@@ -245,7 +250,7 @@ public final class ResettableManagedShaderEffect extends ResettableManagedShader
     }
 
     @Override
-    protected void logInitError(IOException e) {
+    protected void logInitError(ShaderLoader.LoadException e) {
         Satin.LOGGER.error("Could not create screen shader {}", this.getLocation(), e);
     }
 

@@ -20,6 +20,7 @@ package org.ladysnake.satin.impl;
 import com.google.common.base.Preconditions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Defines;
+import net.minecraft.client.gl.ShaderLoader;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.render.RenderLayer;
@@ -30,7 +31,6 @@ import org.ladysnake.satin.Satin;
 import org.ladysnake.satin.api.managed.ManagedCoreShader;
 import org.ladysnake.satin.api.managed.uniform.SamplerUniform;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -55,8 +55,9 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
     }
 
     @Override
-    protected ShaderProgram parseShader(ResourceFactory resourceManager, MinecraftClient mc, Identifier location) {
-        return mc.getShaderLoader().getOrCreateProgram(new ShaderProgramKey(this.getLocation(), this.vertexFormat, Defines.builder().build()));
+    protected ShaderProgram parseShader(ResourceFactory resourceManager, MinecraftClient mc, Identifier location) throws ShaderLoader.LoadException {
+        throw new ShaderLoader.LoadException("unsupported");
+//        return mc.getShaderLoader().getOrCreateProgram(new ShaderProgramKey(this.getLocation(), this.vertexFormat, Defines.builder().build()));
     }
 
     @Override
@@ -94,7 +95,7 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
     }
 
     @Override
-    protected void logInitError(IOException e) {
+    protected void logInitError(ShaderLoader.LoadException e) {
         Satin.LOGGER.error("Could not create shader program {}", this.getLocation(), e);
     }
 }

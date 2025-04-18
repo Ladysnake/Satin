@@ -11,3 +11,4 @@ accessible  class net/minecraft/client/render/RenderPhase$LineWidth
 accessible  class net/minecraft/client/render/RenderPhase$Toggleable
 accessible  class net/minecraft/client/render/RenderPhase$OffsetTexturing
 accessible  class net/minecraft/client/render/RenderPhase$Textures
+accessible  class net/minecraft/client/gl/ShaderLoader$Cache
