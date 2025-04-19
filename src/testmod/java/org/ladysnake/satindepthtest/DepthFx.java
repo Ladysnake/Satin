@@ -40,7 +40,7 @@ import org.ladysnake.satin.api.managed.uniform.UniformMat4;
 import org.ladysnake.satin.api.util.GlMatrices;
 
 public class DepthFx implements PostWorldRenderCallbackV2, ShaderEffectRenderCallback, ClientTickEvents.EndTick {
-    public static final Identifier FANCY_NIGHT_SHADER_ID = Identifier.of(SatinDepthTest.MOD_ID, "shaders/post/rainbow_ping.json");
+    public static final Identifier FANCY_NIGHT_SHADER_ID = Identifier.of(SatinDepthTest.MOD_ID, "rainbow_ping");
     public static final DepthFx INSTANCE = new DepthFx();
 
     private final MinecraftClient mc = MinecraftClient.getInstance();

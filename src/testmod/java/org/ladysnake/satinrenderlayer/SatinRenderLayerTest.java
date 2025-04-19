@@ -57,7 +57,7 @@ public final class SatinRenderLayerTest {
                     EntityType.Builder.create(IronGolemEntity::new, SpawnGroup.CREATURE).dimensions(EntityType.IRON_GOLEM.getWidth(), EntityType.IRON_GOLEM.getHeight())
             );
 
-    public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(Identifier.of("satinrenderlayer", "shaders/post/illusion.json"),
+    public static final ManagedShaderEffect illusionEffect = ShaderEffectManager.getInstance().manage(Identifier.of("satinrenderlayer", "illusion"),
             effect -> effect.setUniformValue("ColorModulate", 1.2f, 0.7f, 0.2f, 1.0f));
     public static final ManagedFramebuffer illusionBuffer = illusionEffect.getTarget("final");
 

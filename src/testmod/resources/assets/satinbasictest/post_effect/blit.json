@@ -14,7 +14,7 @@
       "output": "swap"
     },
     {
-      "name": "satinbasictest:post/blit",
+      "program": "minecraft:post/blit",
       "inputs": [
         {
           "sampler_name": "In",

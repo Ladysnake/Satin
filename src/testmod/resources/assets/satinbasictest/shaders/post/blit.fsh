@@ -3,7 +3,7 @@
 uniform sampler2D DiffuseSampler;
 
 uniform vec4 ColorModulate;
-uniform int Multiplier; // just checking ints work
+uniform int Multiplier = 1; // just checking ints work
 
 in vec2 texCoord;
 

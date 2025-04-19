@@ -1,12 +1,21 @@
 ------------------------------------------------------
-Version 3.0.0
+Version 3.0.0-alpha.1
 ------------------------------------------------------
-Updated to MC 1.21.2
+Partially updated to MC 1.21.2
+
+This update contains major breaking changes made by Mojang to shader declarations preparing the terrain for Vibrant Visuals.
+More breaking changes should be expected for later versions.
+
+**For this first alpha, only `ShaderEffectManager#manage`, `ManagedShaderEffect` and basic uniform manipulation methods are expected to work.**
+
+Feedback is welcome on the [Satin GitHub page](https://github.com/Ladysnake/Satin/discussions/55).
 
 **Changes**
 - Post process shaders are now loaded from `post_effect` and `shaders`
   instead of respectively `shaders/post` and `shaders/program`.
   By convention, files previously in `shaders/program` should go to the `shaders/post` subdirectory.
+- Identifiers for `ManagedShaderEffect` have changed: `mymod:shaders/post/example.json` becomes `mymod:example`
+  (the `example.json` file also needs to be moved to the `post_effect` directory)
 - Includes (loaded from `shaders/include`) are now available in post process shaders
 - Post-process effect format has changed:
   - `inputs` take a `sampler_name`, which will be suffixed with "Sampler" (e.g. `"sampler_name": "In"` becomes `"name": "InSampler"` in the shader definition)

@@ -41,21 +41,25 @@ public interface ShaderEffectManager {
     /**
      * Manages a post-process {@link PostEffectProcessor} loaded from a json definition file
      *
-     * @param location the location of the json within your mod's assets
+     * <p>Shader definition files are loaded from the {@code assets/<namespace>/post_effect} directory
+     *
+     * @param id the identifier of the shader post effect
      * @return a screen shader that will be automatically reloaded as needed
      */
     @API(status = STABLE, since = "1.0.0")
-    ManagedShaderEffect manage(Identifier location);
+    ManagedShaderEffect manage(Identifier id);
 
     /**
      * Manages a post-process {@link PostEffectProcessor} loaded from a json definition file
      *
-     * @param location         the location of the json within your mod's assets
+     * <p>Shader definition files are loaded from the {@code assets/<namespace>/post_effect} directory
+     *
+     * @param id the identifier of the shader post effect
      * @param initCallback a block ran once the shader effect is initialized
      * @return a screen shader that will be automatically reloaded as needed
      */
     @API(status = STABLE, since = "1.0.0")
-    ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback);
+    ManagedShaderEffect manage(Identifier id, Consumer<ManagedShaderEffect> initCallback);
 
     /**
      * Manages a core {@link net.minecraft.client.gl.ShaderProgram} loaded from a json definition file

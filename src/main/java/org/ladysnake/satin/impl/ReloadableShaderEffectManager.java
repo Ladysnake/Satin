@@ -49,24 +49,24 @@ public final class ReloadableShaderEffectManager implements ShaderEffectManager,
     /**
      * Manages a post-processing shader loaded from a json definition file
      *
-     * @param location the location of the json within your mod's assets
+     * @param id the location of the json within your mod's assets
      * @return a lazily initialized shader effect
      */
     @Override
-    public ManagedShaderEffect manage(Identifier location) {
-        return manage(location, s -> { });
+    public ManagedShaderEffect manage(Identifier id) {
+        return manage(id, s -> { });
     }
 
     /**
      * Manages a post-processing shader loaded from a json definition file
      *
-     * @param location            the location of the json within your mod's assets
+     * @param id            the location of the json within your mod's assets
      * @param initCallback a block ran once the shader effect is initialized
      * @return a lazily initialized screen shader
      */
     @Override
-    public ManagedShaderEffect manage(Identifier location, Consumer<ManagedShaderEffect> initCallback) {
-        ResettableManagedShaderEffect ret = new ResettableManagedShaderEffect(location, initCallback);
+    public ManagedShaderEffect manage(Identifier id, Consumer<ManagedShaderEffect> initCallback) {
+        ResettableManagedShaderEffect ret = new ResettableManagedShaderEffect(id, initCallback);
         managedShaders.add(ret);
         return ret;
     }
