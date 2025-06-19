@@ -34,7 +34,7 @@ import org.ladysnake.satin.api.managed.ManagedFramebuffer;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 import org.ladysnake.satin.api.managed.ShaderEffectManager;
 import org.ladysnake.satin.api.managed.uniform.SamplerUniformV2;
-import org.ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
+import org.ladysnake.satin.mixin.client.gl.AccessiblePassesShaderEffect;
 import org.ladysnake.satin.mixin.client.render.GameRendererAccessor;
 
 import javax.annotation.Nullable;

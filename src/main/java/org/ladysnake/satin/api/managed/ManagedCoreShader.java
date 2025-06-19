@@ -20,7 +20,7 @@ package org.ladysnake.satin.api.managed;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
 import org.ladysnake.satin.api.managed.uniform.UniformFinder;

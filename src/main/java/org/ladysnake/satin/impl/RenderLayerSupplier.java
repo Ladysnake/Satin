@@ -17,11 +17,12 @@
  */
 package org.ladysnake.satin.impl;
 
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.ShaderProgramKey;
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.satin.mixin.client.render.RenderPhaseAccessor;
 
@@ -36,18 +37,17 @@ public class RenderLayerSupplier {
     private final String uniqueName;
     private final @Nullable VertexFormat vertexFormat;
 
-    public static RenderLayerSupplier framebuffer(String name, Runnable setupState, Runnable cleanupState) {
+    public static RenderLayerSupplier framebuffer(String name, Supplier<Framebuffer> provider) {
         RenderPhase.Target target = new RenderPhase.Target(
                 name + "_target",
-                setupState,
-                cleanupState
+                provider
         );
         return new RenderLayerSupplier(name, builder -> builder.target(target));
     }
 
-    public static RenderLayerSupplier shader(String name, VertexFormat vertexFormat, ShaderProgramKey shaderKey) {
-        RenderPhase shader = new RenderPhase.ShaderProgram(shaderKey);
-        return new RenderLayerSupplier(name, vertexFormat, builder -> builder.program((RenderPhase.ShaderProgram) shader));
+    public static RenderLayerSupplier shader(String name, VertexFormat vertexFormat, Identifier shaderKey) {
+        RenderPipeline pipeline = RenderPipeline.builder().withVertexFormat(vertexFormat, VertexFormat.DrawMode.QUADS).withLocation(shaderKey.withPath(name)).withFragmentShader(shaderKey).withVertexShader(shaderKey).build();
+        return new RenderLayerSupplier(name, vertexFormat, builder -> {});
     }
 
     public RenderLayerSupplier(String name,  Consumer<RenderLayer.MultiPhaseParameters.Builder> transformer) {
@@ -69,15 +69,5 @@ public class RenderLayerSupplier {
         RenderLayer newLayer = RenderLayerDuplicator.copy(baseLayer, newName, this.vertexFormat, this.transform);
         this.renderLayerCache.put(baseLayer, newLayer);
         return newLayer;
-    }
-
-    /**
-     * Big brain move right there
-     */
-    private static class Helper extends RenderPhase {
-
-        private Helper(String name, Runnable beginAction, Runnable endAction) {
-            super(name, beginAction, endAction);
-        }
     }
 }

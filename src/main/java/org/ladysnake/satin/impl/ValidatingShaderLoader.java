@@ -17,7 +17,7 @@
  */
 package org.ladysnake.satin.impl;
 
-import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.opengl.GlStateManager;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.ladysnake.satin.Satin;

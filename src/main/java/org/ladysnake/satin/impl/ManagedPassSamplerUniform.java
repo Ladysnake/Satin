@@ -17,10 +17,11 @@
  */
 package org.ladysnake.satin.impl;
 
+import com.mojang.blaze3d.systems.RenderPass;
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectPass;
-import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.render.RenderPass;
+import net.minecraft.client.render.FramePass;
 import net.minecraft.client.texture.AbstractTexture;
 import net.minecraft.client.util.Handle;
 import net.minecraft.util.Identifier;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  * A sampler uniform applying to a {@link PostEffectPass}
@@ -40,13 +42,13 @@ public final class ManagedPassSamplerUniform extends ManagedSamplerUniformBase i
     }
 
     @Override
-    public void preRender(RenderPass pass, Map<Identifier, Handle<Framebuffer>> internalTargets) {
+    public void preRender(FramePass pass, Map<Identifier, Handle<Framebuffer>> internalTargets) {
         // NO-OP
     }
 
     @Override
-    public void bind(ShaderProgram program, Map<Identifier, Handle<Framebuffer>> internalTargets) {
-        program.addSamplerTexture(this.name, this.value.getAsInt());
+    public void bindSampler(RenderPass pass, Map<Identifier, Handle<Framebuffer>> internalTargets) {
+        pass.bindSampler(this.name, this.value.get());
     }
 
     @Override
@@ -64,7 +66,7 @@ public final class ManagedPassSamplerUniform extends ManagedSamplerUniformBase i
 
     @Override
     public void set(AbstractTexture texture) {
-        set(texture::getGlId);
+        set(texture::getGlTexture);
     }
 
     @Override
@@ -73,12 +75,7 @@ public final class ManagedPassSamplerUniform extends ManagedSamplerUniformBase i
     }
 
     @Override
-    public void set(int textureName) {
-        set(() -> textureName);
-    }
-
-    @Override
-    public void set(IntSupplier value) {
+    public void set(Supplier<GpuTexture> value) {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.value != value) {
             this.value = value;

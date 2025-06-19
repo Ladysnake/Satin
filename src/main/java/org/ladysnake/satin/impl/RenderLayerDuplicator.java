@@ -17,8 +17,8 @@
  */
 package org.ladysnake.satin.impl;
 
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexFormat;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;

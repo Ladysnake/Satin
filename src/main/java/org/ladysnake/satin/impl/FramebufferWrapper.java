@@ -17,14 +17,13 @@
  */
 package org.ladysnake.satin.impl;
 
-import net.minecraft.client.MinecraftClient;
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectProcessor;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.util.Window;
 import org.ladysnake.satin.Satin;
 import org.ladysnake.satin.api.managed.ManagedFramebuffer;
-import org.ladysnake.satin.mixin.client.AccessiblePassesShaderEffect;
+import org.ladysnake.satin.mixin.client.gl.AccessiblePassesShaderEffect;
 
 import javax.annotation.Nullable;
 
@@ -38,8 +37,7 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
         this.name = name;
         this.renderLayerSupplier = RenderLayerSupplier.framebuffer(
                 this.name + System.identityHashCode(this),
-                () -> this.beginWrite(false),
-                () -> MinecraftClient.getInstance().getFramebuffer().beginWrite(false)
+                this::getFramebuffer
         );
     }
 
@@ -73,30 +71,19 @@ public final class FramebufferWrapper implements ManagedFramebuffer {
     }
 
     @Override
-    public void beginWrite(boolean updateViewport) {
+    public GpuTexture getColorAttachment() {
         if (this.wrapped != null) {
-            this.wrapped.beginWrite(updateViewport);
+            return this.wrapped.getColorAttachment();
         }
+        return null;
     }
 
     @Override
-    public void draw() {
-        Window window = MinecraftClient.getInstance().getWindow();
-        this.draw(window.getFramebufferWidth(), window.getFramebufferHeight(), true);
-    }
-
-    @Override
-    public void draw(int width, int height, boolean disableBlend) {
+    public GpuTexture getDepthAttachment() {
         if (this.wrapped != null) {
-            this.wrapped.draw(width, height);
+            return this.wrapped.getDepthAttachment();
         }
-    }
-
-    @Override
-    public void clear() {
-        if (this.wrapped != null) {
-            this.wrapped.clear();
-        }
+        return null;
     }
 
     @Override

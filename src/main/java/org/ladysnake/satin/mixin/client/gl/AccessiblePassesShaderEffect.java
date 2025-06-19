@@ -15,21 +15,23 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program; If not, see <https://www.gnu.org/licenses>.
  */
-package org.ladysnake.satin.mixin.client.render;
+package org.ladysnake.satin.mixin.client.gl;
 
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexFormat;
+import net.minecraft.client.gl.PostEffectPass;
+import net.minecraft.client.gl.PostEffectPipeline;
+import net.minecraft.client.gl.PostEffectProcessor;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
-import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(RenderLayer.class)
-public interface RenderLayerAccessor {
+import java.util.List;
+import java.util.Map;
+
+@Mixin(PostEffectProcessor.class)
+public interface AccessiblePassesShaderEffect {
     @Accessor
-    boolean isTranslucent();
+    List<PostEffectPass> getPasses();
 
-    @Invoker("of")
-    static RenderLayer.MultiPhase satin$of(@SuppressWarnings("unused") String name, @SuppressWarnings("unused") VertexFormat vertexFormat, @SuppressWarnings("unused") VertexFormat.DrawMode drawMode, @SuppressWarnings("unused") int expectedBufferSize, @SuppressWarnings("unused") boolean hasCrumbling, @SuppressWarnings("unused") boolean translucent, @SuppressWarnings("unused") RenderLayer.MultiPhaseParameters phases) {
-        throw new IllegalStateException("Mixin not transformed");
-    }
+    @Accessor
+    Map<Identifier, PostEffectPipeline.Targets> getInternalTargets();
 }

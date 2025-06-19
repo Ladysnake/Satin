@@ -17,7 +17,7 @@
  */
 package org.ladysnake.satin.mixin.client.gl;
 
-import com.mojang.blaze3d.platform.GlConst;
+import com.mojang.blaze3d.opengl.GlConst;
 import net.minecraft.client.gl.Framebuffer;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.satin.impl.CustomFormatFramebuffers;
@@ -39,7 +39,7 @@ public abstract class CustomFormatFramebufferMixin {
     private int satin$format = GlConst.GL_RGBA8;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void satin$setFormat(boolean useDepth, CallbackInfo ci) {
+    private void satin$setFormat(String name, boolean useDepthAttachment, CallbackInfo ci) {
         @Nullable CustomFormatFramebuffers.TextureFormat format = CustomFormatFramebuffers.getCustomFormat();
         if (format != null) {
             this.satin$format = format.value;

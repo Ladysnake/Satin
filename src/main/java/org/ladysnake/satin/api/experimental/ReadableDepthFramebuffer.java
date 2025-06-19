@@ -17,6 +17,7 @@
  */
 package org.ladysnake.satin.api.experimental;
 
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.option.GraphicsMode;
@@ -53,7 +54,7 @@ public interface ReadableDepthFramebuffer {
      * @return a still of this framebuffer's depth texture
      */
     @API(status = EXPERIMENTAL)
-    int getStillDepthMap();
+    GpuTexture getStillDepthMap();
 
     /**
      * Freezes the {@linkplain Framebuffer#getDepthAttachment() current depth texture} for use in

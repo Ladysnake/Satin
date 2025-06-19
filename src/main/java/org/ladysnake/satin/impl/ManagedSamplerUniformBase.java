@@ -17,12 +17,12 @@
  */
 package org.ladysnake.satin.impl;
 
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.ShaderProgramDefinition;
 import org.ladysnake.satin.api.managed.uniform.SamplerUniform;
 
 import java.util.List;
-import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  *
@@ -32,16 +32,16 @@ import java.util.function.IntSupplier;
 public abstract class ManagedSamplerUniformBase extends ManagedUniformBase implements SamplerUniform {
     protected SamplerAccess[] targets = new SamplerAccess[0];
     protected int[] locations = new int[0];
-    protected IntSupplier value;
+    protected Supplier<GpuTexture> value;
 
     public ManagedSamplerUniformBase(String name) {
         super(name);
     }
 
     private int getSamplerLoc(SamplerAccess access) {
-        List<ShaderProgramDefinition.Sampler> samplerNames = access.satin$getSamplerNames();
+        List<String> samplerNames = access.satin$getSamplerNames();
         for (int i = 0; i < samplerNames.size(); i++) {
-            if (samplerNames.get(i).name().equals(this.name)) {
+            if (samplerNames.get(i).equals(this.name)) {
                 return access.satin$getSamplerShaderLocs().getInt(i);
             }
         }
@@ -64,13 +64,13 @@ public abstract class ManagedSamplerUniformBase extends ManagedUniformBase imple
     }
 
     protected void syncCurrentValues() {
-        IntSupplier value = this.value;
+        Supplier<GpuTexture> value = this.value;
         if (value != null) { // after the first upload
             this.value = null;
             this.set(value);
         }
     }
 
-    protected abstract void set(IntSupplier value);
+    protected abstract void set(Supplier<GpuTexture> value);
 
 }

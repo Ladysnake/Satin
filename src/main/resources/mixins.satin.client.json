@@ -4,16 +4,15 @@
   "package": "org.ladysnake.satin.mixin.client",
   "plugin": "org.ladysnake.satin.mixin.SatinMixinPlugin",
   "mixins": [
-    "AccessiblePassesShaderEffect",
     "blockrenderlayer.RenderLayerMixin",
     "blockrenderlayer.WorldRendererMixin",
     "event.GameRendererMixin",
     "event.MinecraftClientMixin",
+    "gl.AccessiblePassesShaderEffect",
     "gl.CoreShaderMixin",
     "gl.CustomFormatFramebufferMixin",
     "gl.CustomFormatPostEffectProcessorMixin",
     "gl.DepthGlFramebufferMixin",
-    "render.RenderLayerAccessor",
     "render.RenderLayerMixin",
     "render.RenderLayerMixin$MultiPhaseParametersAccessor",
     "render.RenderLayerMultiPhaseMixin",
@@ -24,6 +23,8 @@
   },
   "client": [
     "event.ShaderLoaderMixin",
+    "gl.PostEffectPassAccessor",
+    "gl.PostEffectUniformAccessor",
     "gl.ShaderLoaderMixin",
     "render.GameRendererAccessor",
     "render.WorldRendererMixin"

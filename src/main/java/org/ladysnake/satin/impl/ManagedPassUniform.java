@@ -17,6 +17,7 @@
  */
 package org.ladysnake.satin.impl;
 
+import com.google.common.primitives.Floats;
 import net.minecraft.client.gl.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -24,25 +25,27 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.ladysnake.satin.api.managed.uniform.*;
 import org.ladysnake.satin.mixin.client.gl.PostEffectPassAccessor;
+import org.ladysnake.satin.mixin.client.gl.PostEffectUniformAccessor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-public final class ManagedUniform extends ManagedUniformBase implements
+public final class ManagedPassUniform extends ManagedUniformBase implements
         Uniform1i, Uniform2i, Uniform3i, Uniform4i,
         Uniform1f, Uniform2f, Uniform3f, Uniform4f,
         UniformMat4 {
 
-    private static final GlUniform[] NO_TARGETS = new GlUniform[0];
+    private static final PostEffectPipeline.Uniform[] NO_TARGETS = new PostEffectPipeline.Uniform[0];
 
     private final int count;
 
-    private GlUniform[] targets = NO_TARGETS;
-    private int i0, i1, i2, i3;
+    private PostEffectPipeline.Uniform[] targets = NO_TARGETS;
     private float f0, f1, f2, f3;
     private boolean firstUpload = true;
 
-    public ManagedUniform(String name, int count) {
+    public ManagedPassUniform(String name, int count) {
         super(name);
         this.count = count;
     }
@@ -63,7 +66,7 @@ public final class ManagedUniform extends ManagedUniformBase implements
         }
 
         if (!list.isEmpty()) {
-            this.targets = list.toArray(new GlUniform[0]);
+            this.targets = list.toArray(new PostEffectPipeline.Uniform[0]);
             this.syncCurrentValues();
             return true;
         } else {
@@ -83,39 +86,27 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public boolean findUniformTarget(ShaderProgram shader) {
-        GlUniform uniform = shader.getUniform(this.name);
-        if (uniform != null) {
-            this.targets = new GlUniform[] {uniform};
-            this.syncCurrentValues();
-            return true;
-        } else {
-            this.targets = NO_TARGETS;
-            return false;
-        }
+        throw new UnsupportedOperationException();
     }
 
     private void syncCurrentValues() {
         if (!this.firstUpload) {
-            for (GlUniform target : this.targets) {
-                if (target.getType().isIntegerData()) {
-                    target.set(i0, i1, i2, i3);
-                } else {
-                    target.set(new float[]{f0, f1, f2, f3});
-                }
+            for (PostEffectPipeline.Uniform target : this.targets) {
+                ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of(f0, f1, f2, f3)));
             }
         }
     }
 
     @Override
     public void set(int value) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
-            if (firstUpload || i0 != value) {
-                for (GlUniform target : targets) {
-                    target.set(value);
+            if (firstUpload || f0 != value) {
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of((float) value)));
                 }
-                i0 = value;
+                f0 = value;
                 firstUpload = false;
             }
         }
@@ -123,15 +114,15 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(int value0, int value1) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
-            if (firstUpload || i0 != value0 || i1 != value1) {
-                for (GlUniform target : targets) {
-                    target.set(value0, value1);
+            if (firstUpload || f0 != value0 || f1 != value1) {
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of((float) value0, (float) value1)));
                 }
-                i0 = value0;
-                i1 = value1;
+                f0 = value0;
+                f1 = value1;
                 firstUpload = false;
             }
         }
@@ -139,16 +130,16 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(int value0, int value1, int value2) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
-            if (firstUpload || i0 != value0 || i1 != value1 || i2 != value2) {
-                for (GlUniform target : targets) {
-                    target.set(value0, value1, value2);
+            if (firstUpload || f0 != value0 || f1 != value1 || f2 != value2) {
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of((float) value0, (float) value1, (float) value2)));
                 }
-                i0 = value0;
-                i1 = value1;
-                i2 = value2;
+                f0 = value0;
+                f1 = value1;
+                f2 = value2;
                 firstUpload = false;
             }
         }
@@ -156,17 +147,17 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(int value0, int value1, int value2, int value3) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
-            if (firstUpload || i0 != value0 || i1 != value1 || i2 != value2 || i3 != value3) {
-                for (GlUniform target : targets) {
-                    target.set(value0, value1, value2, value3);
+            if (firstUpload || f0 != value0 || f1 != value1 || f2 != value2 || f3 != value3) {
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of((float) value0, (float) value1, (float) value2, (float) value3)));
                 }
-                i0 = value0;
-                i1 = value1;
-                i2 = value2;
-                i3 = value3;
+                f0 = value0;
+                f1 = value1;
+                f2 = value2;
+                f3 = value3;
                 firstUpload = false;
             }
         }
@@ -174,12 +165,12 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(float value) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
             if (firstUpload || f0 != value) {
-                for (GlUniform target : targets) {
-                    target.set(value);
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of(value)));
                 }
                 f0 = value;
                 firstUpload = false;
@@ -189,12 +180,12 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(float value0, float value1) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
             if (firstUpload || f0 != value0 || f1 != value1) {
-                for (GlUniform target : targets) {
-                    target.set(value0, value1);
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of(value0, value1)));
                 }
                 f0 = value0;
                 f1 = value1;
@@ -210,12 +201,12 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(float value0, float value1, float value2) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
             if (firstUpload || f0 != value0 || f1 != value1 || f2 != value2) {
-                for (GlUniform target : targets) {
-                    target.set(value0, value1, value2);
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of(value0, value1, value2)));
                 }
                 f0 = value0;
                 f1 = value1;
@@ -232,12 +223,12 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(float value0, float value1, float value2, float value3) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
             if (firstUpload || f0 != value0 || f1 != value1 || f2 != value2 || f3 != value3) {
-                for (GlUniform target : targets) {
-                    target.set(new float[]{value0, value1, value2, value3});
+                for (PostEffectPipeline.Uniform target : targets) {
+                    ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(List.of(value0, value1, value2, value3)));
                 }
                 f0 = value0;
                 f1 = value1;
@@ -255,11 +246,11 @@ public final class ManagedUniform extends ManagedUniformBase implements
 
     @Override
     public void set(Matrix4f value) {
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
-            for (GlUniform target : targets) {
-                target.set(value);
+            for (PostEffectPipeline.Uniform target : targets) {
+                ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(Floats.asList(value.get(new float[16]))));
             }
         }
     }
@@ -270,11 +261,11 @@ public final class ManagedUniform extends ManagedUniformBase implements
             throw new IllegalArgumentException("Mismatched values size, expected " + count + " but got " + values.length);
         }
 
-        GlUniform[] targets = this.targets;
+        PostEffectPipeline.Uniform[] targets = this.targets;
         int nbTargets = targets.length;
         if (nbTargets > 0) {
-            for (GlUniform target : targets) {
-                target.set(values);
+            for (PostEffectPipeline.Uniform target : targets) {
+                ((PostEffectUniformAccessor)(Object) target).setValues(Optional.of(Floats.asList(values)));
             }
         }
     }

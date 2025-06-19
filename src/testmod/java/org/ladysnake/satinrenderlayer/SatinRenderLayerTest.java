@@ -17,13 +17,10 @@
  */
 package org.ladysnake.satinrenderlayer;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -38,7 +35,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.ladysnake.satin.api.event.EntitiesPreRenderCallback;
-import org.ladysnake.satin.api.event.ShaderEffectRenderCallback;
 import org.ladysnake.satin.api.managed.ManagedCoreShader;
 import org.ladysnake.satin.api.managed.ManagedFramebuffer;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
@@ -94,17 +90,5 @@ public final class SatinRenderLayerTest {
         EntityRendererRegistry.register(RAINBOW_WITHER, RainbowWitherEntityRenderer::new);
         ClientTickEvents.END_CLIENT_TICK.register(client -> ticks++);
         EntitiesPreRenderCallback.EVENT.register((camera, frustum, tickDelta) -> uniformSTime.set((ticks + tickDelta) * 0.05f));
-        ShaderEffectRenderCallback.EVENT.register(tickDelta -> {
-                    MinecraftClient client = MinecraftClient.getInstance();
-                    illusionEffect.render(tickDelta);
-                    client.getFramebuffer().beginWrite(true);
-                    RenderSystem.enableBlend();
-                    RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ZERO, GlStateManager.DstFactor.ONE);
-                    illusionBuffer.draw(client.getWindow().getFramebufferWidth(), client.getWindow().getFramebufferHeight(), false);
-                    illusionBuffer.clear();
-                    client.getFramebuffer().beginWrite(true);
-                    RenderSystem.disableBlend();
-                }
-        );
     }
 }

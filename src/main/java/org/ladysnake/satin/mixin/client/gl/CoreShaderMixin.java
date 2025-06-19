@@ -19,7 +19,6 @@ package org.ladysnake.satin.mixin.client.gl;
 
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.ShaderProgramDefinition;
 import org.ladysnake.satin.impl.SamplerAccess;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,13 +31,13 @@ import java.util.Objects;
 
 @Mixin(ShaderProgram.class)
 public abstract class CoreShaderMixin implements SamplerAccess {
-    @Shadow @Final private List<ShaderProgramDefinition.Sampler> samplers;
+    @Shadow @Final private List<String> samplers;
 
     @Override
     public void satin$removeSampler(String name) {
-        for (Iterator<ShaderProgramDefinition.Sampler> iterator = this.samplers.iterator(); iterator.hasNext(); ) {
-            ShaderProgramDefinition.Sampler sampler = iterator.next();
-            if (Objects.equals(sampler.name(), name)) {
+        for (Iterator<String> iterator = this.samplers.iterator(); iterator.hasNext(); ) {
+            String sampler = iterator.next();
+            if (Objects.equals(sampler, name)) {
                 iterator.remove();
             }
         }
@@ -46,8 +45,8 @@ public abstract class CoreShaderMixin implements SamplerAccess {
 
     @Override
     public boolean satin$hasSampler(String name) {
-        for (ShaderProgramDefinition.Sampler sampler : samplers) {
-            if (sampler.name().equals(name)) {
+        for (String sampler : samplers) {
+            if (sampler.equals(name)) {
                 return true;
             }
         }
@@ -56,7 +55,7 @@ public abstract class CoreShaderMixin implements SamplerAccess {
 
     @Override
     @Accessor("samplers")
-    public abstract List<ShaderProgramDefinition.Sampler> satin$getSamplerNames();
+    public abstract List<String> satin$getSamplerNames();
 
     @Override
     @Accessor("samplerLocations")

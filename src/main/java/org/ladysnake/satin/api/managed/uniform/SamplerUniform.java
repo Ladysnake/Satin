@@ -41,12 +41,4 @@ public interface SamplerUniform {
      */
     @API(status = MAINTAINED, since = "1.4.0")
     void set(Framebuffer textureFbo);
-
-    /**
-     * Sets the value of a sampler uniform declared in json
-     *
-     * @param textureName an opengl texture name
-     */
-    @API(status = MAINTAINED, since = "1.4.0")
-    void set(int textureName);
 }

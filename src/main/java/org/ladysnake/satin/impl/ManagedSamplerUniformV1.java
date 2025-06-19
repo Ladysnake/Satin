@@ -17,13 +17,14 @@
  */
 package org.ladysnake.satin.impl;
 
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectPass;
 import net.minecraft.client.gl.ShaderProgram;
 import net.minecraft.client.texture.AbstractTexture;
 
 import java.util.List;
-import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
     public ManagedSamplerUniformV1(String name) {
@@ -37,7 +38,7 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
 
     @Override
     public void set(AbstractTexture texture) {
-        this.set(texture::getGlId);
+        this.set(texture::getGlTexture);
     }
 
     @Override
@@ -46,16 +47,11 @@ public final class ManagedSamplerUniformV1 extends ManagedSamplerUniformBase {
     }
 
     @Override
-    public void set(int textureName) {
-        this.set(() -> textureName);
-    }
-
-    @Override
-    protected void set(IntSupplier value) {
+    protected void set(Supplier<GpuTexture> value) {
         SamplerAccess[] targets = this.targets;
         if (targets.length > 0 && this.value != value) {
             for (SamplerAccess target : targets) {
-                ((ShaderProgram) target).addSamplerTexture(this.name, value.getAsInt());
+                ((ShaderProgram) target).addSamplerTexture(this.name, value.get());
             }
             this.value = value;
         }

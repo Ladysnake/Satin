@@ -17,10 +17,10 @@
  */
 package org.ladysnake.satin.api.managed;
 
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.util.Window;
 import org.apiguardian.api.API;
 import org.ladysnake.satin.api.util.RenderLayerHelper;
 
@@ -32,14 +32,8 @@ public interface ManagedFramebuffer {
     @Nullable
     Framebuffer getFramebuffer();
 
-    /**
-     * Begins a write operation on this framebuffer.
-     *
-     * <p>If the operation is successful, every subsequent draw call will write to this framebuffer.
-     *
-     * @param updateViewport whether binding this framebuffer should call {@link com.mojang.blaze3d.systems.RenderSystem#viewport(int, int, int, int)}
-     */
-    void beginWrite(boolean updateViewport);
+    @Nullable GpuTexture getColorAttachment();
+    @Nullable GpuTexture getDepthAttachment();
 
     /**
      * Copies the depth texture from another framebuffer to this framebuffer.
@@ -47,19 +41,6 @@ public interface ManagedFramebuffer {
      * @param buffer the framebuffer to copy depth from
      */
     void copyDepthFrom(Framebuffer buffer);
-
-    /**
-     * Draws this framebuffer, scaling to the default framebuffer's
-     * {@linkplain Window#getFramebufferWidth() width} and {@linkplain Window#getFramebufferHeight() height}.
-     */
-    void draw();
-
-    void draw(int width, int height, boolean disableBlend);
-
-    /**
-     * Clears the content of this framebuffer.
-     */
-    void clear();
 
     /**
      * Gets a simple {@link RenderLayer} that is functionally identical to {@code baseLayer},

@@ -18,13 +18,11 @@
 package org.ladysnake.satin.impl;
 
 import com.google.common.base.Preconditions;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.Defines;
 import net.minecraft.client.gl.ShaderLoader;
 import net.minecraft.client.gl.ShaderProgram;
-import net.minecraft.client.gl.ShaderProgramKey;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexFormat;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.ladysnake.satin.Satin;
@@ -35,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public final class ResettableManagedCoreShader extends ResettableManagedShaderBase<ShaderProgram> implements ManagedCoreShader {
+public final class ResettableManagedCoreShader extends ResettableManagedShaderBase<ShaderProgram, ManagedUniform> implements ManagedCoreShader {
     /**
      * Callback to run once each time the shader effect is initialized
      */
@@ -51,7 +49,8 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
         this.renderLayerSupplier = RenderLayerSupplier.shader(
                 String.format("%s_%d", location, System.identityHashCode(this)),
                 vertexFormat,
-                new ShaderProgramKey(this.getLocation(), this.vertexFormat, Defines.EMPTY));
+                this.getLocation()
+        );
     }
 
     @Override
@@ -63,7 +62,7 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
     @Override
     public void setup() {
         Preconditions.checkNotNull(this.shader);
-        for (ManagedUniformBase uniform : this.getManagedUniforms()) {
+        for (ManagedUniform uniform : this.getManagedUniforms()) {
             setupUniform(uniform, this.shader);
         }
         this.initCallback.accept(this);
@@ -85,7 +84,7 @@ public final class ResettableManagedCoreShader extends ResettableManagedShaderBa
     }
 
     @Override
-    protected boolean setupUniform(ManagedUniformBase uniform, ShaderProgram shader) {
+    protected boolean setupUniform(ManagedUniform uniform, ShaderProgram shader) {
         return uniform.findUniformTarget(shader);
     }
 

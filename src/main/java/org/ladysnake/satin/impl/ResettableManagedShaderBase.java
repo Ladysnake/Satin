@@ -22,6 +22,7 @@ import net.minecraft.client.gl.ShaderLoader;
 import net.minecraft.resource.ResourceFactory;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;
+import org.jetbrains.annotations.NotNull;
 import org.ladysnake.satin.Satin;
 import org.ladysnake.satin.api.managed.uniform.Uniform1f;
 import org.ladysnake.satin.api.managed.uniform.Uniform1i;
@@ -44,11 +45,11 @@ import java.util.function.Function;
 
 import static org.apiguardian.api.API.Status.INTERNAL;
 
-public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
+public abstract class ResettableManagedShaderBase<S, U extends ManagedUniformBase> implements UniformFinder {
     /**Location of the shader json definition file*/
     private final Identifier location;
-    private final Map<String, ManagedUniform> managedUniforms = new HashMap<>();
-    private final List<ManagedUniformBase> allUniforms = new ArrayList<>();
+    private final Map<String, U> managedUniforms = new HashMap<>();
+    private final List<U> allUniforms = new ArrayList<>();
     private boolean errored;
     @CheckForNull
     protected S shader;
@@ -92,11 +93,11 @@ public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
 
     protected abstract void doRelease(S shader);
 
-    protected Collection<ManagedUniformBase> getManagedUniforms() {
+    protected Collection<U> getManagedUniforms() {
         return this.allUniforms;
     }
 
-    protected abstract boolean setupUniform(ManagedUniformBase uniform, S shader);
+    protected abstract boolean setupUniform(U uniform, S shader);
 
     public boolean isInitialized() {
         return this.shader != null;
@@ -110,12 +111,12 @@ public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
         return location;
     }
 
-    protected <U extends ManagedUniformBase> U manageUniform(Map<String, U> uniformMap, Function<String, U> factory, String uniformName, String uniformKind) {
-        U existing = uniformMap.get(uniformName);
+    protected <V extends U> V manageUniform(Map<String, V> uniformMap, Function<String, V> factory, String uniformName, String uniformKind) {
+        V existing = uniformMap.get(uniformName);
         if (existing != null) {
             return existing;
         }
-        U ret = factory.apply(uniformName);
+        V ret = factory.apply(uniformName);
         if (this.shader != null) {
             boolean found = setupUniform(ret, shader);
             if (!found) {
@@ -129,47 +130,49 @@ public abstract class ResettableManagedShaderBase<S> implements UniformFinder {
 
     @Override
     public Uniform1i findUniform1i(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 1), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 1), uniformName, "uniform");
     }
+
+    protected abstract @NotNull U createUniform(String name, int count);
 
     @Override
     public Uniform2i findUniform2i(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 2), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 2), uniformName, "uniform");
     }
 
     @Override
     public Uniform3i findUniform3i(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 3), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 3), uniformName, "uniform");
     }
 
     @Override
     public Uniform4i findUniform4i(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 4), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 4), uniformName, "uniform");
     }
 
     @Override
     public Uniform1f findUniform1f(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 1), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 1), uniformName, "uniform");
     }
 
     @Override
     public Uniform2f findUniform2f(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 2), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 2), uniformName, "uniform");
     }
 
     @Override
     public Uniform3f findUniform3f(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 3), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 3), uniformName, "uniform");
     }
 
     @Override
     public Uniform4f findUniform4f(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 4), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 4), uniformName, "uniform");
     }
 
     @Override
     public UniformMat4 findUniformMat4(String uniformName) {
-        return manageUniform(this.managedUniforms, name -> new ManagedUniform(name, 16), uniformName, "uniform");
+        return manageUniform(this.managedUniforms, name -> createUniform(name, 16), uniformName, "uniform");
     }
 
     @API(status = INTERNAL)

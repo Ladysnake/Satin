@@ -17,8 +17,8 @@
  */
 package org.ladysnake.satin.api.managed;
 
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.gl.PostEffectProcessor;
-import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.util.Identifier;
 import org.apiguardian.api.API;

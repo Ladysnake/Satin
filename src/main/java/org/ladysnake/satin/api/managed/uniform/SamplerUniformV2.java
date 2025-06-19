@@ -17,10 +17,12 @@
  */
 package org.ladysnake.satin.api.managed.uniform;
 
+import com.mojang.blaze3d.textures.GpuTexture;
 import org.apiguardian.api.API;
 import org.ladysnake.satin.api.managed.ManagedShaderEffect;
 
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 import static org.apiguardian.api.API.Status.EXPERIMENTAL;
 
@@ -34,5 +36,5 @@ public interface SamplerUniformV2 extends SamplerUniform {
      * @param textureSupplier a supplier for opengl texture names
      */
     @API(status = EXPERIMENTAL, since = "1.4.0")
-    void set(IntSupplier textureSupplier);
+    void set(Supplier<GpuTexture> textureSupplier);
 }
